@@ -1,0 +1,12 @@
+D:\wwwroot\AutoLogin\AutoLogin\bin\Debug\AutoLogin.exe.config
+D:\wwwroot\AutoLogin\AutoLogin\bin\Debug\AutoLogin.exe
+D:\wwwroot\AutoLogin\AutoLogin\bin\Debug\AutoLogin.pdb
+D:\wwwroot\AutoLogin\AutoLogin\bin\Debug\WebDriver.dll
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.csprojAssemblyReference.cache
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.Form1.resources
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.Properties.Resources.resources
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.csproj.GenerateResource.cache
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.csproj.CoreCompileInputs.cache
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.csproj.CopyComplete
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.exe
+D:\wwwroot\AutoLogin\AutoLogin\obj\Debug\AutoLogin.pdb
