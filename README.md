@@ -1,4 +1,4 @@
-# portal-autoLogon_v1
+# portal-autoLogon
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/choipureum/CommitChecker/graphs/commit-activity) 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
@@ -43,7 +43,9 @@ using OpenQA.Selenium.Interactions;
 - Repository: https://github.com/choipureum/portal-autoLogon
 - Issue tracker: https://github.com/choipureum/portal-autoLogon/issues
   - 보안 취약점 등의 민감한 이슈인 경우 poo1994.imbc.com 로 연락주십시오. 
-
+## Updates
+-<b>version_1</b> : Mportal 자동 로그인 지원
+-<b>version_2</b> : 경로 설정 디버깅, 넷플릭스 자동 로그인 지원 및 설치파일  
 ## Testing
 ### 자동 로그인
 ![image](https://user-images.githubusercontent.com/55127127/112962103-fb20bc00-9180-11eb-847b-4138b4b759fb.png)
