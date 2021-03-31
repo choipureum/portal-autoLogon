@@ -48,7 +48,7 @@ using OpenQA.Selenium.Interactions;
   - 보안 취약점 등의 민감한 이슈인 경우 poo1994.imbc.com 로 연락주십시오. 
 ## Updates
 - <b>version_1</b> : Mportal 자동 로그인 지원
-- <b>version_2</b> : 경로 설정 디버깅, 넷플릭스 자동 로그인 지원 및 설치파일  
+- <b>version_2</b> : 경로 설정 디버깅,프로세스 오류 디버깅, 관리자권한 자동 취득, 넷플릭스 자동 로그인 지원 및 설치파일  
 ## Testing
 ### 자동 로그인
 ![image](https://user-images.githubusercontent.com/55127127/112962103-fb20bc00-9180-11eb-847b-4138b4b759fb.png)
