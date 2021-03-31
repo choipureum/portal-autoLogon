@@ -1,4 +1,4 @@
-# portal-autoLogon
+# portal-autoLogon_v2.0.0
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/choipureum/CommitChecker/graphs/commit-activity) 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
@@ -22,7 +22,7 @@
  
 - <b>'-'</b> : listBox에서 특정 항목 선택한 뒤 클릭시 해당 정보를 삭제합니다.
  
-- <b>'kill'</b> : 본 프로그램을 통해 생성된 모든 process를 kill합니다. * 단순 종료시에도 같은 로직 실행함.
+- <b>'kill'</b> : 본 프로그램을 통해 생성된 모든 process를 kill합니다. * 단순 종료시에도 같은 로직 실행함. => 2.0.0 업데이트 삭제
  
 - <b>'How to use'</b> : 사용방법
 
@@ -48,7 +48,7 @@ using OpenQA.Selenium.Interactions;
   - 보안 취약점 등의 민감한 이슈인 경우 poo1994.imbc.com 로 연락주십시오. 
 ## Updates
 - <b>version_1</b> : Mportal 자동 로그인 지원
-- <b>version_2</b> : 경로 설정 디버깅,프로세스 오류 디버깅, 관리자권한 자동 취득, 넷플릭스 자동 로그인 지원 및 설치파일  
+- <b>version_2</b> : 경로 설정 디버깅,프로세스 오류 디버깅, 관리자권한 자동 취득, 넷플릭스 자동 로그인 지원 및 설치파일, UI   
 ## Testing
 ### 자동 로그인
 ![image](https://user-images.githubusercontent.com/55127127/112962103-fb20bc00-9180-11eb-847b-4138b4b759fb.png)
