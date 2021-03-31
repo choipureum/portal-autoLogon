@@ -15,16 +15,13 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
-
+using System.Diagnostics;
 
 namespace AutoLogin
 {
 
     public partial class Form1 : Form
     {
-        [DllImport("User32.dll")]
-        private static extern int Hotkey();
-
         private const string KEY_FILENAME = "key.txt";
 
         protected ChromeDriverService _driverService = null;
@@ -56,6 +53,7 @@ namespace AutoLogin
             catch (Exception)
             {
                 MessageBox.Show("[Error]");
+                processKill();
             }
 
         }
@@ -66,73 +64,95 @@ namespace AutoLogin
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            //파일읽기
-            string[] lines = File.ReadAllLines(path+@"/"+KEY_FILENAME);
-            string url = string.Empty;
-            string id = string.Empty;
-            string pw = string.Empty;
-
-            _driver = new ChromeDriver(_driverService, _options);
-         
-
-            for (int i=0;i<lines.Length;i++)
+            try
             {
-                string line = lines[i];
+                //파일읽기
+                string[] lines = File.ReadAllLines(path + @"/" + KEY_FILENAME);
+                string url = string.Empty;
+                string id = string.Empty;
+                string pw = string.Empty;
 
-                string[] lineArr = line.Split(' ');
-                url = lineArr[0];
-                if (i > 0)
+                _driver = new ChromeDriver(_driverService, _options);
+
+
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    ExecuteScript(_driver, "window.open();");
-                    Thread.Sleep(1000);
-                }               
-                nowhandle = _driver.CurrentWindowHandle;
-                handles = _driver.WindowHandles;
+                    string line = lines[i];
 
-                TapChange(_driver, handles[i]);
-               
-                _driver.Navigate().GoToUrl(url); // 웹 사이트에 접속합니다.
-                _driver.Manage().Window.Maximize();
-                //_driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-
-                Thread.Sleep(1000);
-
-                //모두 존재(자동로그인3)
-                if (lineArr.Length > 2 && (lineArr[1] != "" || lineArr[2] != ""))
-                {
-                    id = lineArr[1];
-                    pw = lineArr[2];
-
-                    //M portal
-                    if (url.Contains("mportal"))
+                    string[] lineArr = line.Split(' ');
+                    url = lineArr[0];
+                    if (i > 0)
                     {
-                        IWebElement element = _driver.FindElement(By.XPath("//*[@id='login_com']"));
-                        IList<IWebElement> AllDropDownList = element.FindElements(By.XPath("//option"));
-                        int DpListCount = AllDropDownList.Count;
-                        for (int j = 0; j < DpListCount; j++)
-                        {
-                            if (AllDropDownList[j].Text == "iMBC")
-                            {
-                                AllDropDownList[j].Click();
-                            }
-                        }
-
-                        element = _driver.FindElementByCssSelector("#id");
-                        
-                        element.SendKeys(id);
-
-                        Thread.Sleep(500);
-
-                        element = _driver.FindElementByCssSelector("#passwd");
-                        element.SendKeys(pw);
-
-                        element = _driver.FindElementByXPath("//*[@id='wrap']/div[2]/div[2]/p[5]/img");
-                        element.Click();
+                        ExecuteScript(_driver, "window.open();");
+                        Thread.Sleep(1000);
                     }
-                }             
+                    nowhandle = _driver.CurrentWindowHandle;
+                    handles = _driver.WindowHandles;
+
+                    TapChange(_driver, handles[i]);
+
+                    _driver.Navigate().GoToUrl(url); // 웹 사이트에 접속합니다.
+                    _driver.Manage().Window.Maximize();
+                    //_driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
+                    Thread.Sleep(1000);
+
+                    //모두 존재(자동로그인3)
+                    if (lineArr.Length > 2 && (lineArr[1] != "" || lineArr[2] != ""))
+                    {
+                        id = lineArr[1];
+                        pw = lineArr[2];
+
+                        //M portal
+                        if (url.Contains("mportal"))
+                        {
+                            IWebElement element = _driver.FindElement(By.XPath("//*[@id='login_com']"));
+                            IList<IWebElement> AllDropDownList = element.FindElements(By.XPath("//option"));
+                            int DpListCount = AllDropDownList.Count;
+                            for (int j = 0; j < DpListCount; j++)
+                            {
+                                if (AllDropDownList[j].Text == "iMBC")
+                                {
+                                    AllDropDownList[j].Click();
+                                }
+                            }
+
+                            element = _driver.FindElementByCssSelector("#id");
+
+                            element.SendKeys(id);
+
+                            Thread.Sleep(500);
+
+                            element = _driver.FindElementByCssSelector("#passwd");
+                            element.SendKeys(pw);
+
+                            element = _driver.FindElementByXPath("//*[@id='wrap']/div[2]/div[2]/p[5]/img");
+                            element.Click();
+                        }
+                        else if (url.Contains("netflix"))
+                        {
+                            IWebElement element = _driver.FindElementByCssSelector("#id_userLoginId");
+
+                            element.SendKeys(id);
+
+                            Thread.Sleep(500);
+
+                            element = _driver.FindElementByCssSelector("#id_password");
+                            element.SendKeys(pw);
+
+                            element = _driver.FindElementByXPath("//*[@id='appMountPoint']/div/div[3]/div/div/div[1]/form/button");
+                            element.Click();
+                        }
+                    }
+                }
+                return;
             }
-            return;
-           
+            catch (Exception)
+            {
+                processKill();
+            }
+
+
         }
         //웹추가
         private void plus1_Click(object sender, EventArgs e)
@@ -147,10 +167,10 @@ namespace AutoLogin
                 {
                     //value 텍스트 파일 생성 / 입력
                     writer = File.AppendText(path + @"/" + KEY_FILENAME);
-                    writer.WriteLine(web+" "+key+" "+pw);
+                    writer.WriteLine(web + " " + key + " " + pw);
 
                     // listbox 추가
-                    listBox1.Items.Add(web+" "+key + " " + pw);
+                    listBox1.Items.Add(web + " " + key + " " + pw);
                     textBox1.Clear();
                     textBox2.Clear();
                     textBox3.Clear();
@@ -162,11 +182,11 @@ namespace AutoLogin
                     MessageBox.Show("[Error] value empty");
                 }
             }
-            catch(Exception e1)
+            catch (Exception e1)
             {
-                MessageBox.Show("[Error]"+e1.StackTrace);
+                MessageBox.Show("[Error]" + e1.StackTrace);
             }
-           
+
         }
         //txt 저장 데이터 삭제
         private void minus1_Click(object sender, EventArgs e)
@@ -178,13 +198,13 @@ namespace AutoLogin
                 string[] temp = selected.Split(' ');
 
                 UpdateFileSkipRow(path + @"/" + KEY_FILENAME, temp[0].Trim());
-        }
+            }
             catch (Exception)
             {
                 MessageBox.Show("[Error]");
             }
 
-}
+        }
         public void UpdateFileSkipRow(string fileFullPath, string key)
         {
             string[] lines = File.ReadAllLines(fileFullPath);
@@ -194,7 +214,7 @@ namespace AutoLogin
             RemoveAt<string>(ref lines, pos);
             File.WriteAllLines(fileFullPath, lines);
         }
-        public  void RemoveAt<T>(ref T[] arr, int index)
+        public void RemoveAt<T>(ref T[] arr, int index)
         {
             for (int a = index; a < arr.Length - 1; a++) arr[a] = arr[a + 1];
             Array.Resize(ref arr, arr.Length - 1);
@@ -215,13 +235,13 @@ namespace AutoLogin
         //how to use 깃헙 readme연동
         private void howtouse_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/choipureum");
+            System.Diagnostics.Process.Start("https://github.com/choipureum/portal-autoLogon");
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             //문서 불러오기
             di = new DirectoryInfo(path);
-            if(di.Exists == false)
+            if (di.Exists == false)
             {
                 di.Create();
                 return;
@@ -235,14 +255,14 @@ namespace AutoLogin
                 if (fi.Exists)
                 {
                     //listbox 추가
-                    string [] keylines = File.ReadAllLines(path + @"/" + KEY_FILENAME, Encoding.UTF8);
-                    
-                    for(int i = 0; i < keylines.Length; i++)
+                    string[] keylines = File.ReadAllLines(path + @"/" + KEY_FILENAME, Encoding.UTF8);
+
+                    for (int i = 0; i < keylines.Length; i++)
                     {
                         string[] key = keylines[i].Split(' ');
                         // listbox 추가
-                        listBox1.Items.Add(key[0]+" "+ key[1] + " " + key[2]);
-                    }                  
+                        listBox1.Items.Add(key[0] + " " + key[1] + " " + key[2]);
+                    }
                 }
                 else
                 {
@@ -260,7 +280,7 @@ namespace AutoLogin
                 js.ExecuteScript(script);
             }
             catch (Exception) { }
-          
+
         }
 
         //비동기적 실행 (driver, 자바스크립트)
@@ -278,27 +298,26 @@ namespace AutoLogin
         //크롬 종료
         private void button1_Click_1(object sender, EventArgs e)
         {
+            processKill();
+        }
+        private void processKill()
+        {
             try
             {
+                //오류및 강제종료시 process kill
+                Process[] processList = Process.GetProcessesByName("chromedriver.exe");
+                if (processList.Length > 0)
+                {
+                    processList[0].Kill();
+                }
                 _driver.Quit();
             }
-            catch (Exception)
-            {
-                MessageBox.Show("[Error] process null");
-            }
-           
+            catch (Exception) { }
         }
         //창종료
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            try
-            {
-                _driver.Quit();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("[Error] process null");
-            }
+            processKill();
         }
         private void label1_Click(object sender, EventArgs e)
         {
