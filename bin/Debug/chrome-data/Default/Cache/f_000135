@@ -1,0 +1,878 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	//메일상세보기
+	CH3170_viewMail = function (mailSN) {
+		var url = "https://mail.worksmobile.com/read/popup?";
+		var params = {
+			nMailId : mailSN
+		};
+		
+		url += jQuery.param(params);
+		
+ 		var popupOptions = "left=0, top=0, width=900, height=650, toolbar=no, status=no, scrollbars=yes, resizable=yes, menubar=no";
+		var viewMailPop = window.open(url, "viewMailPop", popupOptions);
+	};
+
+	//Page이동처리
+	function CH3170_movePage(pageNo,refreshYn){
+		if(false) return;
+		var f = document.CH3170_frm;
+		jQuery('#CH3170_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3170/ws/normal/pm/view/refresh='+refreshYn+';/controller=/portletAjax;?currpage_no='+pageNo);
+	};
+
+	function CH3170_beforeClose(){
+		CH3170_movePage(null,'Y');
+	};
+	
+	jQuery(document).ready(function () {
+		if(jQuery('#CH3170_window').length > 0){
+			setChannelDragElement(jQuery('#CH3170_window')[0]);
+		}
+		
+		//MBC / 2016.12.30 / 가운데 레이아웃 보다 작은 곳에 포틀릿 넣을 경우 리사이즈 / jcpark
+		CH3170_divResize();
+	});
+	
+	function CH3170_divResize() {
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+0).width();
+			var pWidth = jQuery("#mailTitleP_"+0).width();
+			var spanWidth = jQuery("#mailDateSpan_"+0).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+0).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+1).width();
+			var pWidth = jQuery("#mailTitleP_"+1).width();
+			var spanWidth = jQuery("#mailDateSpan_"+1).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+1).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+2).width();
+			var pWidth = jQuery("#mailTitleP_"+2).width();
+			var spanWidth = jQuery("#mailDateSpan_"+2).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+2).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+3).width();
+			var pWidth = jQuery("#mailTitleP_"+3).width();
+			var spanWidth = jQuery("#mailDateSpan_"+3).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+3).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+4).width();
+			var pWidth = jQuery("#mailTitleP_"+4).width();
+			var spanWidth = jQuery("#mailDateSpan_"+4).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+4).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+5).width();
+			var pWidth = jQuery("#mailTitleP_"+5).width();
+			var spanWidth = jQuery("#mailDateSpan_"+5).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+5).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+6).width();
+			var pWidth = jQuery("#mailTitleP_"+6).width();
+			var spanWidth = jQuery("#mailDateSpan_"+6).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+6).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+7).width();
+			var pWidth = jQuery("#mailTitleP_"+7).width();
+			var spanWidth = jQuery("#mailDateSpan_"+7).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+7).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+8).width();
+			var pWidth = jQuery("#mailTitleP_"+8).width();
+			var spanWidth = jQuery("#mailDateSpan_"+8).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+8).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+9).width();
+			var pWidth = jQuery("#mailTitleP_"+9).width();
+			var spanWidth = jQuery("#mailDateSpan_"+9).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+9).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+10).width();
+			var pWidth = jQuery("#mailTitleP_"+10).width();
+			var spanWidth = jQuery("#mailDateSpan_"+10).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+10).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+11).width();
+			var pWidth = jQuery("#mailTitleP_"+11).width();
+			var spanWidth = jQuery("#mailDateSpan_"+11).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+11).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+12).width();
+			var pWidth = jQuery("#mailTitleP_"+12).width();
+			var spanWidth = jQuery("#mailDateSpan_"+12).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+12).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+13).width();
+			var pWidth = jQuery("#mailTitleP_"+13).width();
+			var spanWidth = jQuery("#mailDateSpan_"+13).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+13).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+14).width();
+			var pWidth = jQuery("#mailTitleP_"+14).width();
+			var spanWidth = jQuery("#mailDateSpan_"+14).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+14).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+15).width();
+			var pWidth = jQuery("#mailTitleP_"+15).width();
+			var spanWidth = jQuery("#mailDateSpan_"+15).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+15).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+16).width();
+			var pWidth = jQuery("#mailTitleP_"+16).width();
+			var spanWidth = jQuery("#mailDateSpan_"+16).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+16).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+17).width();
+			var pWidth = jQuery("#mailTitleP_"+17).width();
+			var spanWidth = jQuery("#mailDateSpan_"+17).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+17).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+18).width();
+			var pWidth = jQuery("#mailTitleP_"+18).width();
+			var spanWidth = jQuery("#mailDateSpan_"+18).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+18).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+19).width();
+			var pWidth = jQuery("#mailTitleP_"+19).width();
+			var spanWidth = jQuery("#mailDateSpan_"+19).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+19).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+20).width();
+			var pWidth = jQuery("#mailTitleP_"+20).width();
+			var spanWidth = jQuery("#mailDateSpan_"+20).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+20).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+21).width();
+			var pWidth = jQuery("#mailTitleP_"+21).width();
+			var spanWidth = jQuery("#mailDateSpan_"+21).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+21).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+22).width();
+			var pWidth = jQuery("#mailTitleP_"+22).width();
+			var spanWidth = jQuery("#mailDateSpan_"+22).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+22).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+23).width();
+			var pWidth = jQuery("#mailTitleP_"+23).width();
+			var spanWidth = jQuery("#mailDateSpan_"+23).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+23).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+24).width();
+			var pWidth = jQuery("#mailTitleP_"+24).width();
+			var spanWidth = jQuery("#mailDateSpan_"+24).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+24).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+25).width();
+			var pWidth = jQuery("#mailTitleP_"+25).width();
+			var spanWidth = jQuery("#mailDateSpan_"+25).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+25).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+26).width();
+			var pWidth = jQuery("#mailTitleP_"+26).width();
+			var spanWidth = jQuery("#mailDateSpan_"+26).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+26).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+27).width();
+			var pWidth = jQuery("#mailTitleP_"+27).width();
+			var spanWidth = jQuery("#mailDateSpan_"+27).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+27).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+28).width();
+			var pWidth = jQuery("#mailTitleP_"+28).width();
+			var spanWidth = jQuery("#mailDateSpan_"+28).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+28).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+			/* var liWidth = jQuery("[id^='mailTitleLi']").width();
+			var pWidth = jQuery("[id^='mailTitleP']").width();
+			var spanWidth = jQuery("[id^='mailDateSpan']").width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("[id^='mailTitleA']").css("width", (liWidth - spanWidth - 5)+"px");
+			} */
+			var liWidth = jQuery("#mailTitleLi_"+29).width();
+			var pWidth = jQuery("#mailTitleP_"+29).width();
+			var spanWidth = jQuery("#mailDateSpan_"+29).width();
+			
+			if(liWidth < pWidth + spanWidth) {
+				jQuery("#mailTitleA_"+29).css("width", (liWidth - spanWidth - 5)+"px");
+			}
+		
+	};
+</script>
+<form name="CH3170_frm" id="CH3170_frm" method="post" action="/xclick_mbc/workplace/wp/WP70/ch/CH3170/ws/normal/pm/view">
+	<div class="m_bbs box" style="height:170px;">
+		<h2 class="tabbbstitle01">받은편지함</h2>
+		<div class="m_list" id="mailTitleDiv">
+			<ul style="margin:1px;">
+				
+				<li id="mailTitleLi_0">
+					<a id="mailTitleA_0" href="#" onclick="CH3170_viewMail('293');" style="position:absolute;">
+						<p id="mailTitleP_0" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							MBC앱 개편 회의 참석 요청
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_0" class="wdate" style="display:block;">황지선  16 : 47</span>
+				</li>
+				
+				<li id="mailTitleLi_1">
+					<a id="mailTitleA_1" href="#" onclick="CH3170_viewMail('290');" style="position:absolute;">
+						<p id="mailTitleP_1" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							FW: 아카이브 사이트 이미지 배너 교체(겨울 -&gt; 봄) 요청의 건
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_1" class="wdate" style="display:block;">문현선  03-30 15:59</span>
+				</li>
+				
+				<li id="mailTitleLi_2">
+					<a id="mailTitleA_2" href="#" onclick="CH3170_viewMail('289');" style="position:absolute;">
+						<p id="mailTitleP_2" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							신임이사 업무보고 안내(4.9)
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_2" class="wdate" style="display:block;">황지선  03-30 14:38</span>
+				</li>
+				
+				<li id="mailTitleLi_3">
+					<a id="mailTitleA_3" href="#" onclick="CH3170_viewMail('288');" style="position:absolute;">
+						<p id="mailTitleP_3" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							FW: 100분토론 홈페이지 이슈 및 메타태그 점검 진행 공유드립니다. 
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_3" class="wdate" style="display:block;">황지선  03-30 10:58</span>
+				</li>
+				
+				<li id="mailTitleLi_4">
+					<a id="mailTitleA_4" href="#" onclick="CH3170_viewMail('287');" style="position:absolute;">
+						<p id="mailTitleP_4" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							3월 29일 보직자 업무보고 및  2월 실적회의 자료 전달
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_4" class="wdate" style="display:block;">황지선  03-29 14:44</span>
+				</li>
+				
+				<li id="mailTitleLi_5">
+					<a id="mailTitleA_5" href="#" onclick="CH3170_viewMail('286');" style="position:absolute;">
+						<p id="mailTitleP_5" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: (정정) [라디오] &lt;FM영화음악 김세윤입니다&gt; &gt; 3/24일자 다시듣기 미재생 건
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_5" class="wdate" style="display:block;">박가영  03-25 14:35</span>
+				</li>
+				
+				<li id="mailTitleLi_6">
+					<a id="mailTitleA_6" href="#" onclick="CH3170_viewMail('285');" style="position:absolute;">
+						<p id="mailTitleP_6" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							(정정) [라디오] &lt;FM영화음악 김세윤입니다&gt; &gt; 3/24일자 다시듣기 미재생 건
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_6" class="wdate" style="display:block;">모니터링팀  03-25 14:15</span>
+				</li>
+				
+				<li id="mailTitleLi_7">
+					<a id="mailTitleA_7" href="#" onclick="CH3170_viewMail('284');" style="position:absolute;">
+						<p id="mailTitleP_7" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: [라디오] &lt;손경제&gt; 3/16일자 다시듣기 수정 완료의 건
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_7" class="wdate" style="display:block;">모니터링팀  03-25 14:09</span>
+				</li>
+				
+				<li id="mailTitleLi_8">
+					<a id="mailTitleA_8" href="#" onclick="CH3170_viewMail('283');" style="position:absolute;">
+						<p id="mailTitleP_8" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							윈도우즈 서비스 디버깅
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_8" class="wdate" style="display:block;">황지선  03-23 09:00</span>
+				</li>
+				
+				<li id="mailTitleLi_9">
+					<a id="mailTitleA_9" href="#" onclick="CH3170_viewMail('282');" style="position:absolute;">
+						<p id="mailTitleP_9" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							Scanned Image
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_9" class="wdate" style="display:block;">sindoh  03-22 10:29</span>
+				</li>
+				
+				<li id="mailTitleLi_10">
+					<a id="mailTitleA_10" href="#" onclick="CH3170_viewMail('281');" style="position:absolute;">
+						<p id="mailTitleP_10" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							Scanned Image
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_10" class="wdate" style="display:block;">sindoh  03-22 08:46</span>
+				</li>
+				
+				<li id="mailTitleLi_11">
+					<a id="mailTitleA_11" href="#" onclick="CH3170_viewMail('280');" style="position:absolute;">
+						<p id="mailTitleP_11" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							Scanned Image
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_11" class="wdate" style="display:block;">sindoh  03-19 16:31</span>
+				</li>
+				
+				<li id="mailTitleLi_12">
+					<a id="mailTitleA_12" href="#" onclick="CH3170_viewMail('279');" style="position:absolute;">
+						<p id="mailTitleP_12" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: CDN 캐시서버 SSL 인증서 갱신 관련 테스트
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_12" class="wdate" style="display:block;">이봉진  03-19 15:45</span>
+				</li>
+				
+				<li id="mailTitleLi_13">
+					<a id="mailTitleA_13" href="#" onclick="CH3170_viewMail('278');" style="position:absolute;">
+						<p id="mailTitleP_13" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: CDN 캐시서버 SSL 인증서 갱신 관련 테스트
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_13" class="wdate" style="display:block;">황지선  03-19 15:39</span>
+				</li>
+				
+				<li id="mailTitleLi_14">
+					<a id="mailTitleA_14" href="#" onclick="CH3170_viewMail('277');" style="position:absolute;">
+						<p id="mailTitleP_14" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							CDN 캐시서버 SSL 인증서 갱신 관련 테스트
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_14" class="wdate" style="display:block;">전헌진  03-19 15:31</span>
+				</li>
+				
+				<li id="mailTitleLi_15">
+					<a id="mailTitleA_15" href="#" onclick="CH3170_viewMail('276');" style="position:absolute;">
+						<p id="mailTitleP_15" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							3월 임직원 급여 지급 안내
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_15" class="wdate" style="display:block;">정이나  03-19 09:15</span>
+				</li>
+				
+				<li id="mailTitleLi_16">
+					<a id="mailTitleA_16" href="#" onclick="CH3170_viewMail('275');" style="position:absolute;">
+						<p id="mailTitleP_16" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							미디어센터 전기 설비 안전 진단 시행
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_16" class="wdate" style="display:block;">김도훈  03-18 18:02</span>
+				</li>
+				
+				<li id="mailTitleLi_17">
+					<a id="mailTitleA_17" href="#" onclick="CH3170_viewMail('274');" style="position:absolute;">
+						<p id="mailTitleP_17" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							FW: [제이엠커리어 서울서부] 청년내일채움공제 신청방법 및 사업안내 (2021)_(주)아이엠비씨
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_17" class="wdate" style="display:block;">허영승  03-18 11:03</span>
+				</li>
+				
+				<li id="mailTitleLi_18">
+					<a id="mailTitleA_18" href="#" onclick="CH3170_viewMail('273');" style="position:absolute;">
+						<p id="mailTitleP_18" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							사장님과 점심일정 재안내드립니다.
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_18" class="wdate" style="display:block;">박초의  03-17 14:49</span>
+				</li>
+				
+				<li id="mailTitleLi_19">
+					<a id="mailTitleA_19" href="#" onclick="CH3170_viewMail('272');" style="position:absolute;">
+						<p id="mailTitleP_19" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: 웹방화벽 신규 SSL 인증서 갱신 완료
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_19" class="wdate" style="display:block;">황지선  03-17 10:41</span>
+				</li>
+				
+				<li id="mailTitleLi_20">
+					<a id="mailTitleA_20" href="#" onclick="CH3170_viewMail('271');" style="position:absolute;">
+						<p id="mailTitleP_20" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: 웹방화벽 신규 SSL 인증서 갱신 완료
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_20" class="wdate" style="display:block;">김지훈  03-17 10:39</span>
+				</li>
+				
+				<li id="mailTitleLi_21">
+					<a id="mailTitleA_21" href="#" onclick="CH3170_viewMail('270');" style="position:absolute;">
+						<p id="mailTitleP_21" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							웹방화벽 신규 SSL 인증서 갱신 완료
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_21" class="wdate" style="display:block;">전헌진  03-17 10:17</span>
+				</li>
+				
+				<li id="mailTitleLi_22">
+					<a id="mailTitleA_22" href="#" onclick="CH3170_viewMail('269');" style="position:absolute;">
+						<p id="mailTitleP_22" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							웹방화벽 신규 SSL 인증서 갱신
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_22" class="wdate" style="display:block;">전헌진  03-17 09:56</span>
+				</li>
+				
+				<li id="mailTitleLi_23">
+					<a id="mailTitleA_23" href="#" onclick="CH3170_viewMail('267');" style="position:absolute;">
+						<p id="mailTitleP_23" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							사장님과 점심식사 일정 안내드립니다.
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_23" class="wdate" style="display:block;">박초의  03-16 16:41</span>
+				</li>
+				
+				<li id="mailTitleLi_24">
+					<a id="mailTitleA_24" href="#" onclick="CH3170_viewMail('266');" style="position:absolute;">
+						<p id="mailTitleP_24" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							[라디오] &lt;손경제&gt; 3/16일자 다시듣기 수정 완료의 건
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_24" class="wdate" style="display:block;">김미영  03-16 13:49</span>
+				</li>
+				
+				<li id="mailTitleLi_25">
+					<a id="mailTitleA_25" href="#" onclick="CH3170_viewMail('265');" style="position:absolute;">
+						<p id="mailTitleP_25" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							PodcastM 라디오 웹페이지 확인
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_25" class="wdate" style="display:block;">모니터링팀  03-16 11:25</span>
+				</li>
+				
+				<li id="mailTitleLi_26">
+					<a id="mailTitleA_26" href="#" onclick="CH3170_viewMail('264');" style="position:absolute;">
+						<p id="mailTitleP_26" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							 (필독)2021년 회사 단체보험 갱신 안내 및 [입원실비 항목] 선택 가입 재안내
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_26" class="wdate" style="display:block;">정이나  03-15 13:49</span>
+				</li>
+				
+				<li id="mailTitleLi_27">
+					<a id="mailTitleA_27" href="#" onclick="CH3170_viewMail('263');" style="position:absolute;">
+						<p id="mailTitleP_27" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							FW: SSL 인증서 사용 서비스 현황 - 인증서 적용 일정 확인
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_27" class="wdate" style="display:block;">황지선  03-15 09:00</span>
+				</li>
+				
+				<li id="mailTitleLi_28">
+					<a id="mailTitleA_28" href="#" onclick="CH3170_viewMail('262');" style="position:absolute;">
+						<p id="mailTitleP_28" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							RE: MBC앱 개발 버그테스트를 위한 구글 드라이브 링크 안내
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_28" class="wdate" style="display:block;">김경은  03-12 14:08</span>
+				</li>
+				
+				<li id="mailTitleLi_29">
+					<a id="mailTitleA_29" href="#" onclick="CH3170_viewMail('255');" style="position:absolute;">
+						<p id="mailTitleP_29" style="overflow: hidden; white-space: nowrap; -ms-text-overflow: ellipsis;">
+							MBC앱 개발 버그테스트를 위한 구글 드라이브 링크 안내
+						</p>
+					</a>
+					
+					
+					<span id="mailDateSpan_29" class="wdate" style="display:block;">황지선  03-12 09:30</span>
+				</li>
+				
+			</ul>
+		</div>
+		
+		<p class="dateover">
+			<span><strong>1</strong>/7</span>
+			<span>
+		   	
+		    
+		    <a><img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/btn_dnext.png?1.99_xclickstatic" alt="다음" onclick="CH3170_movePage(2,'N');"/></a>
+		    
+		    </span>
+		</p>
+		
+		<p class="more">
+	    	<a><img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/refresh_white.png?1.99_xclickstatic" onclick="jQuery('#CH3170_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3170/ws/normal/pm/view/windowRender=N;/refresh=Y;/controller=/portletAjax;');" alt=""/></a>
+	    	
+	    </p>
+	</div>
+</form>

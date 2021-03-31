@@ -1,0 +1,333 @@
+/*--기본정의--*/
+td  		{font-size :12px; font-family:"굴림";color:#525252; line-height:18px;} 
+td a       		{font-size :12px; font-family:"굴림";color:#525252; line-height:18px;}
+td a:link    		{font-size :12px; font-family:"굴림";color:#525252; line-height:18px;}
+td a:visited 	{font-size :12px; font-family:"굴림";color:#525252; line-height:18px;}
+td a:hover 	{font-size :12px; font-family:"굴림";color:#990033; line-height:18px; text-decoration:underline;}
+
+/*--초기메인 포커싱--*/
+.mfocus 				{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mfocus a:link  		{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mfocus a:visited 	{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mfocus a:hover 	{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;text-decoration:underline;}  
+
+/*--초기메인 좌측 뉴스--*/
+.mnews 				{color:#007CA4; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;} 
+.mnews a:link  		{color:#007CA4; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;} 
+.mnews a:visited 	{color:#007CA4; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;} 
+.mnews a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;text-decoration:underline;} 
+
+/*--초기메인 좌측 뉴스 텍스트--*/
+.mnews_text 				{color:#007CA4; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mnews_text a:link  		{color:#007CA4; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mnews_text a:visited 	{color:#007CA4; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mnews_text a:hover 	{color:#000000; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;text-decoration:underline;} 
+
+/*--초기메인 좌측 뉴스--*/
+.mnews1 				{color:#555555; font-size :11px; font-family: "굴림", "Helvetica", "Arial";line-height:14px;} 
+.mnews1 a:link  		{color:#555555; font-size :11px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;} 
+.mnews1 a:visited 	{color:#555555; font-size :11px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;} 
+.mnews1 a:hover 	{color:#555555; font-size :11px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;text-decoration:underline;} 
+
+/*--초기메인 좌측 뉴스 텍스트--*/
+.mnews_text1 				{color:#555555; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mnews_text1 a:link  		{color:#555555; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mnews_text1 a:visited 	{color:#555555; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mnews_text1 a:hover 	{color:#555555; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;text-decoration:underline;} 
+
+/*--초기메인 좌측 프리미엄--*/
+.mpremium  				    {color:#BE8200; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;letter-spacing: -1px;} 
+.mpremium a:link  		{color:#BE8200; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;letter-spacing: -1px;} 
+.mpremium a:visited 	{color:#BE8200; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;letter-spacing: -1px;} 
+.mpremium a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;text-decoration:underline;letter-spacing: -1px;} 
+
+/*--초기메인 좌측 커뮤니티--*/
+.mcommunity 				{color:#FD8203; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;} 
+.mcommunity a:link  		{color:#FD8203; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;} 
+.mcommunity a:visited 	{color:#FD8203; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;} 
+.mcommunity a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:18px;text-decoration:underline;} 
+
+/*--초기메인 중앙  프로모션--*/
+.mpromotion 				{color:#8C394E; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;} 
+.mpromotion a:link  		{color:#8C394E; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;} 
+.mpromotion a:visited 	{color:#8C394E; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;} 
+.mpromotion a:hover 	{color:#8C394E; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:16px;text-decoration:underline;} 
+
+/*--초기메인 MBC와함께--*/
+.mwithmbc 				{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mwithmbc a:link  		{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mwithmbc a:visited 	{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.mwithmbc a:hover 	{color:#FFFFFF; font-size :12px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;text-decoration:underline;}  
+
+/*--초기메인 우측 생활정보--*/
+.mlife 				{color:#019D38; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mlife a:link  		{color:#019D38; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mlife a:visited 	{color:#019D38; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mlife a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;text-decoration:underline;} 
+
+/*--초기메인 우측 엔터테인먼트--*/
+.menter 				{color:#739A00; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.menter a:link  		{color:#739A00; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.menter a:visited 	{color:#739A00; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.menter a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;text-decoration:underline;} 
+
+/*--초기메인 우측 쇼핑--*/
+.mshop 				{color:#8165D3; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mshop a:link  		{color:#8165D3; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mshop a:visited 	{color:#8165D3; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mshop a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;text-decoration:underline;} 
+
+/*--초기메인 우측 공연이벤트--*/
+.mevent				{color:#739A00; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mevent a:link  		{color:#739A00; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mevent a:visited 	{color:#739A00; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;} 
+.mevent a:hover 	{color:#000000; font-size :11px; font-family: "돋음", "Helvetica", "Arial";line-height:16px;text-decoration:underline;}  
+
+/*--서브하단텍스트--*/
+.subbottom				{color:#000000; font-size :12px; line-height:18px;} 
+.subbottom a:link  		{color:#000000; font-size :12px; line-height:18px;text-decoration:underline;} 
+.subbottom a:visited 	{color:#000000; font-size :12px; line-height:18px;text-decoration:underline;} 
+.subbottom a:active   	{color:#000000; font-size :12px; line-height:18px;text-decoration:underline;} 
+.subbottom a:hover 	{color:#000000; font-size :12px;line-height:18px;text-decoration:none;}  
+
+
+/*--제네럴메뉴--*/
+.font11 {color:#000000; font-size :11px; font-family: "굴림", "Helvetica", "Arial";line-height:18px;} 
+.font11 a      {color:#000000; font-size :11px; text-decoration:none;line-height:18px;}
+.font11 a:hover {color:#000000; font-size :11px; text-decoration:underline;line-height:18px;}
+
+/*--방송--*/
+.broad {color: #525252; line-height:18px;} 
+.broad a      {color:#525252; text-decoration:none;line-height:18px;}
+.broad a:hover {color:#F02233; text-decoration:underline;line-height:18px;}
+
+/*--방송>라디오--*/
+.radio {color: #525252; line-height:18px;} 
+.radio a      {color:#525252; text-decoration:none;line-height:18px;}
+.radio a:hover {color:#3798B9; text-decoration:underline;line-height:18px;}
+
+/*--방송>TV>드라마--*/
+.drama {color: #525252; line-height:18px;} 
+.drama a      {color:#525252; text-decoration:none;line-height:18px;}
+.drama a:hover {color:#C32C66; text-decoration:underline;line-height:18px;}
+
+/*--방송>TV>연예오락--*/
+.play {color: #525252; line-height:18px;} 
+.play a      {color:#525252; text-decoration:none;line-height:18px;}
+.play a:hover {color:#329310; text-decoration:underline;line-height:18px;}
+
+/*--방송>TV>시사교양--*/
+.culture {color: #525252; line-height:18px;} 
+.culture a      {color:#525252; text-decoration:none;line-height:18px;}
+.culture a:hover {color:#644D14; text-decoration:underline;line-height:18px;}
+
+/*--방송>TV>특집방송--*/
+.special {color: #525252; line-height:18px;} 
+.special a      {color:#525252; text-decoration:none;line-height:18px;}
+.special a:hover {color:#644D14; text-decoration:underline;line-height:18px;}
+
+/*--프리미엄존--*/
+.premium {color: #525252; line-height:18px;} 
+.premium a      {color:#525252; text-decoration:none;line-height:18px;}
+.premium a:hover {color:#77500D; text-decoration:underline;line-height:18px;}
+
+/*--무료존--*/
+.free {color: #525252; line-height:18px;} 
+.free a      {color:#525252; text-decoration:none;line-height:18px;}
+.free a:hover {color:#D4267A; text-decoration:underline;line-height:18px;}
+
+/*--커뮤니티--*/
+.comm {color: #525252; line-height:18px;}
+.comm a      {color:#525252; text-decoration:none;line-height:18px;}
+.comm a:hover {color:#914800; text-decoration:underline;line-height:18px;}
+
+/*--생활정보--*/
+.life {color: #525252; line-height:18px;} 
+.life a      {color:#525252; text-decoration:none;line-height:18px;}
+.life a:hover {color:#005920; text-decoration:underline;line-height:18px;}
+
+/*--엔터테인먼트--*/
+.enter {color: #525252; line-height:18px;} 
+.enter a      {color:#525252; text-decoration:none;line-height:18px;}
+.enter a:hover {color:#237A29; text-decoration:underline;line-height:18px;}
+
+/*--쇼핑--*/
+.shop {color: #525252; line-height:18px;} 
+.shop a      {color:#525252; text-decoration:none;line-height:18px;}
+.shop a:hover {color:#27405F; text-decoration:underline;line-height:18px;}
+
+/*--가이드--*/
+.guide {color: #525252; line-height:18px;} 
+.guide a      {color:#525252; text-decoration:none;line-height:18px;}
+.guide a:hover {color:#116554; text-decoration:underline;line-height:18px;}
+
+/*--Footer--*/
+.footer {color: #ffffff; line-height:18px;} 
+.footer a      {color:#ffffff; text-decoration:none;line-height:18px;}
+.footer a:hover {color:#ffffff; text-decoration:underline;line-height:18px;}
+
+/*---달력---*/
+.calendar {font-size:12px; font-family:굴림; text-decoration:none; color:#000000; line-height:15px;}
+.calendar1 {font-size:12px; font-family:굴림; text-decoration:none; color:#000000; line-height:14px;}
+.calendar2 {font-size:12px; font-family:굴림; text-decoration:none; color:#000000; line-height:14px;}
+.H0 { color : #000000; font-size : 12px; }
+.H1 { color : #ffffff; font-size : 12px; }
+.H2 { color : #6699CC; font-size : 12px; }
+.H3 { color : #868686; font-size : 12px; }
+
+.imbchands
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 13px;
+    CURSOR: hand;
+    COLOR: #ffffff;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-VARIANT: normal;
+    TEXT-DECORATION: none
+}
+
+/*--텍스트 광고용 class--*/
+A:link
+{
+    FONT-SIZE: 12px;
+    COLOR: #3A3A3A;
+    CURSOR: hand;
+    TEXT-DECORATION: none
+}
+A:visited
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    CURSOR: hand;
+    TEXT-DECORATION: none
+}
+A:active
+{
+    COLOR: tomato;
+    CURSOR: hand;
+    TEXT-DECORATION: none
+}
+A:hover
+{
+    COLOR: royalblue;
+    CURSOR: hand;
+    TEXT-DECORATION: none
+}
+/*--텍스트 광고용 class--*/
+
+
+
+/*--기본정의--*/
+td  		{font-size :12px;letter-spacing=-0.5px; font-family:"굴림";color:#555555;line-height:16px;} 
+td a       	{color:#555555; text-decoration:none; line-height:16px;}
+td a:link    	{color:#555555; text-decoration:none; line-height:16px;}
+td a:hover 	{color:#333333; text-decoration:underline; line-height:16px;}
+
+/*-채널메인 메뉴 포커싱--*/
+.focus 		{font-size :12px; font-family:"굴림"; color:#111111;line-height:16px;} 
+.focus a       	{color:#111111; text-decoration:none; line-height:16px;}
+.focus a:link   {color:#111111; text-decoration:none; line-height:16px;}
+.focus a:hover 	{color:#000000; text-decoration:underline; line-height:16px;}  
+
+/*-작은글씨--*/
+.small 		{font-size :11px; font-family:"굴림"; color:#444444;line-height:16px;} 
+.small a       	{color:#444444; text-decoration:none; line-height:16px;}
+.small a:link   {color:#444444; text-decoration:none; line-height:16px;}
+.small a:hover 	{color:#333333; text-decoration:underline; line-height:16px;}  
+
+/*-링크시자간조정--*/
+.he 		{font-size :12px; font-family:"굴림"; color:#111111;line-height:14px;} 
+.he a       	{color:#111111; text-decoration:none; line-height:14px;}
+.he a:link   {color:#111111; text-decoration:none; line-height:14px;}
+.he a:hover 	{color:#000000; text-decoration:underline; line-height:14px;}  
+
+
+/*-시사 TV 속 정보창고 title--*/
+a.stitle 	 {color:#CE7B01; font-weight:bold; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.stitle         {color:#CE7B01; font-weight:bold; text-decoration:none; line-height:16px;}
+a.stitle:link    {color:#CE7B01; font-weight:bold; text-decoration:none; line-height:16px;}
+a.stitle:hover   {color:#CE7B01; font-weight:bold; text-decoration:underline; line-height:16px;}
+
+/*-시사 TV 속 정보창고 내용--*/
+a.stext 	 {color:#999999; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.stext          {color:#999999; text-decoration:none; line-height:16px;}
+a.stext:link     {color:#999999; text-decoration:none; line-height:16px;}
+a.stext:hover    {color:#666666; text-decoration:underline; line-height:16px;}
+
+/*-시사 TV 속 정보창고 리스트 no--*/
+a.slistn         {color:#666666; font-weight:20px; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.slistn         {color:#666666; font-weight:20px; text-decoration:none; line-height:16px;}
+a.slistn:link    {color:#666666; font-weight:20px; text-decoration:none; line-height:16px;}
+a.slistn:hover   {color:#E64589; font-weight:20px; text-decoration:none; line-height:16px;} 
+
+
+/*-드라마 원작추천 공모 리스트--*/
+.prize             {color:#66665C; font-size :12px; font-family:"굴림";line-height:16px;} 
+.prize a           {color:#66665C; text-decoration:none; line-height:16px;}
+.prize a:link      {color:#66665C; text-decoration:none; line-height:16px;}
+.prize a:hover   {color:#66665C; text-decoration:underline; line-height:16px;}
+
+/*-게시판 리스트 넘버_드라마 원작 추천 공모--*/
+.listno             {color:#666666; font-weight:bold; font-size :12px; font-family:"굴림";line-height:20px;} 
+.listno a          {color:#666666; font-weight:bold; text-decoration:none; line-height:20px;}
+.listno a:link     {color:#666666; font-weight:bold; text-decoration:none; line-height:20px;}
+.listno a:hover  {color:#4098F0; font-weight:bold; text-decoration:none; line-height:20px;} 
+ 
+
+/*-종영프로그램 리스트 no--*/
+.list_no           {color:#666666; font-weight:bold; font-size :12px; font-family:"굴림";line-height:16px;} 
+.list_no a         {color:#666666; font-weight:bold; text-decoration:none; line-height:16px;}
+.list_no a:link    {color:#666666; font-weight:bold; text-decoration:none; line-height:16px;}
+.list_no a:hover   {color:#E64589; font-weight:bold; text-decoration:none; line-height:16px;} 
+
+/*-종영프로그램 리스트--*/
+.end_list           {color:#1D6790; font-weight:none; font-size :12px; font-family:"굴림";line-height:16px;} 
+.end_list a         {color:#1D6790; font-weight:none; text-decoration:none; line-height:16px;}
+.end_list a:link    {color:#1D6790; font-weight:none; text-decoration:none; line-height:16px;}
+.end_list a:hover   {color:#1D6790; font-weight:none; text-decoration:underline; line-height:16px;} 
+
+/*-현장리포트 제목--*/
+a.report 	      {color:#EE645A; font-weight:bold; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.report            {color:#EE645A; font-weight:bold; text-decoration:none; line-height:16px;}
+a.report:link       {color:#EE645A; font-weight:bold; text-decoration:none; line-height:16px;}
+a.report:hover    {color:#EE645A; font-weight:bold; text-decoration:underline; line-height:16px;}
+
+
+
+
+/*-라디오 플러스 메인 리포트 제목--*/
+a.plus          {color:#B843E9; font-weight:bold; font-size :14px; font-family:"굴림";line-height:20px;} 
+a.plus          {color:#B843E9; font-weight:bold; text-decoration:none; line-height:20px;}
+a.plus:link     {color:#B843E9; font-weight:bold; text-decoration:none; line-height:20px;}
+a.plus:hover  {color:#B843E9; font-weight:bold; text-decoration:underline; line-height:20px;} 
+
+/*-라디오 플러스 메인 나머지 제목--*/
+a.plus_s          {color:#E943CB; font-weight:bold; font-size :12px; font-family:"굴림";line-height:20px;} 
+a.plus_s          {color:#E943CB; font-weight:bold; text-decoration:none; line-height:20px;}
+a.plus_s:link     {color:#E943CB; font-weight:bold; text-decoration:none; line-height:20px;}
+a.plus_s:hover  {color:#E943CB; font-weight:bold; text-decoration:underline; line-height:20px;}
+
+/*-시사 터놓고말해요 메인--*/
+a.ilchon_t01 	     {color:#037E00; font-weight:bold; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.ilchon_t01                    {color:#037E00; font-weight:bold; text-decoration:none; line-height:16px;}
+a.ilchon_t01:link               {color:#037E00; font-weight:bold; text-decoration:none; line-height:16px;}
+a.ilchon_t01:hover           {color:#037E00; font-weight:bold; text-decoration:underline; line-height:16px;}
+
+a.ilchon_c01 	     {color:#037E00; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.ilchon_c01                    {color:#037E00; text-decoration:none; line-height:16px;}
+a.ilchon_c01:link               {color:#037E00; text-decoration:none; line-height:16px;}
+a.ilchon_c01:hover            {color:#037E00; text-decoration:underline; line-height:16px;}
+
+a.ilchon_t02 	     {color:#B96007; font-weight:bold; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.ilchon_t02                    {color:#B96007; font-weight:bold; text-decoration:none; line-height:16px;}
+a.ilchon_t02:link               {color:#B96007; font-weight:bold; text-decoration:none; line-height:16px;}
+a.ilchon_t02:hover            {color:#B96007; font-weight:bold; text-decoration:underline; line-height:16px;}
+
+a.ilchon_c02 	     {color:#B96007; font-size :12px; font-family:"굴림";line-height:16px;} 
+a.ilchon_c02                    {color:#B96007; text-decoration:none; line-height:16px;}
+a.ilchon_c02:link               {color:#B96007; text-decoration:none; line-height:16px;}
+a.ilchon_c02:hover           {color:#B96007; text-decoration:underline; line-height:16px;}
+
+/*--작은글씨 2006년12월추가 sh--*/
+.vod_no 		{font-size :12px; font-family:"굴림"; color:#999999;line-height:16px;}

@@ -45,7 +45,12 @@ namespace AutoLogin
                 _driverService.HideCommandPromptWindow = true;
 
                 _options = new ChromeOptions();
-                _options.AddArgument("disable-gpu");
+                _options.AddArgument("--disable-gpu");
+                _options.AddArgument("lang=ko_KR");
+                _options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36");
+                _options.AddArgument("--user-data-dir=chrome-data");
+                _options.AddArgument("--disable-infobars");
+                _options.AddAdditionalCapability("useAutomationExtension", false);
                 //클릭이벤트선언
                 this.plus1.Click += plus1_Click;
                 this.minus1.Click += minus1_Click;
@@ -73,8 +78,7 @@ namespace AutoLogin
                 string pw = string.Empty;
 
                 _driver = new ChromeDriver(_driverService, _options);
-
-
+                
                 for (int i = 0; i < lines.Length; i++)
                 {
                     string line = lines[i];
@@ -93,8 +97,7 @@ namespace AutoLogin
 
                     _driver.Navigate().GoToUrl(url); // 웹 사이트에 접속합니다.
                     _driver.Manage().Window.Maximize();
-                    //_driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-
+                    //_driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
                     Thread.Sleep(1000);
 
                     //모두 존재(자동로그인3)
@@ -296,16 +299,14 @@ namespace AutoLogin
         }
 
         //크롬 종료
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            processKill();
-        }
         private void processKill()
         {
             try
             {
+                MessageBox.Show("[program finish!] closing all processes \n wait a few minutes!","Good bye :)");
                 //오류및 강제종료시 process kill
                 Process[] processList = Process.GetProcessesByName("chromedriver.exe");
+                
                 if (processList.Length > 0)
                 {
                     processList[0].Kill();
@@ -319,6 +320,7 @@ namespace AutoLogin
         {
             processKill();
         }
+        //사용X
         private void label1_Click(object sender, EventArgs e)
         {
             //없음
@@ -333,6 +335,9 @@ namespace AutoLogin
             //없음
         }
 
-
+        private void label5_Click(object sender, EventArgs e)
+        {
+            //없음
+        }
     }
 }

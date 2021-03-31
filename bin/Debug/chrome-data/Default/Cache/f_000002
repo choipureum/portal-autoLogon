@@ -1,0 +1,929 @@
+/*
+ * Inline Form Validation Engine 1.7, jQuery plugin
+ * 
+ * Copyright(c) 2010, Cedric Dugas
+ * http://www.position-relative.net
+ *	
+ * Form validation engine allowing custom regex rules to be added.
+ * Thanks to Francois Duquette and Teddy Limousin 
+ * and everyone helping me find bugs on the forum
+ * Licenced under the MIT Licence
+ */
+
+(function($) {
+	//VER : REG_2015.05, REFID : DEV150511_320, AUTHOR : jhhan
+	//msgid추가함 COMMON-000357 : homepage관련 
+	var msgIds = ["COMMON-000063","COMMON-000064","COMMON-000065","COMMON-000066","COMMON-000067","COMMON-000068",
+	              "COMMON-000069","COMMON-000070","COMMON-000071","COMMON-000072","COMMON-000073","COMMON-000074",
+	              "COMMON-000076","COMMON-000095","COMMON-000195","COMMON-000245","COMMON-000357","COMMON-020004"];
+	var jsonValidationMessages = {};
+	try{
+		// 로그인 전 페이지에서만 .do 로 호출한다. (로그인관련 페이지)
+		if(!isUndefined(window._exceptSessionCheck)){
+			//jsonValidationMessages = jQuery.listMessages(msgIds.join("\14"), true);
+			jsonValidationMessages = validationMsgs;
+		}else{
+			jsonValidationMessages = jQuery.listMessages(msgIds.join("\14"));
+		}
+	}catch(e){}
+	/*
+	 * Note - hyungyu
+	 * 1.
+	 * 해당 폼에 ajaxCall 을 사용한 object 가 존재할 경우 최종 validation call 방법
+	 * 	1) jQuery(formobject).validationEngine({returnIsValid}) : return boolean
+	 *  2) jQuery.validationEngine.submitValidation(formobject) : return boolean
+	 * 일반적인 경우 1번의 방법으로 다시 체크가 된지만,
+	 * engine 의 ajaxValidArray 변수가 초기화 되므로 이경우 2번의 방법으로 체크하도록 한다.
+	 * *****************************************
+	 * 1번방법 -->  valid : true, invalid : false
+	 * 2번방법 -->  valid : false, invalid : true
+	 * *****************************************
+	 * 부서관리 참고하세요 dept.js
+	 * 
+	 * 2.
+	 * ajaxCall 함수는 비동기로 처리되므로, 
+	 * 최종 판단시 ajaxCall 함수를 호출하는 방식은 의미가 없음.
+	 */
+	$.fn.validationEngineLanguage = function() {};
+	$.validationEngineLanguage = {
+		newRule: function() {
+			$.validationEngineLanguage.allRules = 	{
+					"required":{    			// Add your regex rules here, you can take telephone as an example
+						"regex":"none",
+						"alertText":"* "+jsonValidationMessages["COMMON-000063"],
+						"alertTextCheckboxMultiple":"* "+jsonValidationMessages["COMMON-000064"],
+						"alertTextCheckboxe":"* "+jsonValidationMessages["COMMON-000064"]},
+					"length":{
+						"regex":"none",
+						"alertText":"* "+jsonValidationMessages["COMMON-000065"]},
+					"maxCheckbox":{
+						"regex":"none",
+						"alertText":"* "+jsonValidationMessages["COMMON-000066"]},	
+					"minCheckbox":{
+						"regex":"none",
+						"alertText":"* "+jsonValidationMessages["COMMON-000067"]},	
+					"confirm":{
+						"regex":"none",
+						"alertText":"* "+jsonValidationMessages["COMMON-000068"]},		
+					"telephone":{
+						"regex":"/^[0-9\-\(\)\ ]+$/",
+						"alertText":"* "+jsonValidationMessages["COMMON-000069"]},	
+					"email":{
+						//VER : REG_2015.05, REFID : DEV150511_320, AUTHOR : jhhan
+						//email 유효성 체크 정규식 변경
+						"regex":"/^[a-z0-9\._-]+@([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$/i",
+						"alertText":"* "+jsonValidationMessages["COMMON-000070"]},	
+					"date":{
+			             "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
+			             "alertText":"* "+jsonValidationMessages["COMMON-000071"]},
+					"onlyNumber":{
+						"regex":"/^[0-9\- ]+$/",
+						"alertText":"* "+jsonValidationMessages["COMMON-000072"]},	
+					"onlyPointNumber":{
+						"regex":"/^[0-9\-\. ]+$/",
+						"alertText":"* "+jsonValidationMessages["COMMON-000195"]},	
+					"noSpecialCharacters":{
+						"regex":"/^[0-9a-zA-Z]+$/",
+						"alertText":"* "+jsonValidationMessages["COMMON-000073"]},	
+					"codeCharacters":{
+						"regex":"/^[0-9a-zA-Z\_]+$/",
+						"alertText":"* "+jsonValidationMessages["COMMON-000095"]},	
+					"onlyLetter":{
+						"regex":"/^[a-zA-Z\ \']+$/",
+						"alertText":"* "+jsonValidationMessages["COMMON-000074"]},
+					"alphaNumber":{
+//						"regex":"/[a-zA-Z]/i&&/[0-9]/",		//영숫자 체크
+						"regex":"/[a-zA-Z]/i&&/[0-9]/&&/[^a-zA-Z0-9]/",		//영/숫자/특수문자 체크
+						"alertText":"* "+jsonValidationMessages["COMMON-000076"]},
+					//VER : REG_2015.05, REFID : DEV150511_320, AUTHOR : jhhan
+					//홈페이지 유효성 체크 추가
+					"homepage":{
+						"regex":"/^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$/i",		
+						"alertText":"* "+jsonValidationMessages["COMMON-000357"]},
+					"bulletOper" : {
+						"regex":"/∙/i",
+						"alertText":"* "+jsonValidationMessages["COMMON-020004"]}
+					};
+			}
+	};
+	$.fn.validationEngine = function(settings) {
+	if($.validationEngineLanguage){				// IS THERE A LANGUAGE LOCALISATION ?
+		allRules = $.validationEngineLanguage.allRules;
+	}else{
+		$.validationEngine.debug("Validation engine rules are not loaded check your external file");
+	}
+	if (settings && settings.returnIsValid) {
+  	settings = jQuery.extend($.validationEngine.settings,settings);
+  }else {
+  	settings = jQuery.extend({
+  		allrules: allRules,
+  		validationEventTriggers: "keyup",
+  		inlineValidation: true,
+  		returnIsValid: false,
+  		liveEvent: false,
+  		unbindEngine: true,
+  		containerOverflow: false,
+  		containerOverflowDOM: "",
+  		validationGroup: {},
+  		validationGroupCurId : "",
+  		
+  		closeOnBlur : true,
+  		useAlert :false,
+  		
+  		ajaxSubmit: false,
+  		scroll: true,
+  		promptPosition: "topLeft", // OPENNING BOX POSITION, IMPLEMENTED: topLeft, topRight, bottomLeft, centerRight, bottomRight
+		success: false,
+		beforeSuccess: function(){
+		},
+		failure: function(){
+		}
+		}, settings);
+	}
+	//alert(settings.containerOverflow);
+	$.validationEngine.settings = settings;
+	$.validationEngine.ajaxValidArray = new Array();	// ARRAY FOR AJAX: VALIDATION MEMORY 
+	$.validationEngine.isSubmitValidationCall = false;
+	$.validationEngine.objIdx=0;
+	
+	if(settings.inlineValidation == true){ 		// Validating Inline ?
+		if(!settings.returnIsValid){					// NEEDED FOR THE SETTING returnIsValid
+			allowReturnIsvalid = false;
+			if(settings.liveEvent){						// LIVE event, vast performance improvement over BIND
+				$(this).find("[class*=validate][type!=checkbox]").live(settings.validationEventTriggers, function(caller){ _inlinEvent(this);});
+				$(this).find("[class*=validate][type=checkbox]").live("click", function(caller){ _inlinEvent(this); });
+				
+				$(this).find("[class*=validate]").not("[type=checkbox]").live("focus", function(caller){if($(this).val()=='') _inlinEvent(this);});
+			}else{
+				$(this).find("[class*=validate]").not("[type=checkbox]").bind(settings.validationEventTriggers, function(caller){ _inlinEvent(this); });
+				//콤보박스등.. 디폴트 keydown시에는 계속 보이므로 change추가!
+				if(settings.validationEventTriggers != 'change'){
+					$(this).find("[class*=validate]").not("[type=checkbox]").bind("change", function(caller){ _inlinEvent(this); });
+				}
+				$(this).find("[class*=validate][type=checkbox]").bind("click", function(caller){ _inlinEvent(this); });
+
+				$(this).find("[class*=validate]").not("[type=checkbox]").bind("focus", function(caller){if($(this).val()=='') _inlinEvent(this);});
+				
+				if(settings.closeOnBlur){
+					$(this).find("[class*=validate]").not("[type=checkbox]").bind("blur", function(caller){ jQuery.validationEngine.closePrompt(this); });
+				}
+			}
+			firstvalid = false;
+			
+		}
+		function _inlinEvent(caller){
+			$.validationEngine.settings = settings;
+			if($.validationEngine.intercept == false || !$.validationEngine.intercept){		// STOP INLINE VALIDATION THIS TIME ONLY
+				$.validationEngine.onSubmitValid=false;
+				$.validationEngine.loadValidation(caller); 
+			}else{
+				$.validationEngine.intercept = false;
+			}
+		}
+	}
+	if (settings.returnIsValid){		// Do validation and return true or false, it bypass everything;
+		if ($.validationEngine.submitValidation(this,settings)){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	/*$(this).bind("submit", function(caller){   // ON FORM SUBMIT, CONTROL AJAX FUNCTION IF SPECIFIED ON DOCUMENT READY
+		$.validationEngine.onSubmitValid = true;
+		$.validationEngine.settings = settings;
+		if($.validationEngine.submitValidation(this,settings) == false){
+			if($.validationEngine.submitForm(this,settings) == true) return false;
+		}else{
+			settings.failure && settings.failure(); 
+			return false;
+		}		
+	})*/
+	$(".formError").live("click",function(){	 // REMOVE BOX ON CLICK
+		$(this).fadeOut(50,function(){		$(this).remove();	});
+		$(this).remove(); 
+	});
+};	
+$.validationEngine = {
+	defaultSetting : function(caller) {		// NOT GENERALLY USED, NEEDED FOR THE API, DO NOT TOUCH
+		if($.validationEngineLanguage){				
+			allRules = $.validationEngineLanguage.allRules;
+		}else{
+			$.validationEngine.debug("Validation engine rules are not loaded check your external file");
+		}	
+		settings = {
+			allrules:allRules,
+			validationEventTriggers:"keydown",					
+			inlineValidation: true,	
+			containerOverflow:false,
+			containerOverflowDOM:"",
+			validationGroup: {},
+	  		validationGroupCurId : "",
+			returnIsValid:false,
+			scroll:true,
+			unbindEngine:true,
+			ajaxSubmit: false,
+			promptPosition: "topLeft",	// OPENNING BOX POSITION, IMPLEMENTED: topLeft, topRight, bottomLeft, centerRight, bottomRight
+			success : false,
+			failure : function() {}
+		};
+		$.validationEngine.settings = settings;
+	},
+	loadValidation : function(caller) {		// GET VALIDATIONS TO BE EXECUTED
+		if(!$.validationEngine.settings) $.validationEngine.defaultSetting();
+		var rulesParsing = $(caller).attr('class');
+		var rulesRegExp = /\[(.*)\]/;
+		var getRules = rulesRegExp.exec(rulesParsing);
+		if(getRules == null) return false;
+		var str = getRules[1];
+		var pattern = /\[|,|\]/;
+		var result= str.split(pattern);	
+		var validateCalll = $.validationEngine.validateCall(caller,result);
+		return validateCalll;
+	},
+	ajaxCall : function(caller,rules) {
+		if(!$.validationEngine.onSubmitValid) {
+			fieldValue = $(caller).val();
+			ajaxCaller = caller;
+			fieldId = $(caller).attr("id");
+			ajaxValidate = true;
+			ajaxisError = $.validationEngine.isError;
+			var promptText = "";
+			var rulesData = rules;  //비동기호출이므로 로컬변수에 담아두어야한다.
+			if(rulesData.extraData){
+				extraData = rulesData.extraData;
+			}else{
+				extraData = "";
+			}
+			/* AJAX VALIDATION HAS ITS OWN UPDATE AND BUILD UNLIKE OTHER RULES */	
+			if(!ajaxisError){
+				$.ajax({
+				   	type: "POST",
+				   	url: _weburl+'/'+rulesData.file,
+				   	async: true,
+				   	data: "validateValue="+fieldValue+"&validateId="+fieldId+"&extraData="+extraData,
+				   	beforeSend: function(){		// BUILD A LOADING PROMPT IF LOAD TEXT EXIST		   			
+				   		if(rules.alertTextLoad){
+				   			if(!$("div."+fieldId+"formError")[0]){				   				
+	 			 					return $.validationEngine.buildPrompt(ajaxCaller,rules.alertTextLoad,"load");
+	 			 				}else{
+	 			 					$.validationEngine.updatePromptText(ajaxCaller,rules.alertTextLoad,"load");
+	 			 				}
+			   			}
+			  	 	},
+			  	 	error: function(data,transport){ $.validationEngine.debug("error in the ajax: "+data.status+" "+transport); },
+					success: function(data){					// GET SUCCESS DATA RETURN JSON
+						//data = eval( "("+data+")");				// GET JSON DATA FROM PHP AND PARSE IT
+						ajaxisError = data.result;
+						//ajaxCaller = $(caller);
+						//fieldId = ajaxCaller;
+						ajaxErrorLength = $.validationEngine.ajaxValidArray.length;
+						existInarray = false;
+						
+			 			 if(ajaxisError == "false"){			// DATA FALSE UPDATE PROMPT WITH ERROR;
+			 			 	_checkInArray(false);				// Check if ajax validation alreay used on this field
+			 			 	if(!existInarray){		 			// Add ajax error to stop submit
+				 			 	$.validationEngine.ajaxValidArray[ajaxErrorLength] =  new Array(2);
+				 			 	$.validationEngine.ajaxValidArray[ajaxErrorLength][0] = fieldId;
+				 			 	$.validationEngine.ajaxValidArray[ajaxErrorLength][1] = false;
+				 			 	existInarray = false;
+			 			 	}
+				
+			 			 	$.validationEngine.ajaxValid = false;
+							$.validationEngine.isError = true;
+							promptText += rulesData.alertText+"<br />";
+							
+							var linkTofieldText = "." +$.validationEngine.linkTofield(ajaxCaller);
+							if(linkTofieldText != "."){
+								if(!$(linkTofieldText)[0]){
+									$.validationEngine.buildPrompt(ajaxCaller,rulesData.alertText,"",true);
+								}else{
+									$.validationEngine.updatePromptText(ajaxCaller,rulesData.alertText,"",true);	
+								}	
+							}else{
+								$.validationEngine.updatePromptText(ajaxCaller,rulesData.alertText,"",true);	
+							}
+							
+						 }else{	 
+						 	_checkInArray(true);
+						 	$.validationEngine.ajaxValid = true;
+							$.validationEngine.isError = false; 			
+						 	//if(!customAjaxRule)	{$.validationEngine.debug("wrong ajax response, are you on a server or in xampp? if not delete de ajax[ajaxUser] validating rule from your form ")}
+						 	if(rulesData.alertTextOk && !$.validationEngine.isSubmitValidationCall){	// NO OK TEXT MEAN CLOSE PROMPT	
+						 			var linkTofieldText = "." +$.validationEngine.linkTofield(ajaxCaller);
+									if(linkTofieldText != "."){
+										if(!$(linkTofieldText)[0]){
+											$.validationEngine.buildPrompt(ajaxCaller, rulesData.alertTextOk, "pass", true);
+										}else{
+											$.validationEngine.updatePromptText(ajaxCaller, rulesData.alertTextOk, "pass", true);	
+										}	
+									}else{
+										$.validationEngine.updatePromptText(ajaxCaller, rulesData.alertTextOk, "pass", true);	
+									}
+									ajaxValidate = false;	
+									$.validationEngine.closePrompt(ajaxCaller,false,3000);
+ 			 				}else{
+				 			 	ajaxValidate = false;		 	
+				 			 	$.validationEngine.closePrompt(ajaxCaller);
+ 			 				}		
+			 			 }
+			 			function  _checkInArray(validate){
+			 				for(x = 0; x < ajaxErrorLength; x++){
+			 			 		if($.validationEngine.ajaxValidArray[x][0] == fieldId){
+			 			 			$.validationEngine.ajaxValidArray[x][1] = validate;
+			 			 			existInarray = true;
+			 			 		
+			 			 		}
+			 			 	}
+			 			}
+			 		}				
+				});
+			}
+		}
+	},
+	validateCall : function(caller,rules) {	// EXECUTE VALIDATION REQUIRED BY THE USER FOR THIS FIELD
+		var promptText =""	;
+		
+		if(!$(caller).attr("id")) $.validationEngine.debug("This field have no ID attribut( name & class displayed): "+$(caller).attr("name")+" "+$(caller).attr("class"));
+
+		ajaxValidate = false;
+		var callerName = $(caller).attr("name");
+		$.validationEngine.isError = false;
+		$.validationEngine.showTriangle = true;
+		callerType = $(caller).attr("type");
+		var txt = new Array();
+		var orgCaller = caller;
+		
+		for (var i=0; i<rules.length;i++){
+			switch (rules[i]){
+			case "optional":
+				if(!$(caller).val()){
+					$.validationEngine.closePrompt(caller);
+					return $.validationEngine.isError;
+				}
+			break;
+			case "required": 
+				_required(caller,rules);
+			break;
+			case "custom": 
+				 _customRegex(caller,rules,i);
+			break;
+			case "exemptString": 
+				 _exemptString(caller,rules,i);
+			break;
+			case "ajaxCall": 
+				_ajaxCall(orgCaller,rules,i);
+			break;
+			case "length": 
+				 _length(caller,rules,i);
+			break;
+			case "maxCheckbox": 
+				_maxCheckbox(caller,rules,i);
+			 	groupname = $(caller).attr("name");
+			 	caller = $("input[name='"+groupname+"']");
+			break;
+			case "minCheckbox": 
+				_minCheckbox(caller,rules,i);
+				groupname = $(caller).attr("name");
+			 	caller = $("input[name='"+groupname+"']");
+			break;
+			case "confirm": 
+				 _confirm(caller,rules,i);
+			break;
+			case "funcCall":
+		     	_funcCall(orgCaller,rules,i);
+			break;
+			default :
+			;
+			};
+		};
+		
+		radioHack();
+		if ($.validationEngine.isError == true){
+			var linkTofieldText = "." +$.validationEngine.linkTofield(caller);
+			if(linkTofieldText != "."){
+				if(!$(linkTofieldText)[0]){
+//					$.validationEngine.buildPrompt(caller,promptText,"error");
+					$.validationEngine.buildPrompt(caller,promptText, "error", false, $.validationEngine.includeRequiredErr);
+				}else{
+//					$.validationEngine.updatePromptText(caller,promptText);
+					$.validationEngine.updatePromptText(caller,promptText,"",false, $.validationEngine.includeRequiredErr);
+				}
+			}else{
+				$.validationEngine.updatePromptText(caller,promptText);
+			}
+		}else{
+			$.validationEngine.closePrompt(caller);
+		}
+		
+		promptText='';
+		/* UNFORTUNATE RADIO AND CHECKBOX GROUP HACKS */
+		/* As my validation is looping input with id's we need a hack for my validation to understand to group these inputs */
+		function radioHack(){
+	      if($("input[name='"+callerName+"']").size()> 1 && (callerType == "radio" || callerType == "checkbox")) {        // Hack for radio/checkbox group button, the validation go the first radio/checkbox of the group
+	          caller = $("input[name='"+callerName+"'][type!=hidden]:first");     
+	          $.validationEngine.showTriangle = false;
+	      }      
+	    }
+		/* VALIDATION FUNCTIONS */
+		function _required(caller,rules){   // VALIDATE BLANK FIELD
+			callerType = caller.type;
+			if (callerType == "text" || callerType == "password" || caller.nodeName.toLowerCase() == "textarea"){
+				if(isNullStr($(caller).val())){
+					$.validationEngine.isError = true;
+					$.validationEngine.includeRequiredErr = true;
+					var msg = $.validationEngine.settings.allrules[rules[i]].alertText;
+					// fake 콤보박스일 경우 처리
+					if(!isUndefined($(caller).attr("isFakeSelect"))){
+						msg = $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxMultiple;
+					}
+					msg = msg.replace("$objtitle", getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+					promptText += msg+"<br />";
+				}
+				//2017.04.17 특수문자 ∙ valid 체크 PDF파일 생성시 에러 발생 author joo
+				if(caller.name == "appSubject"){
+					var reg = eval($.validationEngine.settings.allrules.bulletOper.regex);
+					if(reg.test(caller.value)){
+						$.validationEngine.isError = true;
+						var msg =  $.validationEngine.settings.allrules.bulletOper.alertText;
+						msg = msg.replace("$objtitle", getString($(caller).attr('objtitle'),$(caller).attr('name')));
+						promptText += msg+"<br />";
+					}
+				}
+			}	
+			if (callerType == "radio" || callerType == "checkbox" ){
+				callerName = $(caller).attr("name");
+		
+				if($("input[name='"+callerName+"']:checked").size() == 0) {
+					$.validationEngine.isError = true;
+					$.validationEngine.includeRequiredErr = true;
+					if($("input[name='"+callerName+"']").size() ==1) {
+						var msg = $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxe;
+						msg = msg.replace("$objtitle", $(caller).attr('objtitle')); 
+						promptText += msg+"<br />";
+					}else{
+						 var msg = $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxMultiple;
+						 msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+						 promptText += msg+"<br />";
+					}	
+				}
+			}	
+			if (callerType == "select-one") { // added by paul@kinetek.net for select boxes, Thank you
+				if(isNullStr($(caller).val())){
+					$.validationEngine.isError = true;
+					$.validationEngine.includeRequiredErr = true;
+					var msg = $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxMultiple;
+					msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+					promptText += msg+"<br />";
+				}
+			}
+			if (callerType == "select-multiple") { // added by paul@kinetek.net for select boxes, Thank you	
+				if(!$(caller).find("option:selected").val()) {
+					$.validationEngine.isError = true;
+					$.validationEngine.includeRequiredErr = true;
+					var msg = $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxMultiple;
+					msg = msg.replace("$objtitle", getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+					promptText += msg+"<br />";
+				}
+			}
+			//해당 오브젝트가 Validation실패할경우 추가적인 Validation Trigger작업 호출
+			//ex) Tab에서 Validation발생할경우 해당 탭활성화처리
+			//  <div id='div1'><input type=text vtid='div1' vt='click'/></div>
+			if($.validationEngine.isError && $.validationEngine.isSubmitValidationCall){
+				var vt 				= $(caller).attr('vt'); 	//Validation trigger 이름
+				var vtid 			= $(caller).attr('vtid'); 	//Validation trigger 대상id
+				var vtObj 			= jQuery('#'+vtid);
+				if(vtObj.length > 0 ){
+					var len = $.validationEngine.settings.validationGroup.length;
+					for(var j=0; j <len; j++){
+						if($.validationEngine.validationGroupCurId != '') break;
+						var vGrpId = $.validationEngine.settings.validationGroup[j]; 
+						if(vGrpId == vtid && $.validationEngine.validationGroupCurId != vtid ){
+							jQuery('#'+vtid).trigger(vt);
+							$.validationEngine.validationGroupCurId = vGrpId;
+							break;
+						}
+					};
+				}
+			}
+			if(!$.validationEngine.isError){
+				$.validationEngine.includeRequiredErr = false;
+				//top.jQuery.debug(">>> no error");
+				//$(caller).removeClass("input_strong");
+				//$(caller).css({"border": ""});
+			}
+		}
+		function _customRegex(caller,rules,position){		 // VALIDATE REGEX RULES
+			customRule = rules[position+1];
+
+			var isValid = false;
+			var patternList = $.validationEngine.settings.allrules[customRule].regex;
+			
+			if (patternList.indexOf("||") > 0) {
+	  		patternList = patternList.split("||");
+	  	
+	  		//OR조건 체크
+				for (var i = 0; i < patternList.length; i++) {
+					pattern = eval(patternList[i]);
+					if (pattern.test($(caller).attr('value'))) {
+						isValid = true;
+					}
+				}
+			}else if(patternList.indexOf("&&") > 0){
+				patternList = patternList.split("&&");
+	  		//AND조건 체크
+				for (var i = 0; i < patternList.length; i++) {
+					pattern = eval(patternList[i]);
+					if (!pattern.test($(caller).attr('value'))) {
+				  	isValid = false;
+				  	break;
+				  }else{
+						isValid = true;
+					}
+				}
+			}else{
+				isValid =eval(patternList).test($(caller).attr('value'));
+			}
+			
+			if(!isValid){
+				$.validationEngine.isError = true;
+				  var msg = $.validationEngine.settings.allrules[customRule].alertText;
+					msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+					promptText += msg+"<br />";
+			}
+		}
+		function _exemptString(caller,rules,position){		 // VALIDATE REGEX RULES
+			customString = rules[position+1];
+			if(customString == $(caller).attr('value')){
+				$.validationEngine.isError = true;
+					var msg =  $.validationEngine.settings.allrules['required'].alertText;
+					msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+					promptText += msg+"<br />";
+			}
+		}
+		
+		function _funcCall(caller,rules,position){  		// VALIDATE CUSTOM FUNCTIONS OUTSIDE OF THE ENGINE SCOPE
+			customRule = rules[position+1];
+			funce = customRule;
+					var fn = window[funce];
+			if (typeof(fn) === 'function'){
+				var fn_result = fn.call( caller, caller );
+				//var fn_result = fn();
+				if(!fn_result){
+					$.validationEngine.isError = true;
+					
+					//사용자 정의 메세지.
+					if($(caller).attr('customfuncmsg') != 'undefined' 
+					   && $(caller).attr('customfuncmsg') != 'null' 
+						 && $(caller).attr('customfuncmsg') != null){
+						promptText += '* ' + $(caller).attr('customfuncmsg')  + "<br />";
+					}else{
+						// 함수호출은 funcmsg attriute에 메시지를 반드시 넣어야 함
+						var msg =  $.validationEngine.settings.allrules['required'].alertText;
+						msg = msg.replace("$objtitle", $(caller).attr('funcmsg')); 
+						promptText += '* ' + msg.replace('*','').replace('<br />','') + "<br />";
+					}
+					
+				}
+			}
+		}
+		function _ajaxCall(caller,rules,position){  		// VALIDATE CUSTOM FUNCTIONS OUTSIDE OF THE ENGINE SCOPE
+			customRule = rules[position+1];
+			funce = customRule;
+			
+			var fn = window[funce];
+			if (typeof(fn) === 'function'){
+				var fn_result = fn.call( caller, caller );
+			}
+		}
+		function _confirm(caller,rules,position){		 // VALIDATE FIELD MATCH
+			confirmField = rules[position+1];
+			
+			if($(caller).attr('value') != $("#"+confirmField).attr('value')){
+				$.validationEngine.isError = true;
+				var msg =  $.validationEngine.settings.allrules["confirm"].alertText;
+				msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+				promptText += msg+"<br />";
+			}
+		}
+		function _length(caller,rules,position){    	  // VALIDATE LENGTH
+			startLength = eval(rules[position+1]);
+			endLength = eval(rules[position+2]);
+			
+			feildLength = $(caller).attr('value').trim().length;
+
+			if(feildLength<startLength || feildLength>endLength){
+				$.validationEngine.isError = true;
+				
+				var msg = $.validationEngine.settings.allrules["length"].alertText;
+				msg = msg.replace("$1",startLength).replace("$2",endLength); 
+				
+				promptText += msg+"<br />";
+			}
+		}
+		function _maxCheckbox(caller,rules,position){  	  // VALIDATE CHECKBOX NUMBER
+		
+			nbCheck = eval(rules[position+1]);
+			groupname = $(caller).attr("name");
+			groupSize = $("input[name='"+groupname+"']:checked").size();
+			if(groupSize > nbCheck){	
+				$.validationEngine.showTriangle = false;
+				$.validationEngine.isError = true;
+				var msg =  $.validationEngine.settings.allrules["maxCheckbox"].alertText;
+				msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+				promptText += msg+"<br />";
+			}
+		}
+		function _minCheckbox(caller,rules,position){  	  // VALIDATE CHECKBOX NUMBER
+		
+			nbCheck = eval(rules[position+1]);
+			groupname = $(caller).attr("name");
+			groupSize = $("input[name='"+groupname+"']:checked").size();
+			if(groupSize < nbCheck){	
+			
+				$.validationEngine.isError = true;
+				$.validationEngine.showTriangle = false;
+				
+				var msg = $.validationEngine.settings.allrules["minCheckbox"].alertText;
+				msg = msg.replace("$objtitle",  getString($(caller).attr('objtitle'),$(caller).attr('name'))); 
+				msg = msg.replace('$1',nbCheck);
+				
+				promptText += msg+"<br />";
+			}
+		}
+		return ($.validationEngine.isError) ? $.validationEngine.isError : false;
+	},
+	buildPrompt : function(caller,promptText,type,ajaxed, includeRequiredErr) {			// ERROR PROMPT CREATION AND DISPLAY WHEN AN ERROR OCCUR
+		//caller가 포함하는 vtid가 존재시 해당 display속성을 체크해서 안보이면 DIV만들지 않는다!
+		if( $.validationEngine.isSubmitValidationCall){
+			var vtid = $(caller).attr('vtid');
+			if(!isNullStr(vtid)){
+				var vtObj = $('#'+vtid);
+				if(vtObj.length>0 && $.validationEngine.validationGroupCurId != vtid){
+					return false;
+				}
+			}
+			//전체 Validation의 경우는 Border BOX 구분으로 처리한다!
+			//$(caller).addClass("input_strong"); //class로 처리시 readOnly는 안됨!!
+			//안보이는 object 는 기존대로 prompt.
+//			if(isUndefined($(caller).attr("forcePrompt")) && includeRequiredErr){ 2012.09.22 hyungyu,song - radioHack 관련 수정.09.23
+			var forcePrompt = false;
+			if(caller instanceof jQuery){
+				forcePrompt = !isNull(caller[0].getAttribute("forcePrompt"));
+			}else{
+				forcePrompt = !isNull(caller.getAttribute("forcePrompt"));
+			}
+			if(!forcePrompt && includeRequiredErr){
+				$(caller).css({border:'1px #ff6600 solid'});
+				return false;
+			}
+		}
+		
+		if(!$.validationEngine.settings){
+			$.validationEngine.defaultSetting();
+		}
+		deleteItself = "." + $(caller).attr("id") + $(caller).attr("objIdx") +"formError";
+	
+		if($(deleteItself)[0]){
+			$(deleteItself).stop();
+			$(deleteItself).remove();
+		}
+		var divFormError = document.createElement('div');
+		var formErrorContent = document.createElement('div');
+		linkTofield = $.validationEngine.linkTofield(caller);
+		//alert('linkTofield:'+linkTofield);
+		$(divFormError).addClass("formError");
+		
+		if(type == "pass") $(divFormError).addClass("greenPopup");
+		if(type == "load") $(divFormError).addClass("blackPopup");
+		if(ajaxed) $(divFormError).addClass("ajaxed");
+		
+		$(divFormError).addClass(linkTofield);
+		$(formErrorContent).addClass("formErrorContent");
+		
+		if($.validationEngine.settings.containerOverflow){		// Is the form contained in an overflown container?
+			if($(caller).attr('inputContainerExists')!='true'){
+				var divContainer = document.createElement('div');
+				$(divContainer).addClass("inputContainer");
+				$(caller).before(divContainer);
+				$(divFormError).appendTo(divContainer);
+				$(caller).attr('inputContainerExists','true');
+			}else{
+				var divContainer = $(caller).parent().find('.inputContainer');
+				$(divFormError).appendTo(divContainer);
+			}
+			
+			//$(caller).before(divFormError);
+		}else{
+			$("body").append(divFormError);
+		}
+		
+		$(divFormError).append(formErrorContent);
+			
+		if($.validationEngine.showTriangle != false){		// NO TRIANGLE ON MAX CHECKBOX AND RADIO
+			var arrow = document.createElement('div');
+			$(arrow).addClass("formErrorArrow");
+			if($.validationEngine.settings.promptPosition == "bottomLeft" || $.validationEngine.settings.promptPosition == "bottomRight"){
+				$(divFormError).find(".formErrorContent").before(arrow);
+				$(arrow).addClass("formErrorArrowBottom");
+				$(arrow).html('<div id="arrowDiv"><div class="line1"><!-- --></div><div class="line2"><!-- --></div><div class="line3"><!-- --></div><div class="line4"><!-- --></div><div class="line5"><!-- --></div><div class="line6"><!-- --></div><div class="line7"><!-- --></div><div class="line8"><!-- --></div><div class="line9"><!-- --></div><div class="line10"><!-- --></div></div>');
+				$(arrow).find('#arrowDiv').css({'position':'relative','top':'-8px','background':'none'});
+			}
+			if($.validationEngine.settings.promptPosition == "topLeft" || $.validationEngine.settings.promptPosition == "topRight"){
+				$(divFormError).append(arrow);
+				$(arrow).html('<div class="line10"><!-- --></div><div class="line9"><!-- --></div><div class="line8"><!-- --></div><div class="line7"><!-- --></div><div class="line6"><!-- --></div><div class="line5"><!-- --></div><div class="line4"><!-- --></div><div class="line3"><!-- --></div><div class="line2"><!-- --></div><div class="line1"><!-- --></div>');
+			}
+		}
+		$(formErrorContent).html(promptText);
+		//alert(type+":"+ajaxed);
+		var calculatedPosition = $.validationEngine.calculatePosition(caller,promptText,type,ajaxed,divFormError);
+
+		calculatedPosition.callerTopPosition +="px";
+		calculatedPosition.callerleftPosition +="px";
+		calculatedPosition.marginTopSize +="px";
+		$(divFormError).css({
+			"top":calculatedPosition.callerTopPosition,
+			"left":calculatedPosition.callerleftPosition,
+			"marginTop":calculatedPosition.marginTopSize,
+			"opacity":0
+		});
+		return $(divFormError).animate({"opacity":1},function(){return true;});	
+	},
+	updatePromptText : function(caller,promptText,type,ajaxed) {	// UPDATE TEXT ERROR IF AN ERROR IS ALREADY DISPLAYED
+		linkTofield = $.validationEngine.linkTofield(caller);
+		var updateThisPrompt =  "."+linkTofield;
+		
+		if(type == "pass") { $(updateThisPrompt).addClass("greenPopup"); }else{ $(updateThisPrompt).removeClass("greenPopup");};
+		if(type == "load") { $(updateThisPrompt).addClass("blackPopup"); }else{ $(updateThisPrompt).removeClass("blackPopup");};
+		if(ajaxed) { $(updateThisPrompt).addClass("ajaxed"); }else{ $(updateThisPrompt).removeClass("ajaxed");};
+	
+		$(updateThisPrompt).find(".formErrorContent").html(promptText);
+		
+		var calculatedPosition = $.validationEngine.calculatePosition(caller,promptText,type,ajaxed,updateThisPrompt);
+		
+		calculatedPosition.callerTopPosition +="px";
+		calculatedPosition.callerleftPosition +="px";
+		calculatedPosition.marginTopSize +="px";
+		$(updateThisPrompt).animate({ "top":calculatedPosition.callerTopPosition,"marginTop":calculatedPosition.marginTopSize });
+	},
+	calculatePosition : function(caller,promptText,type,ajaxed,divFormError){
+		//alert('$.validationEngine.settings.containerOverflow:'+$.validationEngine.settings.containerOverflow);
+		if($.validationEngine.settings.containerOverflow){		// Is the form contained in an overflown container?
+			callerTopPosition = 0;
+			callerleftPosition = 0;
+			callerWidth =  $(caller).width();
+			inputHeight = $(divFormError).height();					// compasation for the triangle
+			var marginTopSize = "-"+inputHeight;
+		}else{
+			callerTopPosition = $(caller).offset().top;
+			callerleftPosition = $(caller).offset().left;
+			callerWidth =  $(caller).width();
+			inputHeight = $(divFormError).height();
+			var marginTopSize = 0;
+		}
+		
+		/* POSITIONNING */
+		if($.validationEngine.settings.promptPosition == "topRight"){ 
+			if($.validationEngine.settings.containerOverflow){		// Is the form contained in an overflown container?
+				callerleftPosition += callerWidth -30;
+			}else{
+				callerleftPosition +=  callerWidth -30; 
+				callerTopPosition += -inputHeight; 
+			}
+		}
+		if($.validationEngine.settings.promptPosition == "topLeft"){ 
+			if (!$.validationEngine.settings.containerOverflow) { // Is the form contained in an overflown container?
+				callerTopPosition += -inputHeight - 2;
+			}
+		}
+		
+		if($.validationEngine.settings.promptPosition == "centerRight"){ callerleftPosition +=  callerWidth +13; }
+		
+		if($.validationEngine.settings.promptPosition == "bottomLeft"){
+			callerHeight =  $(caller).height();
+			callerTopPosition = callerTopPosition + callerHeight + 12;
+			if($.validationEngine.settings.containerOverflow){
+				marginTopSize = 0;
+			}
+		}
+		if($.validationEngine.settings.promptPosition == "bottomRight"){
+			callerHeight =  $(caller).height();
+			callerleftPosition +=  callerWidth -30;
+			callerTopPosition +=  callerHeight +5;
+		}
+		return {
+			"callerTopPosition":callerTopPosition,
+			"callerleftPosition":callerleftPosition,
+			"marginTopSize":marginTopSize
+		};
+	},
+	linkTofield : function(caller){
+		//submit시 같은 ID오브젝트에 대한 체크때문에 objIdx를 두어 처리한다.
+		if(isNullStr($(caller).attr("objIdx"))) {
+			$(caller).attr("objIdx",$.validationEngine.objIdx++);
+		}
+		var linkTofield = $(caller).attr("id") + $(caller).attr("objIdx") + "formError";
+		linkTofield = linkTofield.replace(/\[/g,""); 
+		linkTofield = linkTofield.replace(/\]/g,"");
+		return linkTofield;
+	},
+	closePrompt : function(caller,outside,interval) {						// CLOSE PROMPT WHEN ERROR CORRECTED
+		if(typeof(interval)=='undefined') interval=0;
+		if(!$.validationEngine.settings){
+			$.validationEngine.defaultSetting();
+		}
+		if(outside){
+			$(caller).fadeTo(interval,0,function(){
+				$(caller).remove();
+			});
+			return false;
+		}
+		if(typeof(ajaxValidate)=='undefined'){ajaxValidate = false;}
+		if(!ajaxValidate){
+			linkTofield = $.validationEngine.linkTofield(caller);
+			closingPrompt = "."+linkTofield;
+			$(closingPrompt).fadeTo(interval,0,function(){
+				$(closingPrompt).remove();
+			});
+		}
+	},
+	debug : function(error) {
+		if(!$("#debugMode")[0]){
+			$("body").append("<div id='debugMode'><div class='debugError'><strong>This is a debug mode, you got a problem with your form, it will try to help you, refresh when you think you nailed down the problem</strong></div></div>");
+		}
+		$(".debugError").append("<div class='debugerror'>"+error+"</div>");
+	},			
+	submitValidation : function(caller) {					// FORM SUBMIT VALIDATION LOOPING INLINE VALIDATION
+		var stopForm = false;
+		$.validationEngine.ajaxValid = true;
+		$.validationEngine.isSubmitValidationCall = true;
+		var toValidateSize = $(caller).find("[class*=validate]").size();
+		
+		$.validationEngine.validationGroupCurId = ""; //현재 오류난 그룹ID 초기화
+		
+		$(caller).find("[class*=validate]").not(":disabled").each(function(i){
+			//$.validationEngine.debug(this.name);
+			linkTofield = $.validationEngine.linkTofield(this);
+			
+			if(!$("."+linkTofield).hasClass("ajaxed")){	// DO NOT UPDATE ALREADY AJAXED FIELDS (only happen if no normal errors, don't worry)
+				var validationPass = $.validationEngine.loadValidation(this);
+				return(validationPass) ? stopForm = true : "";					
+			};
+		});
+		
+		//오류가 있으면 alert창 표시
+		if(stopForm){
+			alert(jsonValidationMessages["COMMON-000245"]);
+		}
+		
+		ajaxErrorLength = $.validationEngine.ajaxValidArray.length;		// LOOK IF SOME AJAX IS NOT VALIDATE
+		for(x=0;x<ajaxErrorLength;x++){
+	 		if($.validationEngine.ajaxValidArray[x][1] == false) $.validationEngine.ajaxValid = false;
+ 		}
+		$.validationEngine.isSubmitValidationCall = false;
+		if(stopForm || !$.validationEngine.ajaxValid){		// GET IF THERE IS AN ERROR OR NOT FROM THIS VALIDATION FUNCTIONS
+			//전체 Validation시에 오류 DIV을 생성하지 않으므로 하단 offset()관련해서 오류가 나므로 하단 로직 막습니다(2011.10.06 이화진)
+			/*if($.validationEngine.settings.scroll){
+				if(!$.validationEngine.settings.containerOverflow){
+					var destination = $(".formError:not('.greenPopup'):first").offset().top;
+					$(".formError:not('.greenPopup')").each(function(){
+						testDestination = $(this).offset().top;
+						if(destination>testDestination) destination = $(this).offset().top;
+					})
+					$("html:not(:animated),body:not(:animated)").animate({ scrollTop: destination}, 1100);
+				}else{
+					var destination = $(".formError:not('.greenPopup'):first").offset().top;
+					var scrollContainerScroll = $($.validationEngine.settings.containerOverflowDOM).scrollTop();
+					var scrollContainerPos = - parseInt($($.validationEngine.settings.containerOverflowDOM).offset().top);
+					var destination = scrollContainerScroll + destination + scrollContainerPos -5
+					var scrollContainer = $.validationEngine.settings.containerOverflowDOM+":not(:animated)"
+					
+					$(scrollContainer).animate({ scrollTop: destination}, 1100);
+				}
+			}*/
+			return true;
+		}else{
+			return false;
+		}
+	},
+	// hyungyu append, ajaxCall 을 사용할 경우 '사용자정의함수' 에서 특정조건에 의해 ajaxCall 함수를 호출하지 않도록 분기처리 한다면
+	// 이경우 해당 object 는 valid 한것이므로 
+	// 아래 함수를 이용해 해당 object 에 대해 ajaxValidArray 의 값을 초기화 해주어야 한다.
+	// - ajaxCall 함수를 항상 호출하도록 되어 있으면 호출할 필요는 없다.
+	ajaxValidateObject : function(caller, isValid){
+		var id = jQuery(caller).attr("id");
+		for(x = 0; x < $.validationEngine.ajaxValidArray.length; x++){
+	 		if($.validationEngine.ajaxValidArray[x][0] == id) {
+	 			$.validationEngine.ajaxValidArray[x][1] = isValid;
+	 			break;
+	 		}
+ 		}
+	}
+
+};
+})(jQuery);
+
+$(document).ready(function() {
+	try{
+		$.validationEngineLanguage.newRule();
+	}catch(e){}
+});

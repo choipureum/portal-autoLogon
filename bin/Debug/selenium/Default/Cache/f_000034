@@ -1,0 +1,2649 @@
+@charset "UTF-8";
+body, p, h1, h2, h3, h4, h5, h6, menu, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea, button {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+select {
+    font-size: 12px;
+}
+
+img, fieldset {
+    border: 0;
+}
+
+menu, ul, ol {
+    list-style: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+em, address {
+    font-style: normal;
+}
+
+a, a:link {
+    text-decoration: none;
+}
+
+a:hover, a:active, a:focus {
+    text-decoration: underline;
+}
+
+textarea {
+    overflow: auto;
+}
+
+option, x:-moz-any-link {
+    padding-right: 6px;
+}
+
+option, x:-moz-any-link, x:default {
+    padding-right: 0;
+}
+
+input[type='file']::-webkit-file-upload-button {
+    cursor: pointer;
+}
+
+button, label {
+    cursor: pointer;
+}
+
+button::-moz-focus-inner {
+    padding: 0 !important;
+    border: 0;
+}
+
+.b {
+    font-weight: bold;
+}
+
+legend {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+}
+
+.blind {
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border: 0;
+    background: none;
+    font-size: 0;
+    line-height: 0;
+}
+
+a.skip {
+    position: absolute;
+    left: 15px;
+    top: -30px;
+    border: 1px solid #4ec53d;
+    color: #fff;
+    text-decoration: none;
+    padding: 2px 6px 0;
+    line-height: 24px;
+    font-size: 12px;
+    background-color: #000;
+    z-index: 100;
+    -webkit-transition: .3s;
+}
+
+a.skip:active, a.skip:focus {
+    top: 0;
+}
+
+.spr {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* https://ssl.pstatic.net/static/pwe/nworks/portal/sp_works_home.png */
+.register .step li, .register .download .lst.app_type li .app span a {
+    font: 0/0 a;
+    color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.register .download .lst li .tit, .register .download .lst li a, .register .download .lst.app_type li .app span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+html {
+    -webkit-text-size-adjust: none;
+}
+
+body {
+    background-color: #f6f6f9;
+}
+
+body, input, textarea, select, button, table, pre {
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", Dotum, sans-serif;
+}
+
+.ko_KR, .ko_KR input, .ko_KR textarea, .ko_KR select, .ko_KR button, .ko_KR table {
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", Dotum, sans-serif;
+}
+
+.en_US, .en_US input, .en_US textarea, .en_US select, .en_US button, .en_US table {
+    font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, Dotum, sans-serif;
+}
+
+.ja_JP, .ja_JP input, .ja_JP textarea, .ja_JP select, .ja_JP button, .ja_JP table {
+    font-family: -apple-system, BlinkMacSystemFont, "Meiryo", "MS PGothic", Dotum, sans-serif;
+}
+
+.zh_TW, .zh_TW input, .zh_TW textarea, .zh_TW select, .zh_TW button, .zh_TW table {
+    font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", SimSun, Dotum, sans-serif;
+}
+
+.zh_CN, .zh_CN input, .zh_CN textarea, .zh_CN select, .zh_CN button, .zh_CN table {
+    font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", SimSun, Dotum, sans-serif;
+}
+
+.register {
+    max-width: 698px;
+    min-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.register h1 {
+    padding: 80px 0 40px;
+}
+
+.register h1 span {
+    display: block;
+    width: 220px;
+    height: 28px;
+    margin: 0 auto;
+    background: url(https://static.worksmobile.net/static/pwe/wm/common/logo_lineworks.svg) no-repeat;
+    background-size: 100%;
+    font-size: 0;
+    line-height: 0;
+}
+
+.kr_instance .register h1 span {
+    width: 263px;
+    background: url(https://static.worksmobile.net/static/pwe/wm/common/logo_naverworks.svg) no-repeat;
+}
+
+.register #container, .register .container {
+    margin: 0 auto;
+    padding: 50px 6%;
+    background-color: #fff;
+    border: 1px solid #e5e5e6;
+    border-radius: 2px;
+    text-align: left;
+    word-break: break-all;
+}
+
+.register .step {
+    text-align: center;
+}
+
+.register .step li {
+    display: inline-block;
+    width: 100px;
+    height: 66px;
+    margin: 0 -3px 0 0;
+    *margin: 0;
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/dm/step_02_off.png) no-repeat;
+}
+
+.register .step li.step1 {
+    width: 66px;
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/step_01_off.png);
+}
+
+.register .step li.step2.selected {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/step_02_on.png);
+}
+
+.register .step li.step3 {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/step_03_off.png);
+}
+
+.register .step li.step3.selected {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/step_03_on.png);
+}
+
+.register h2.tit, .register h3.acc_infor {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.3em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.register .step + h2.tit {
+    padding: 58px 0 0;
+}
+
+.register h2.tit strong {
+    color: #00c834;
+}
+
+.register h3.acc_infor {
+    padding: 11px 0 0;
+    color: #00c834;
+}
+
+.register .fm_register {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 24px 0 0;
+}
+
+.register .fm_register .inp {
+    position: relative;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #ddd;
+}
+
+.register .fm_register .inp label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 12px;
+    height: 100%;
+    line-height: 26px;
+    width: 100%;
+    font-size: 16px;
+    color: #989898;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: text;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.register .fm_register .inp label.blind {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.register .fm_register .inp input {
+    outline-style: none;
+    width: 100%;
+    height: 47px;
+    border: 0 none;
+    font-size: 17px;
+    color: #222;
+    line-height: 32px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 12px 0;
+    vertical-align: top;
+}
+
+.register .fm_register .inp input::-webkit-input-placeholder {
+    color: #989898;
+}
+
+.register .fm_register .inp input::-moz-placeholder {
+    color: #989898;
+}
+
+.register .fm_register .inp input:-ms-input-placeholder {
+    color: #989898;
+}
+
+.register .fm_register .inp input::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.register .fm_register .inp input::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.register .fm_register .inp input.placeholder {
+    color: #989898;
+}
+
+.register .fm_register .inp .btn_delete {
+    display: none;
+    position: absolute;
+    top: 13px;
+    right: 11px;
+    padding: 5px;
+    border: 0;
+}
+
+.register .fm_register .inp .ico_delete {
+    display: block;
+    width: 14px;
+    height: 14px;
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/dm/sp_loginprocess_v3.png) no-repeat;
+    background-position: 0 -170px;
+}
+
+.register .fm_register .inp.pw input {
+    padding: 0 45px 0 12px;
+}
+
+.register .fm_register .inp .btn_masking {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    padding: 4px;
+    background: #fff;
+    border: 0;
+}
+
+.register .fm_register .inp .btn_masking:before {
+    content: '';
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_a8c6d40b.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_7ce6bce3.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_7ce6bce3.svg);
+    background-size: 347px 340px;
+    background-position: -322px -228px;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.register .fm_register .inp .btn_masking.checked:before {
+    background-position: -284px -286px;
+}
+
+.register .fm_register .inp.focus {
+    border-color: #157efb;
+}
+
+.register .fm_register .inp.failed {
+    border-color: #fd472b;
+}
+
+.register .fm_register .form_cover {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 48px;
+}
+
+.register .fm_register .form_cover input {
+    width: 100%;
+    height: 48px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 17px;
+    color: #222;
+    line-height: 23px;
+    padding: 12px 0;
+    vertical-align: top;
+    outline: none;
+    -webkit-box-flex: 1;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+}
+
+.register .fm_register .form_cover input::-webkit-input-placeholder {
+    color: #989898;
+}
+
+.register .fm_register .form_cover input::-moz-placeholder {
+    color: #989898;
+}
+
+.register .fm_register .form_cover input:-ms-input-placeholder {
+    color: #989898;
+}
+
+.register .fm_register .form_cover input::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.register .fm_register .form_cover input::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.register .fm_register .form_cover.focus input {
+    border-color: #157efb;
+}
+
+.register .fm_register .form_cover.failed .current,
+.register .fm_register .form_cover.failed input {
+    border-color: #fd472b;
+}
+
+.register .fm_register .form_cover .picker_cover {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    min-width: 72px;
+    margin-right: 8px;
+}
+
+.register .fm_register .form_cover .picker_cover .current {
+    padding-right: 16px;
+    max-width: 226px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.register .picker_cover {
+    position: relative;
+    line-height: 47px;
+}
+
+.register .picker_cover:after {
+    content: '';
+    background: url(https://ssl.pstatic.net/static/pwe/wm/common/ic-8-arrow-down-222222.png) no-repeat;
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.register .picker_cover select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-appearance: none;
+    border: 0;
+    background-color: transparent;
+    opacity: 0;
+    border-radius: 0;
+    z-index: 30;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.register .picker_cover select:focus + .current {
+    border-bottom-color: #157efb;
+}
+
+.register .picker_cover .current {
+    font-size: 17px;
+    color: #222;
+    height: 48px;
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: left;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-top: 1px;
+}
+
+.register .fm_login {
+    font-size: 14px;
+    line-height: 1.43;
+    text-align: center;
+}
+
+.register .fm_login a[x-apple-data-detectors] {
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
+
+.register .fm_login .user {
+    font-family: -apple-system, BlinkMacSystemFont, Sans-serif;
+    font-size: 24px;
+    color: #222;
+}
+
+.register .fm_login .desc {
+    padding-top: 12px;
+    color: #767676;
+}
+
+.register .fm_login .cert_box {
+    padding: 36px 0 0;
+}
+
+.register .fm_login .cert_box input {
+    width: 60px;
+    height: 60px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0 4px;
+    padding: 6px 0;
+    border: 0;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    font-family: -apple-system, BlinkMacSystemFont, Sans-serif;
+    font-size: 32px;
+    color: #222;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.register .fm_login .cert_box input.focus, .register .fm_login .cert_box input.writing {
+    border-color: #157efb;
+}
+
+.register .fm_login .cert_box input.failed {
+    border-color: #fd472b;
+}
+
+.register .fm_login .cert_box input[type=number]::-webkit-inner-spin-button,
+.register .fm_login .cert_box input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.register .fm_login .cert_box input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.register .fm_login .cert_box input[type=number]:invalid {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #fd472b;
+}
+
+.register .fm_login .cert_box.failed input {
+    border-color: #fd472b;
+}
+
+.register .fm_login .link_box {
+    padding: 30px 0 0;
+}
+
+.register .fm_login .link_box span {
+    display: block;
+    margin-top: 10px;
+}
+
+.register .fm_login .link_box span:first-child {
+    margin-top: 0;
+}
+
+.register .fm_login .link_box a {
+    color: #434343;
+    text-decoration: underline;
+}
+
+.register .notice {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 18px 0 0;
+}
+
+.register .notice li {
+    padding: 5px 0 0;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.3em;
+}
+
+.register .notice li strong {
+    color: #f1392d;
+    font-weight: normal;
+}
+
+.register .welcome {
+    margin: 24px 0 0;
+    padding: 35px 0 0;
+    border-top: 1px solid #ccc;
+}
+
+.register .welcome p {
+    font-size: 16px;
+    color: #32383e;
+    line-height: 1.6em;
+    font-weight: bold;
+}
+
+.register .welcome p strong {
+    color: #00c834;
+}
+
+.register .welcome .infor_box {
+    margin: 34px 0 0;
+    padding: 12px 4% 9px;
+    background-color: #f5f5f5;
+}
+
+.register .welcome .infor_box li {
+    font-size: 14px;
+    color: #32383e;
+    line-height: 1.5em;
+}
+
+.register .welcome .infor_box li span {
+    font-weight: bold;
+}
+
+.register .welcome .infor_box li strong {
+    color: #00c73c;
+    font-weight: normal;
+}
+
+.register .alert_box {
+    margin: 24px 0 0;
+    padding: 35px 0 0;
+    border-top: 1px solid #ccc;
+}
+
+.register .alert_box h3 {
+    font-size: 14px;
+    color: #32383e;
+    line-height: 1.5em;
+}
+
+.register .alert_box p {
+    padding: 8px 0 0;
+    font-size: 12px;
+    color: #32383e;
+    line-height: 1.5em;
+    font-weight: normal;
+}
+
+.register .download {
+    margin: 60px 0 -25px;
+    padding: 57px 0 0;
+    border-top: 1px solid #ccc;
+}
+
+.register .download h3 {
+    font-size: 18px;
+    color: #00c73c;
+    line-height: 1.3em;
+}
+
+.register .download h4 {
+    margin: 29px 0 0;
+    padding: 0 0 0 18px;
+    font-size: 14px;
+    color: #32383e;
+    line-height: 1.8em;
+    text-indent: -18px;
+}
+
+.register .download .lst {
+    margin: 0 0 0 18px;
+    padding: 27px 0 20px;
+}
+
+.register .download .lst li {
+    position: relative;
+    padding: 5px 0 0 0;
+}
+
+.register .download .lst li .tit, .register .download .lst li a {
+    font-size: 14px;
+    color: #32383e;
+    line-height: 1.3em;
+    font-weight: normal;
+}
+
+.register .download .lst li .tit {
+    width: 108px;
+    vertical-align: top;
+}
+
+.register .download .lst li a {
+    color: #0178f0;
+    text-decoration: none;
+    vertical-align: top;
+}
+
+.register .download .lst.app_type li {
+    margin: 19px 0 0;
+    min-height: 40px;
+}
+
+.register .download .lst.app_type li .tit {
+    width: 126px;
+    padding-top: 6px;
+}
+
+.register .download .lst.app_type li .app {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 112px;
+}
+
+.register .download .lst.app_type li .app span {
+    width: 50%;
+    margin-right: -4px;
+    *margin-right: 0;
+    vertical-align: top;
+}
+
+.register .download .lst.app_type li .app span a {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/dm/ic_app_ios.gif) no-repeat center center;
+}
+
+.register .download .lst.app_type li .app span strong {
+    display: block;
+    margin: 5px 0 0 10px;
+    font-size: 11px;
+    color: #32383e;
+    font-weight: normal;
+    text-align: center;
+}
+
+.register .download .lst.app_type li .app span.android a {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/ic_app_android.gif);
+}
+
+.register .download .lst.app_type li .app span.naver a {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/ic_app_naver2.png);
+    background-size: 20px 20px;
+}
+
+.register .download .lst.app_type li.pc {
+    height: 54px;
+}
+
+.register .download .lst.app_type li.drive .tit, .register .download .lst.app_type li.lang .tit {
+    padding-top: 1px;
+}
+
+.register .download .lst.app_type li.drive .app span, .register .download .lst.app_type li.lang .app span {
+    width: 33%;
+}
+
+.register .download .lst.app_type li.drive .app span.ios, .register .download .lst.app_type li.lang .app span.ios {
+    width: 34%;
+}
+
+.register .download .lst.app_type li.lang {
+    margin-top: 0;
+}
+
+.register .download .lst.app_type {
+    margin-top: -14px;
+}
+
+.register .download .lst.app_type li {
+    min-height: 38px;
+}
+
+.register .download .lst.app_type li .app {
+    left: 122px;
+}
+
+.register .download .lst.app_type li .app span a {
+    display: block;
+    width: auto;
+    height: 38px;
+    margin: 0 0 0 10px;
+    background: #f5f5f5 url(https://ssl.pstatic.net/static/pwe/nworks/dm/ic_app_macos.png) no-repeat center center;
+    background-size: 16px 19px;
+    border-radius: 3px;
+}
+
+.register .download .lst.app_type li .app span.android a {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/ic_app_andrd.png);
+}
+
+.register .download .lst.app_type li .app span.win a {
+    background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/ic_app_win.png);
+}
+
+.register .download .desc {
+    margin: 0 18px;
+    padding: 0 0 20px 15px;
+    font-size: 12px;
+    color: #a1a1a1;
+    line-height: 1.8em;
+    text-indent: -15px;
+}
+
+.register .btn {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 20px 0 0;
+}
+
+.register .btn button {
+    display: block;
+    width: 100%;
+    height: 48px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: #2bc54a;
+    border: 1px solid #22ad3d;
+    border-radius: 2px;
+    font-size: 15px;
+    color: #fff;
+    line-height: 48px;
+}
+
+.register .btn .login_normal {
+    border: 1px solid #b2b2b2;
+    background-color: #157efb;
+    border-radius: 0;
+    border: 0;
+}
+
+.register .btn .login_line {
+    position: relative;
+    background: #fff;
+    margin-top: 16px;
+    border: 1px solid #b2b2b2;
+    color: #222;
+    padding: 0 40px;
+}
+
+.register .btn .login_line:before {
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+    left: 16px;
+    content: '';
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_a8c6d40b.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_7ce6bce3.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_7ce6bce3.svg);
+    background-size: 347px 340px;
+    background-position: -196px -286px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+
+.register .btn .desc {
+    color: #999;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 8px 0 20px;
+}
+
+.register .btn .seperator {
+    color: #999;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    padding: 0 0 20px;
+}
+
+.register .login_line_area {
+    position: relative;
+    text-align: center;
+    background: url("https://static.worksmobile.net/static/pwe/wm/common/bg_login_line.png") repeat-x 0 10px;
+    background-size: 1px;
+    margin-top: 8px;
+}
+
+.register .login_line_desc {
+    display: inline-block;
+    text-align: center;
+    background: #fff;
+    padding: 0 25px;
+    font-size: 12px;
+    color: #999;
+}
+
+.register .welcome_link {
+    padding: 28px 0 4px;
+    font-size: 14px;
+    color: #767676;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.register .welcome_link span {
+    padding-right: 12px;
+}
+
+.register .welcome_link a {
+    margin-left: 12px;
+    color: #157efb;
+    text-decoration: underline;
+}
+
+.register address {
+    padding: 36px 0 30px;
+    font-size: 12px;
+    color: #777;
+}
+
+.alert_pw_chk {
+    position: relative;
+    z-index: 10;
+    top: -57px;
+}
+
+/* 비밀번호 안전 툴팁 */
+.help {
+    position: absolute;
+    height: auto;
+    bottom: 100%;
+    left: 0;
+}
+
+.help.on {
+    display: block;
+}
+
+.help .txt {
+    position: relative;
+    z-index: 3;
+    max-width: 100%;
+    max-width: none;
+    border: 1px solid #666;
+    background: #fff;
+    color: #333;
+    letter-spacing: -1px;
+}
+
+.help .txt p {
+    padding: 8px 14px 6px;
+    line-height: 16px;
+    font-size: 11px;
+    white-space: normal;
+}
+
+.help .txt p * {
+    line-height: 16px;
+    font-size: 11px;
+}
+
+.help .txt p strong {
+    color: #FF6000;
+}
+
+.help .txt p strong.black {
+    color: #333;
+}
+
+.help .txt p .ex {
+    color: #808080;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.help .txt p .ex2 {
+    display: block;
+    margin: 4px 0 0;
+    padding: 6px 0 0;
+    border-top: 1px solid #e5e5e5;
+    font-size: 11px;
+    color: #333;
+    letter-spacing: -1px;
+}
+
+.help .txt p .ex2 strong {
+    color: #333;
+}
+
+.help .txt p span {
+    color: #808080;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.help .txt p .vr {
+    margin: 0 2px 0 3px;
+    color: #e5e5e5;
+}
+
+.help .txt p .level1, .help .txt p .level2, .help .txt p .level3 {
+    padding: 0 52px 0 0;
+}
+
+.help .txt p .level1 {
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/ico_pw_level1.gif) no-repeat right 4px;
+}
+
+.help .txt p .level2 {
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/ico_pw_level2.gif) no-repeat right 4px;
+}
+
+.help .txt p .level3 {
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/ico_pw_level3.gif) no-repeat right 4px;
+}
+
+.left .arrow {
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    bottom: -7px;
+    left: 23px;
+    z-index: 4;
+    width: 13px;
+    height: 8px;
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/bu_tooltip_arrow_d.png) no-repeat;
+}
+
+.help .shadow1 {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: #e3e3e3;
+    _background: #919191;
+    filter: alpha(opacity=25);
+}
+
+:first-child + html .help .shadow1 {
+    background: #919191;
+}
+
+.help .shadow2 {
+    display: block;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: #f6f6f6;
+    _background: #919191;
+    filter: alpha(opacity=10);
+}
+
+:first-child + html .help .shadow2 {
+    background: #919191;
+}
+
+.help .txt em {
+    display: inline;
+    padding: 0;
+}
+
+.help .shadow3 {
+    display: block;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: #f6f6f6;
+    _background: #919191;
+    filter: alpha(opacity=10);
+}
+
+:first-child + html .help .shadow2 {
+    background: #919191;
+}
+
+.help .txt em {
+    display: inline;
+    padding: 0;
+}
+
+.register.login {
+    max-width: 560px;
+}
+
+.register.login .login_option {
+    position: relative;
+    max-width: 460px;
+    height: 40px;
+    margin: 0 auto;
+    white-space: nowrap;
+}
+
+.register.login .login_option a {
+    position: relative;
+    float: left;
+    width: 50%;
+    width: calc(50% + 1px);
+    height: 40px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #c5c5c6;
+    border-radius: 0 2px 2px 0;
+    font-size: 14px;
+    color: #222;
+    text-align: center;
+    line-height: 38px;
+    text-decoration: none;
+}
+
+.register.login .login_option a:first-child {
+    width: 50%;
+    border-radius: 2px 0 0 2px;
+    margin-right: -1px;
+}
+
+.register.login .login_option a.selected {
+    z-index: 1;
+    border-color: #157efb;
+    color: #157efb;
+    font-weight: bold;
+}
+
+.register.login .find_tab {
+    margin: 0 10px 20px;
+    border: 1px solid #28ac42;
+    border-radius: 2px;
+}
+
+.register.login .find_tab:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.register.login .find_tab li {
+    float: left;
+    width: 50%;
+}
+
+.register.login .find_tab li + li {
+    overflow: hidden;
+    float: none;
+    border-left: 1px solid #28ac42;
+    width: auto;
+}
+
+.register.login .find_tab li[aria-selected="true"] {
+    background-color: #15c643;
+}
+
+.register.login .find_tab li[aria-selected="true"] button {
+    color: #fff;
+}
+
+.register.login .find_tab button {
+    border: 0;
+    background-color: transparent;
+    width: 100%;
+    height: 50px;
+    line-height: 52px;
+    font-size: 18px;
+    color: #22b73f;
+    cursor: pointer;
+}
+
+.register.login h2.tit {
+    font-size: 22px;
+}
+
+.register.login h2.tit span {
+    display: inline-block;
+}
+
+.register.login.sandbox h2.tit:after {
+    content: '';
+    background: url(https://ssl.pstatic.net/static/pwe/wm/common/water_mark_sandbox_red.png) no-repeat;
+    display: inline-block;
+    width: 86px;
+    height: 12px;
+    vertical-align: top;
+    position: relative;
+    top: 2px;
+    margin-left: 3px;
+    margin-right: -89px;
+}
+
+.register.login h2.long_tit {
+    padding-top: 12px;
+    font-size: 16px;
+}
+
+.register.login h3.semi_title {
+    margin: 0 auto;
+    padding-top: 7px;
+    max-width: 460px;
+    font-size: 16px;
+    color: #6a6a6a;
+    line-height: 1.5;
+    font-weight: normal;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: keep-all;
+}
+
+.register.login h3.semi_title .beware {
+    display: block;
+    margin-left: 13px;
+    padding-top: 6px;
+    font-size: 14px;
+    color: #22b73f;
+    text-align: left;
+    font-weight: normal;
+    letter-spacing: -.5px;
+    text-indent: -13px;
+    line-height: 20px;
+}
+
+.register.login h3.semi_title .beware span {
+    display: inline-block;
+    text-indent: 0;
+}
+
+.register.login h3.semi_title em {
+    color: #22b73f;
+    font-weight: bold;
+}
+
+.register.login h3.semi_title .normal_font {
+    font-weight: normal;
+}
+
+.register.login h3.semi_title span {
+    display: inline-block;
+    word-break: break-all;
+}
+
+.register.login .certification_type {
+    margin: 30px auto 0;
+    padding-top: 30px;
+    border-top: 1px solid #dadada;
+    max-width: 460px;
+    min-height: 26px;
+}
+
+.register.login .certification_type:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.register.login .certification_type .check_box {
+    float: left;
+    width: 50%;
+    min-width: 179px;
+    margin-right: 4px;
+}
+
+.register.login .certification_type .check_box + .check_box {
+    float: none;
+    overflow: hidden;
+    width: auto;
+}
+
+.register.login .certification_type + .fm_register {
+    padding-top: 0px;
+}
+
+.register.login .fm_register .tail_words {
+    float: right;
+    padding-top: 14px;
+    font-size: 14px;
+    line-height: 21px;
+    color: #767676;
+}
+
+.register.login .fm_register .inp_wrap {
+    position: relative;
+    overflow: hidden;
+    display: block;
+}
+
+.register.login .fm_register .inp_wrap input {
+    line-height: 21px;
+}
+
+.register.login .fm_register h4 {
+    padding: 10px 0 0 10px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #333;
+}
+
+.register.login .fm_register h4 + .inp {
+    margin-top: 7px;
+}
+
+.register.login .fm_register .inp + .inp {
+    margin-top: 12px;
+}
+
+.register.login .fm_register.fm_single {
+    margin-top: 32px;
+    padding-top: 6px;
+    border-top: 1px solid #dadada;
+}
+
+.register.login .fm_register.fm_single h4 {
+    margin-top: 19px;
+}
+
+.register.login .double_input {
+    margin: 0 0 0 12px;
+    padding-top: 7px;
+}
+
+.register.login .double_input:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.register.login .double_input .inp {
+    float: left;
+    margin: 0 8px 0 -12px;
+    width: 50%;
+}
+
+.register.login .double_input .inp + .inp {
+    float: none;
+    overflow: hidden;
+    margin: 0;
+    width: auto;
+}
+
+.register.login .inp_select {
+    position: relative;
+    margin-top: 6px;
+    border: 1px solid #dadada;
+}
+
+.register.login .inp_select.focus {
+    border-color: #00c73c;
+}
+
+.register.login .inp_select .inp {
+    position: relative;
+    margin: 0;
+    border: 0;
+}
+
+.register.login .inp_select .number_input {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding-left: 6px;
+    width: auto;
+}
+
+.register.login .inp_select .number_input input {
+    padding: 12px 6px;
+    width: 100%;
+}
+
+.register.login .inp_select .ly_nation_lst {
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    overflow: auto;
+    border: 1px solid #dadada;
+    width: 100%;
+    height: 184px;
+    background-color: #fff;
+    z-index: 10;
+}
+
+.register.login .inp_select .ly_nation_lst li {
+    position: relative;
+    height: 33px;
+}
+
+.register.login .inp_select .ly_nation_lst li[aria-selected='true'], .register.login .inp_select .ly_nation_lst li:hover {
+    background-color: #e5e5e5;
+}
+
+.register.login .inp_select .ly_nation_lst .img {
+    position: absolute;
+    top: 10px;
+    left: 14px;
+}
+
+.register.login .inp_select .ly_nation_lst img {
+    vertical-align: top;
+}
+
+.register.login .inp_select .ly_nation_lst a {
+    display: block;
+    padding: 0 0 0 44px;
+    height: 33px;
+    line-height: 35px;
+    color: #282828;
+    font-family: arial;
+    text-decoration: none;
+}
+
+.register.login .inp_select .ly_nation_lst strong {
+    font-weight: normal;
+}
+
+.register.login .inp_select .ly_nation_lst .head_line {
+    display: block;
+    margin: 0 14px;
+    height: 1px;
+    background-color: #e3e2e2;
+}
+
+.register.login .inp_select .code {
+    position: relative;
+    float: left;
+    margin-top: 18px;
+    padding-left: 14px;
+    height: 15px;
+    border-right: 1px solid #dadada;
+}
+
+.register.login .inp_select .code em {
+    display: inline-block;
+    margin: 5px 8px;
+    width: 9px;
+    height: 5px;
+    vertical-align: top;
+    background: url(https://ssl.pstatic.net/static/pwe/nworks/dm/sp_loginprocess_v3.png) no-repeat;
+    background-position: 0 -140px;
+}
+
+.register.login .inp_select .code img {
+    display: inline-block;
+    margin-top: 1px;
+    vertical-align: top;
+}
+
+.register.login .inp_select .code_num {
+    float: left;
+    margin-left: 9px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Arial;
+    line-height: 47px;
+}
+
+.register.login .inp_select .select_button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    width: 59px;
+    height: 50px;
+    background-color: transparent;
+}
+
+.register.login .result_box {
+    margin: 24px auto 2px;
+    padding: 33px 10px;
+    border: 1px solid #dcdcdc;
+    max-width: 460px;
+    text-align: center;
+}
+
+.register.login .result_box p {
+    font-size: 16px;
+    line-height: 26px;
+    word-wrap: break-word;
+}
+
+.register.login .wrong_message {
+    margin: 0 auto;
+    padding: 12px 0 0;
+    max-width: 460px;
+}
+
+.register.login .wrong_message p {
+    font-size: 14px;
+    color: #fd472b;
+    line-height: 23px;
+    word-wrap: break-word;
+    word-break: keep-all;
+}
+
+.register.login .wrong_message p.point {
+    color: #157efb;
+}
+
+.register.login .wrong_message .info {
+    color: #6a6a6a;
+}
+
+.register.login .wrong_message .info + .info {
+    padding-top: 11px;
+}
+
+.register.login .wrong_message a {
+    color: #22b73f;
+    text-decoration: underline;
+}
+
+.register.login .message {
+    margin: 0 auto -4px;
+    padding: 17px 0 0;
+    max-width: 460px;
+}
+
+.register.login .message p {
+    font-size: 14px;
+    line-height: 21px;
+    color: #989898;
+}
+
+.register.login .message p a {
+    font-size: 14px;
+    color: #15c643;
+}
+
+.register.login .notice + .btn {
+    padding-top: 37px;
+}
+
+.register.login .send_cerf_num {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.register.login .send_cerf_num button {
+    display: inline-block;
+    border-color: #bebebe;
+    width: auto;
+    min-width: 166px;
+    padding: 0 18px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 52px;
+    line-height: 54px;
+    background-color: #fcfcfc;
+    color: #333;
+}
+
+.register.login .send_cerf_num + h4 {
+    padding-top: 10px;
+}
+
+.register.login .captcha {
+    padding-top: 28px;
+}
+
+.register.login .captcha:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.register.login .captcha p {
+    padding: 0 0 8px 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.register.login .captcha .captcha_box {
+    position: relative;
+}
+
+.register.login .captcha .box {
+    display: block;
+    margin-right: 150px;
+    border: 1px solid #c5c5c5;
+    width: auto;
+    height: 109px;
+}
+
+.register.login .captcha .box img {
+    width: 100%;
+    height: 100%;
+}
+
+.register.login .captcha .inp {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 0;
+    width: 138px;
+}
+
+.register.login .captcha .inp.writing input {
+    padding: 0 30px 0 12px;
+}
+
+.register.login .captcha .change_cerf {
+    position: absolute;
+    top: 58px;
+    right: 0;
+    padding-top: 0;
+    width: 140px;
+}
+
+.register.login .captcha .change_cerf button {
+    display: inline-block;
+    border-color: #bebebe;
+    width: 100%;
+    max-width: 226px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 16px;
+    background-color: #fcfcfc;
+    color: #333;
+}
+
+.register.login .captcha .btn_delete {
+    top: 14px;
+    right: 4px;
+}
+
+.register.login .captcha .ico_delete {
+    width: 12px;
+    height: 12px;
+    background-position: 0 -210px;
+}
+
+.register.login .notice {
+    max-width: 460px;
+}
+
+.register.login .notice li {
+    padding-left: 13px;
+}
+
+.register.login .notice li span {
+    display: inline-block;
+}
+
+.register.login .check_info {
+    position: relative;
+    margin: 20px auto 0;
+    max-width: 460px;
+    min-height: 19px;
+    text-align: right;
+}
+
+.register.login .check_info .check_box {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.register.login .check_info .check_box label {
+    font-size: 14px;
+}
+
+.register.login .check_info:after {
+    clear: both;
+    display: block;
+    content: '';
+}
+
+.register.login .check_box {
+    position: relative;
+    float: left;
+    padding: 0 0 19px;
+    font-size: 14px;
+    color: #333;
+}
+
+.register.login .check_box input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    vertical-align: top;
+}
+
+.register.login .check_box label {
+    display: inline-block;
+    position: relative;
+    z-index: 20;
+    min-height: 24px;
+    font-size: 16px;
+    line-height: 26px;
+    vertical-align: top;
+}
+
+.register.login .check_box label:before {
+    content: '';
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_a8c6d40b.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_7ce6bce3.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_join_7ce6bce3.svg);
+    background-size: 347px 340px;
+    background-position: -256px -286px;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: -2px 9px 0 0;
+    vertical-align: middle;
+}
+
+.register.login .check_box label.on:before {
+    background-position: -228px -286px;
+}
+
+.register.login .check_box + .find_info {
+    padding-top: 3px;
+}
+
+.register.login .find_info {
+    display: inline-block;
+    min-width: 181px;
+    max-width: 460px;
+    line-height: 18px;
+    vertical-align: top;
+}
+
+.register.login .find_info:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.register.login .find_info a {
+    clear: right;
+    float: right;
+    font-size: 14px;
+    color: #434343;
+    text-decoration: underline;
+}
+
+.register.login .find_info a + a {
+    padding-top: 21px;
+}
+
+.register.login .button_area {
+    margin: 0 auto 4px;
+    max-width: 460px;
+    text-align: center;
+}
+
+.register.login .button_area:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.register.login .button_area .btn {
+    float: left;
+    padding: 38px 4px 0 0;
+    width: 50%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.register.login .button_area .btn:only-of-type {
+    float: none;
+    display: inline-block;
+}
+
+.register.login .button_area .btn + .btn {
+    overflow: hidden;
+    float: none;
+    width: auto;
+    padding: 38px 0 0 4px;
+}
+
+.register.login .button_area .cancel button {
+    border-color: #b4b4b4;
+    background-color: #cacaca;
+}
+
+.register.login .fm_code {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.register.login .fm_code .code_box {
+    display: inline-block;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.register.login .fm_code input {
+    float: left;
+    width: 52px;
+    height: 50px;
+    margin: 0 4px;
+    background-color: #fff;
+    border: 1px solid #dadada;
+    font-size: 24px;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.register.login .fm_code .wrong_message {
+    width: 376px;
+    margin: 4px auto;
+    font-size: 14px;
+    color: #ff1616;
+    text-align: left;
+}
+
+@media (max-width: 450px) {
+    .register h1 {
+        padding: 50px 0 30px;
+    }
+
+    .register .fm_register .inp .ico_delete,
+    .register .fm_register .inp .ico_showpassword {
+        background-image: url(https://ssl.pstatic.net/static/pwe/nworks/dm/sp_loginprocess2x_v4.png);
+        background-size: 24px 210px;
+    }
+
+    .register.login .captcha .ico_delete {
+        background-position: 0 -155px;
+    }
+
+    .register #container .download .lst li .tit {
+        width: 85px;
+        font-size: 13px;
+    }
+
+    .register #container .download .lst li a {
+        font-size: 13px;
+    }
+
+    .register #container .download .lst li {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 350px) {
+    .register #container .download .lst li .tit {
+        width: 65px;
+        font-size: 12px;
+    }
+
+    .register #container .download .lst li a {
+        font-size: 11px;
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .register #container .download .lst li .tit {
+        width: 98px;
+        font-size: 14px;
+    }
+
+    .register #container .download .lst li a {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    .register h1 span {
+        width: 178px;
+        height: 23px;
+    }
+}
+
+.band_banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 35px;
+    padding: 8px 10px;
+    background-color: #ffd6d6;
+    border-bottom: 1px solid #f7b7b8;
+    font-size: 12px;
+    line-height: 18px;
+    color: #333;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.band_banner a {
+    color: #1783f0;
+    white-space: nowrap;
+}
+
+.band_banner a:hover {
+    text-decoration: underline;
+}
+
+.auth_page {
+    height: 100%;
+    overflow: auto;
+    background: #fff;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page {
+        background: #f5f5f6;
+    }
+}
+
+.auth_page header {
+    display: none;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page header {
+        display: block;
+        padding: 80px 0 40px;
+    }
+
+    .auth_page header h1 {
+        display: block;
+        width: 220px;
+        height: 28px;
+        background: url(https://static.worksmobile.net/static/pwe/wm/common/logo_lineworks.svg) no-repeat;
+        margin: 0 auto;
+    }
+
+    .auth_page header h1 span {
+        position: absolute;
+        clip: rect(0 0 0 0);
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+    }
+
+    .kr_instance .auth_page header h1 {
+        width: 263px;
+        background: url(https://static.worksmobile.net/static/pwe/wm/common/logo_naverworks.svg) no-repeat;
+    }
+
+    .ncs .auth_page header h1 {
+        width: 134px;
+        background: url(https://static.worksmobile.net/static/pwe/wm/common/logo_ncs.svg) no-repeat;
+    }
+}
+
+.auth_page address {
+    display: none;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page address {
+        display: block;
+        padding: 40px 0 50px;
+        font-size: 12px;
+        color: #777;
+    }
+
+    .auth_page address strong {
+        font-weight: 600;
+    }
+}
+
+.auth_page .close {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.auth_page .close button {
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_de9d12ea.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-size: 128px 84px;
+    background-position: -36px -56px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    display: block;
+    background-color: transparent;
+    border: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+.auth_page .close button.prev {
+    background-position: -4px -56px;
+}
+
+@media screen and (max-width: 414px) {
+    .auth_page .close {
+        left: 16px;
+        -webkit-transform: translateX(0);
+        -ms-transform: translateX(0);
+        transform: translateX(0);
+        width: 24px;
+    }
+}
+
+.auth_page .contents {
+    width: 100%;
+    max-width: 560px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #fff;
+    margin: 0 auto;
+    padding: 44px 16px 30px;
+    color: #222;
+    word-break: keep-all;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .contents {
+        border: 1px solid #e5e5e6;
+        border-radius: 2px;
+        margin: 0 auto;
+        padding: 0 50px 50px;
+    }
+}
+
+.auth_page .contents .tit {
+    padding: 28px 0 0;
+    font-size: 24px;
+    line-height: 1.33;
+    font-weight: normal;
+    word-break: keep-all;
+}
+
+.auth_page .contents .tit span {
+    word-break: break-all;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .contents .tit {
+        padding-top: 50px;
+    }
+
+    .auth_page .contents .tit br.m {
+        display: none;
+    }
+}
+
+.auth_page .contents .desc {
+    padding: 8px 0 0;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.38;
+    letter-spacing: -.11px;
+    word-break: keep-all;
+}
+
+.auth_page .contents .desc em {
+    color: #fd472b;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .contents .desc {
+        padding-top: 12px;
+        font-size: 14px;
+        color: #767676;
+    }
+}
+
+.auth_page .contents wbr:after {
+    content: "\00200B";
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .contents.error_box {
+        padding: 61px 50px 111px;
+    }
+}
+
+.auth_page .form_box {
+    padding: 4px 0 0;
+    text-align: left;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box {
+        padding-top: 16px;
+    }
+}
+
+.auth_page .form_box .form_cover {
+    padding: 28px 0 0;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box .form_cover {
+        padding-top: 20px;
+    }
+}
+
+.auth_page .form_box .form_cover .label {
+    font-size: 13px;
+    font-weight: normal;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box .form_cover .label {
+        font-size: 12px;
+        color: #666;
+    }
+}
+
+.auth_page .form_box .form_cover .label em {
+    padding-left: 5px;
+    color: #157efb;
+}
+
+.auth_page .form_box .form_cover .box {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 4px 0 0;
+    background: #fff;
+    border: 0;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box .form_cover .box {
+        padding-top: 0;
+    }
+}
+
+.auth_page .form_box .form_cover .box .selected {
+    border-color: #157efb !important;
+}
+
+.auth_page .form_box .form_cover .box input {
+    -webkit-box-flex: 1;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: 48px;
+    margin: 0;
+    padding: 0 28px 0 0;
+    box-sizing: border-box;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    font-size: 17px;
+    color: #222;
+    line-height: 48px;
+    outline: none;
+}
+
+.auth_page .form_box .form_cover .box input::-webkit-input-placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input::-moz-placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input:-ms-input-placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input::-ms-input-placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input::placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input::-webkit-input-placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input:-moz-placeholder {
+    color: #ccc;
+}
+
+.auth_page .form_box .form_cover .box input:focus {
+    padding-right: 27px;
+    border-color: #157efb;
+}
+
+.auth_page .form_box .form_cover .box input:focus + button.remove,
+.auth_page .form_box .form_cover .box input:not(:placeholder-shown) + button.remove {
+    visibility: visible;
+}
+
+.auth_page .form_box .form_cover .box button.remove {
+    visibility: hidden;
+    position: absolute;
+    top: 17px;
+    right: 0;
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_de9d12ea.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-size: 128px 84px;
+    background-position: -68px -56px;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    background-color: transparent;
+    border: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+.auth_page .form_box .form_cover .box .country {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+    min-width: 85px;
+    max-width: 50%;
+    height: 48px;
+    margin: 0 12px 0 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.auth_page .form_box .form_cover .box .country strong {
+    display: block;
+    padding: 0 20px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 17px;
+    letter-spacing: -.11px;
+    font-weight: normal;
+    line-height: 48px;
+}
+
+.auth_page .form_box .form_cover .box .country strong:after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    right: 0;
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_de9d12ea.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-size: 128px 84px;
+    background-position: -108px -4px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+.auth_page .form_box .form_cover .box .country select {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    opacity: 0;
+}
+
+.auth_page .form_box .form_cover .invalid input {
+    border-color: #fd472b !important;
+}
+
+.auth_page .form_box .form_cover .invalid + .alert {
+    display: block;
+}
+
+.auth_page .form_box .form_cover .alert {
+    display: none;
+    padding: 8px 0 0;
+    font-size: 13px;
+    color: #fd472b;
+    line-height: 1.46;
+    letter-spacing: -.17px;
+}
+
+.auth_page .form_box .chk_cover {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 56px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    margin: 32px 0 -8px;
+    padding: 16px;
+    text-align: right;
+}
+
+.auth_page .form_box .chk_cover .hd,
+.auth_page .form_box .chk_cover strong {
+    line-height: 20px;
+}
+
+.auth_page .form_box .chk_cover .hd {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    margin-right: auto;
+    font-size: 15px;
+    color: #222;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box .chk_cover .hd {
+        font-size: 17px;
+    }
+}
+
+.auth_page .form_box .chk_cover strong {
+    -webkit-box-flex: 1;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    margin-left: auto;
+    padding-left: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: #989898;
+    font-weight: normal;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box .chk_cover strong {
+        font-size: 17px;
+    }
+}
+
+.auth_page .form_box .chk_cover + .chk_cover {
+    margin-top: 18px;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .form_box .chk_cover + .chk_cover {
+        margin-top: 20px;
+    }
+}
+
+.auth_page .form_box .chk_cover.disabled {
+    background: #f5f5f6;
+}
+
+.auth_page .form_box .chk_cover.disabled .hd,
+.auth_page .form_box .chk_cover.disabled strong {
+    opacity: .5;
+}
+
+.auth_page .form_box .chk_cover.disabled strong {
+    max-width: none;
+    padding-left: 20px;
+    white-space: nowrap;
+}
+
+.auth_page .way_box {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    margin: 32px 0 0;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+}
+
+.auth_page .way_box .item {
+    position: relative;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: table-cell;
+    height: 178px;
+    padding-top: 83px;
+    text-align: center;
+    white-space: normal;
+    word-break: keep-all;
+    vertical-align: middle;
+}
+
+.auth_page .way_box .item + .item {
+    border-left: 1px solid #ccc;
+}
+
+.auth_page .way_box .item strong {
+    display: block;
+    padding: 0 20px;
+    font-size: 15px;
+    color: #222;
+    font-weight: normal;
+    text-align: center;
+    white-space: normal;
+    word-break: break-all;
+}
+
+.en_US .auth_page .way_box .item strong {
+    word-break: break-word;
+}
+
+.ja_JP .auth_page .way_box .item strong {
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.auth_page .way_box .item p {
+    padding: 4px 20px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    color: #989898;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.auth_page .way_box .item button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+.auth_page .way_box .item button:disabled {
+    pointer-events: none;
+}
+
+.auth_page .way_box .item.email:before {
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_de9d12ea.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-size: 128px 84px;
+    background-position: -4px -4px;
+    width: 44px;
+    height: 44px;
+    display: inline-block;
+}
+
+.auth_page .way_box .item.text:before {
+    background-image: url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_de9d12ea.png);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-image: linear-gradient(transparent, transparent), url(https://static.worksmobile.net/static/pwe/wm/common/sp_auth_122e0fd2.svg);
+    background-size: 128px 84px;
+    background-position: -56px -4px;
+    width: 44px;
+    height: 44px;
+    display: inline-block;
+}
+
+.auth_page .way_box .item.disabled {
+    opacity: .4;
+}
+
+.auth_page .way_box .item:before {
+    content: '';
+    height: 44px;
+    position: absolute;
+    top: 39px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.auth_page .chk_number {
+    padding: 32px 0 0;
+}
+
+.auth_page .chk_number input {
+    width: 56px;
+    height: 48px;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0 6px;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    font-size: 34px;
+    color: #222;
+    line-height: 48px;
+    text-align: center;
+    outline: none;
+    /* Chrome, Safari, Edge, Opera */
+    /* Firefox */
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .chk_number input {
+        width: 60px;
+        height: 60px;
+        margin: 0 4px;
+    }
+}
+
+.auth_page .chk_number input:focus, .auth_page .chk_number input.valid {
+    border-color: #157efb;
+}
+
+.auth_page .chk_number input::-webkit-outer-spin-button, .auth_page .chk_number input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.auth_page .chk_number input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.auth_page .chk_number .infor,
+.auth_page .chk_number .alert {
+    padding: 8px 0 0;
+    font-size: 13px;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .chk_number .infor,
+    .auth_page .chk_number .alert {
+        font-size: 14px;
+    }
+}
+
+.auth_page .chk_number .infor {
+    color: #157efb;
+}
+
+.auth_page .chk_number .alert {
+    display: none;
+    color: #fd472b;
+}
+
+.auth_page .chk_number.invalid input {
+    border-color: #fd472b !important;
+}
+
+.auth_page .chk_number.invalid .alert {
+    display: block;
+}
+
+.auth_page .reauth {
+    padding: 40px 0 0;
+    font-size: 13px;
+    color: #999;
+    line-height: 1.46;
+    letter-spacing: -.17px;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .reauth {
+        padding-top: 32px;
+        font-size: 14px;
+    }
+}
+
+.auth_page .reauth p {
+    padding: 0 0 16px;
+}
+
+@media screen and (min-width: 1024px) {
+    .auth_page .reauth p {
+        display: none;
+    }
+}
+
+.auth_page .reauth a {
+    color: #666;
+    font-weight: 500;
+    letter-spacing: -.09px;
+    text-decoration: underline;
+}
+
+.auth_page .btn_box {
+    padding: 32px 0 0;
+}
+
+.auth_page .btn_box button {
+    display: block;
+    width: 100%;
+    height: 48px;
+    background: #157efb;
+    border: 0;
+    border-radius: 1px;
+    font-size: 15px;
+    color: #fff;
+}
+
+.auth_page .btn_box button:disabled {
+    background: #ddd;
+    pointer-events: none;
+}

@@ -1,0 +1,720 @@
+/***********************************************************
+	DESC : menu.js
+		 : 메뉴관리
+	@author ty.choi.
+	@since 2011.05.03
+************************************************************/
+;;
+var menuActiveStatus = false;
+var menuData = null; // 스크립트 실행시 사용할 data 전역변수
+
+jQuery(document).ready(function() {
+	// 메인 메뉴에 대한 이벤트 Setting
+	setMainMenuAction();
+	
+	// 메인 서브 메뉴에 대한 이벤트 Setting
+	setSubMenuAction();
+	
+	// 왼쪽의 Include 된 Object에 대한 이벤트 Setting.
+	setLeftSubObjectAction();
+});
+
+/**
+ * Sub메뉴의 Layer Hide
+ */
+function hideSubMenuLayer() {
+	jQuery("td[menuType='mainMenu']").removeClass("menu_text_o");
+	jQuery("span[id*='subLayer' ]").hide();
+}
+
+/**
+ * 메뉴 선택시 Style적용
+ */
+function setMenuSelectStyle($obj) {
+	var menuType = $obj.attr("menuType");
+	var menuClass= "menu_text_s";
+	if (menuType == 'mainSubMenu') {
+		menuClass = "mTitle_s";
+	}
+	jQuery("td[menuType='"+ menuType +"']").filter("[class*='"+ menuClass +"']").removeClass(menuClass);
+	$obj.addClass(menuClass);
+}
+
+/**
+ * 메뉴 마우스 오버시 Style적용
+ */
+function setMenuOverStyle($obj) {
+	var menuType = $obj.attr("menuType");
+	var menuClass= "menu_text_o";
+	if (menuType == 'mainSubMenu') {
+		menuClass = "mTitle_o";
+	}
+	
+	jQuery("td[menuType='"+ menuType +"']").filter("[class*='"+ menuClass +"']").removeClass(menuClass);
+	$obj.addClass(menuClass);	
+}
+
+/**
+ * 기본 메뉴의 MouseOver 스타일 적용
+ */
+function setMainMenuAction() {
+	// 메인 메뉴의 이벤트 바인딩.
+	if (_isMobileFullMode) {
+		jQuery("td[menuType='mainMenu']").click(toggleSubMenu);
+	} else {
+		jQuery("td[menuType='mainMenu']").mouseover(showSubMenu).mouseout(hideSubMenu);
+	}
+}
+
+function showSubMenu () {
+	if ( menuActiveStatus ) return;
+	var $mainMenuObj = jQuery(this);
+	var $subLayerObj = jQuery("#"+$mainMenuObj.attr("subLayerId"));
+	if( $subLayerObj != null && $subLayerObj.length > 0 ) {
+		var topHeight = jQuery("#logoImg").height();
+		var leftWidth = (jQuery("td[class*='main_layout_1']").length > 0) ? jQuery("td[class*='main_layout_1']").width()+2: 0;
+		var offset = $mainMenuObj.position();
+		var leftmargin = 6;
+		if(xClickLib.getBrowserInfo() == "Internet Explorer" && Number(xClickLib.getIEVersion()) < 9 ){
+			leftmargin = 4;
+		}
+		$subLayerObj.css("top", topHeight + $mainMenuObj.height() + 10)
+			 					.css("left", offset.left + leftWidth - leftmargin)
+								.show();
+	}
+
+	//1. 메인 메뉴의 Style을 적용한다.
+	setMenuOverStyle($mainMenuObj);
+}
+
+function hideSubMenu () {
+	var $mainMenuObj = jQuery(this);
+	$mainMenuObj.removeClass("menu_text_o");
+	var $subLayerObj = jQuery("#"+$mainMenuObj.attr("subLayerId"));
+	if ($subLayerObj != null && $subLayerObj.length > 0) {
+		$subLayerObj.hide();
+	}
+}
+
+function toggleSubMenu () { // 스마트폰, 태블릿의 경우 click이벤트에서 submenu toggle!!
+	if (this.className.indexOf("menu_text_o") > -1) {
+		hideSubMenuLayer();
+	} else {
+		hideSubMenuLayer();
+		showSubMenu.call(this);
+	}
+}
+
+/**
+ * Sub 메뉴의 MouseOver 스타일 적용
+ */
+function setSubMenuAction(){
+	if (_isMobileFullMode) return;
+	// Sub 메뉴의 Layer 이벤트 바인딩.
+	jQuery("span[id*='subLayer']").mouseover(function(){
+			if ( menuActiveStatus ) return;
+			
+			var $mainMenuObj = jQuery("td[subLayerId='"+ jQuery(this).closest("span").attr("id") +"']");
+			setMenuOverStyle($mainMenuObj);
+			
+			jQuery(this).show();
+			// Sub 메뉴의 스타일 이벤트 바인딩.
+			jQuery(this).find("td[menuType='mainSubMenu']").mouseover(function (){
+				setMenuOverStyle(jQuery(this));
+			});	
+		}).mouseout(function() {
+			var subLayerId = jQuery(this).closest("span").attr("id");
+			var $mainMenuObj = jQuery("td[subLayerId='"+ subLayerId +"']");
+			$mainMenuObj.removeClass("menu_text_o");
+
+			jQuery(this).hide();
+			jQuery(this).find("td[menuType='mainSubMenu']").filter("[class*='mTitle_o']").removeClass("mTitle_o");
+		});
+}
+/**
+ * 메뉴 Action 처리
+ */
+function menuClick(obj) {
+ 	// VER : REG_2015.11, REFID : DEV1511_239, AUTHOR : ikhan
+ 	// miniLoginDiv 로그인 후 빈화면 보여지는 현상
+	// submit전에 session check
+	var isSession = jQuery.sessionCheckAjax('', '_self');
+	if(!isSession) return false;
+	
+	var $menuObj = jQuery(obj);
+	var menuType = $menuObj.attr("menuType");
+	var menuId = $menuObj.attr("id");
+	var actionType = $menuObj.attr("actionType");
+	if ( menuType == 'mainMenu' ) {
+		var defaultMenu = $menuObj.attr("defaultMenu");
+		// 하위 메뉴 실행일 때, 처리한다.
+		if ("SUB" == actionType) {
+			var $subMenu = jQuery("#"+$menuObj.attr("subLayerId")).find("td[id='"+ defaultMenu+"']");
+			if ($subMenu.length > 0) {
+				actionType = $subMenu.attr("actionType");
+				menuType = $subMenu.attr("menuType");
+				menuId = $subMenu.attr("id");
+				
+				setMenuSelectStyle($subMenu);
+			}
+		} 
+		setMenuSelectStyle($menuObj);
+	} else if ( menuType == 'mainSubMenu' ) {
+		var $mainMenuObj = jQuery("td[subLayerId='"+ $menuObj.closest("span").attr("id") +"']");
+		setMenuSelectStyle($menuObj);
+		setMenuSelectStyle($mainMenuObj);
+	}
+	hideSubMenuLayer();		// 전체 메뉴 Layer 안보이게 처리.
+	
+	if (actionType == "NONE") return;	
+	menuAction(menuType, menuId);
+}
+function menuAction(strMenuType, strMenuId, jsonParam) {
+	menuActiveStatus = true;
+	if(jsonParam == null){
+		jsonParam = {"portalParam" : ""};
+	}
+	var menuData = getMenu(strMenuId+"_"+jsonParam.portalParam);
+	if(menuData == null){
+		var url = _webapp+"/AjaxController?";
+		var param = {
+			facade : "CommonFacade",
+			command : "getMenuAction",
+			ajax_result_type : "JSON",
+			menuType : strMenuType,
+			menuId : strMenuId,
+			_tokenid : jQuery("#_tokenid").val()
+		};
+		$.ajax({
+			url: url,
+			data : param,
+			async : true,
+			error: function(data, transport){ 
+				//alert("Server is not responding..");
+			},
+		 	success: function(data){
+		 		// 2011.07.08 by ty.choi.
+		 		// 세션정보가 없을때, 메뉴 클릭 Action 처리.
+		 		// XGateTokenFilter에서 HTML Script로 반환되는 부분을 실행시킨다.
+				if ( data == null || typeof(data) == 'string' ) {
+					if(data == null){
+						openMiniLoginPop();
+					}else if(data.indexOf("<script>") >= 0){
+						openMiniLoginPop();
+					}
+				} else {
+					data.menuType=strMenuType;
+					/*
+					 * Portal Page에서 more버튼 클릭시 넘긴 정보 셋팅
+					 * 1) jsonParam.portalLeftMenuId - 좌측 활성 메뉴ID
+					 * 2) jsonParam.portalRightUrl   - 우측 URL overring정보
+					 * 3) jsonParam.portalParam - 기타 파라미터
+					 */
+					if(!isNullStr(jsonParam.portalLeftMenuId)){
+						data.portalLeftMenuId = jsonParam.portalLeftMenuId;	
+					}
+					if(!isNullStr(jsonParam.portalRightUrl)){
+						data.portalRightUrl = jsonParam.portalRightUrl;	
+					}
+					data.portalParam = jsonParam.portalParam;
+					setMenu(strMenuId+"_"+jsonParam.portalParam,data);
+					doMenuAction(data);
+				}
+			}
+		});
+	}else{
+		doMenuAction(menuData);
+	}
+	
+	if(xClickTop.document.getElementById("_tabIfr"+xClickTop.tabpanel.getActiveTab()) && _isMobileFullMode){
+		if(xClickTop.document.getElementById("_tabIfr"+xClickTop.tabpanel.getActiveTab()).height == "1300"){
+			
+		}else{
+			xClickTop.document.getElementById("_tabIfr"+xClickTop.tabpanel.getActiveTab()).height = "1300";
+		}
+	}
+	
+	menuActiveStatus = false;
+}
+/**
+ * data: menu정보를 담고 있는 json data
+ * @param data
+ */
+function doMenuAction(data){
+	if(window != xClickTop){
+		if (parent.jQuery.changeSplitter) {
+			parent.jQuery.changeSplitter('g');
+		}
+	}
+	switch ( data.actionType ) {
+		case 'SCRIPT' :
+			runScriptMenu(data.menuType, data);
+			break;
+		case 'URL' :
+	 		runUrlMenu(data.menuType, data);
+			break;
+		case 'EXTURL' :
+	 		runExtUrlMenu(data.menuType, data);
+			break;
+		case 'SUB' :
+			;;
+		case 'NONE' :
+			break;
+		default :
+			alert("Error in Menu Action..");
+			break;	
+	}	
+}
+
+/**
+ * 왼쪽메뉴 선택시 Style적용
+ */
+function setLeftMenuSelectStyle($obj) {
+	var menuType = $obj.attr("menuType");
+    var menuActiveClass= "left_bg_s";
+    var menuOrgClass = "left_bg_1";
+    var subLayerId = $obj.attr("subLayerId");
+    if (menuType == 'leftSubMenu') {
+        menuActiveClass = "left_sub_menu_s";
+        menuOrgClass = "left_sub_menu";
+    }
+    var $selectedMenuObj = jQuery("td[id='leftMenu_"+ $obj.attr("id") +"']");
+    jQuery("[class*=left_sub_menu]").filter(function(){ if($selectedMenuObj.attr("class") == "left_sub_menu_s" || $selectedMenuObj.attr("class") == "left_bg_s"){return false;}else{return true;}   }).filter("[class*=left_sub_menu]",jQuery("#"+subLayerId)).addClass('left_sub_menu').removeClass("left_sub_menu_s");
+    
+    //트리 관련 처리 추가
+    //1. 자신이 클릭한 좌메뉴 밑으로 서브레이어안에 트리가 없다면 트리 클래스를 모두 삭제 한다.
+    if(jQuery("table[id*=_treeTBL]",jQuery("#"+subLayerId)).length == 0){
+        jQuery("font[id*=Font]").css("color","");
+    }
+    //2. 자신이 클릭한 좌메뉴 밑으로 iframe이 없다면
+    //해당 윈도우 전체를 뒤져서 iframe을 모두 찾은뒤 그안에 트리 관련 클래스를 모두 지워버린다.
+    if(jQuery('iframe',jQuery("#"+subLayerId)).length == 0){
+        jQuery('iframe').each(function(){
+            jQuery("font[id*=Font]",this.contentWindow.document).css("color","");
+        });
+    }
+
+    if($selectedMenuObj.attr('class') == menuActiveClass) return;
+    jQuery("td[id*='leftMenu_']").filter("[class*='"+ menuActiveClass +"']").addClass(menuOrgClass).removeClass(menuActiveClass);
+    $selectedMenuObj.addClass(menuActiveClass).removeClass(menuOrgClass);
+
+    //서브메뉴영역이 접혀있을경우 펼쳐준다.
+    var subLayerId = $obj.attr("subLayerId");
+    if(!jQuery("#"+subLayerId).is(":visible")){
+        toggleLeftSubMenu(jQuery("img[menuId="+$obj.attr("id")+"]"));
+    }
+}
+
+function toggleLeftSubMenu(obj) {
+	var imgSrc = jQuery(obj).attr("src");
+	var menuId = jQuery(obj).attr("menuId");
+	var subLayerId = jQuery("span[id='"+ menuId +"']").attr("subLayerId");
+	jQuery("#" + subLayerId).closest("tr").toggle();
+	
+	if ( imgSrc.indexOf("up.png") > 0) {
+		jQuery(obj).attr("src", imgSrc.replace('up.png', 'down.png'));
+	} else if ( imgSrc.indexOf("down.png") > 0) {
+		jQuery(obj).attr("src", imgSrc.replace('down.png', 'up.png'));
+	}
+	
+	if(window._onAfterToggleLeftSubMenu){
+		window._onAfterToggleLeftSubMenu();
+	}
+}
+/**
+ * 왼쪽 메뉴의 MouseOver 스타일 적용
+ */
+function leftMenuClick(obj, bIsHistory) {
+	var $menuObj = jQuery(obj);
+	var menuType = $menuObj.attr("menuType");
+	var menuId = $menuObj.attr("id");
+	var actionType = $menuObj.attr("actionType");
+	if ( menuType == 'leftMenu' ) {
+		var defaultMenu = $menuObj.attr("defaultMenu");
+		var $subLayer = jQuery("#"+$menuObj.attr("subLayerId"));
+		// 하위 메뉴 실행일 때, 처리한다.
+		setLeftMenuSelectStyle($menuObj);
+		if ("SUB" == actionType) {
+			var $subMenu = $subLayer.find("span[id='"+ defaultMenu+"']");
+			if ($subMenu.length > 0) {
+				actionType = $subMenu.attr("actionType");
+				menuType = $subMenu.attr("menuType");
+				menuId = $subMenu.attr("id");
+				
+				setLeftMenuSelectStyle($subMenu);
+			}
+		} 
+		if ( $subLayer.length > 0 && $subLayer.css("display")=='none') {
+			var $imgIcon = jQuery("img[menuId='"+ $menuObj.attr("id") +"']"); 
+			if ($imgIcon.length > 0) {
+				toggleLeftSubMenu($imgIcon[0]);	
+			}
+		}
+	} else if ( menuType == 'leftSubMenu' ) {
+		var $mainMenuObj = jQuery("span[subLayerId='"+ $menuObj.closest("tr[id*=leftMenuLayer_]").attr("id") +"']");
+		
+		setLeftMenuSelectStyle($mainMenuObj);
+		setLeftMenuSelectStyle($menuObj);
+	}
+	if (actionType == "NONE" || bIsHistory) return; // history 처리에 의해 호출된 경우 Action은 생략한다.
+	menuAction(menuType, menuId);
+}
+
+
+/**
+ * 왼쪽 메뉴의 Bottom Include JSP로 포함된 항목들의 클릭시 상위메뉴 스타일 적용
+ */
+function setLeftSubObjectAction() {
+	// 메인 메뉴의 이벤트 바인딩.
+	jQuery("tr[id*='leftMenuLayer_']").find("a").click(function (){
+		var subLayerId = jQuery(this).closest("tr[id*='leftMenuLayer_']").attr("id");
+		setLeftMenuSelectStyle(jQuery("span[subLayerId='"+ subLayerId +"']"));	
+	});
+	
+}
+
+//MBC - 컨트롤누른상태로 메뉴클릭시 신규팝업 호출 후 메뉴 조회, 2016.11.30 : 박나래
+function init(defaultMenuId, menuOpenPopYn, menuType, menuId) {
+	if (tabpanel != undefined) {
+		//첫번째 메뉴의 서브메뉴를 활성화 시킨다.
+		var heDefaultMenu = document.getElementById(defaultMenuId);
+		if (heDefaultMenu){
+			menuClick(heDefaultMenu);
+			if(menuOpenPopYn=="Y"){
+				menuAction(menuType, menuId);
+			}
+		}
+	} else {
+		setTimeout("init('"+ defaultMenuId +"', '"+ menuOpenPopYn +"', '"+ menuType +"', '"+ menuId +"');", 50);
+	}
+}
+//좌측메뉴의 회사콤보박스 변경시 회사ID값 셋팅!
+var _selectedCompanyId = _companyId;
+function LeftMenu_changeCompany(oSelect) {
+	_selectedCompanyId = oSelect.value;
+	
+	//VER : REG_2015.03 , REFID : REQ638, AUTHOR : SungYongJe
+	//[REQ638] [SKCHaas] 다법인인 경우 관리자화면에서 법인 변경에 따라 tab reload 불가 개선 요청건 - 2015.04.01 
+	//관리자에서 회사변경 시 페이지 Refresh를 위하여 sysMain.jsp에 _popForm을 이용하여 처리함.
+	//추가로 넘어갈 companyId 값은 encoding 하여 _xcsparam에 넣어 넘겨 전체 리프레시 함. 2015.04.20 by SungYongJe
+	var f = document._popForm;
+	f.action = _webapp+"/sys/sysMain.jsp";
+	//url-security적용
+	var plainTxt = jQuery.param({companyId:_selectedCompanyId});
+	var encTxt = jQuery.encrypt(plainTxt);
+	f._xcsparam.value = encTxt;
+	
+	jQuery.submitForm(f);
+}
+// ↓↓↓ 이거 쓰는데가 있낭..
+function _getCompanyId() {
+	return _selectedCompanyId;
+}
+
+function getContents(facade, command, nextpage, params) {
+	var param = ( !isNullStr(facade)?('facade='+ facade+'&'):'' ) +
+							( !isNullStr(command)?('command='+ command+'&'):'' ) +
+							'nextpage='+ nextpage + '&' +
+							"";//'ajax_result_type=HTML&' + params;
+	params = params || "";
+	if("" != params)param += params;
+	//if (jQuery("#companySelect_LeftMenu").length > 0 && param.indexOf("&companyId") < 0) {
+	if (param.indexOf("&companyId") < 0 && xClickTop.jQuery("#companySelect_LeftMenu").length > 0) {
+		param += "&companyId=" + xClickTop.getCompanyId('LeftMenu');
+	}
+	if (menuData != null) {
+		param += "&leftPaneMenuId=" + menuData.menuId;
+		if(!isNullStr(menuData.portalParam)){
+			param += menuData.portalParam;
+		}
+	}
+	jQuery.submitForm("", parent.contentsLayer, param, "");
+}	
+
+/**
+ * ActionType이 SCRIPT인 메뉴 실행
+ */
+function runScriptMenu(menuType, data) {
+	if (data.actionVal.indexOf("getContents") >= 0) {
+		menuData = data;
+	}
+	eval(data.actionVal);
+	menuData = null;
+}
+
+/**
+ * ActionType이 URL인 메뉴 실행
+ */
+var _init = false;
+function runUrlMenu(menuType, data) {
+	if ( menuType == 'leftMenu' || menuType == 'leftSubMenu') {
+		jQuery.submitForm("", parent.contentsLayer, _webapp + data.actionVal, "");
+	} else {
+		var menuName = stringReplace(data.menuName,"%20"," ");
+		var _menuParam = {
+				menuTreeId: data.treeId,
+				defaultMenuId: data.defaultMenuId,
+				imageFileName: data.imageFileName,
+				userContentsLeftWidth: data.leftWidth,
+				menuName: menuName,
+				menuKind: data.menuKind,
+				//subMenuId: data.subMenuId,
+				menuId : data.menuId
+		};
+		/*
+		 * 포탈 More정보 셋팅
+		 */
+		if(!isNullStr(data.portalLeftMenuId)){
+			_menuParam.defaultMenuId = data.portalLeftMenuId;
+		}
+		// GET방식 파라미터의 원할을 위한 인코딩 
+		if(!isNullStr(data.portalRightUrl)){
+			_menuParam.portalRightUrl = jQuery.encrypt(data.portalRightUrl);	
+		}
+		
+		if(!isNullStr(data.portalParam)){
+			_menuParam.portalParam = data.portalParam;
+		}
+		var actionVal = _webapp + data.actionVal + 
+				(data.actionVal.indexOf("?") > 0 ? "&" : "?") +
+				jQuery.param(_menuParam);
+		
+		var activeTab = tabpanel.getActiveTab();
+		var activeTabIsClosable = tabpanel.getClosable(activeTab);
+		if (!_init || (!activeTabIsClosable && actionVal.indexOf("/workplace/")==-1)) {
+			jQuery.addTab(menuName, actionVal);
+		} else {
+			jQuery.urlTab(menuName, actionVal);
+		}
+		_init = true;
+	}
+}
+
+/**
+ * ActionType이 EXTURL인 메뉴 실행
+ */
+function runExtUrlMenu(menuType, data) {
+	if ( menuType == 'leftMenu' ) {
+		//좌측메뉴에 외부URL을 호출하는 경우 by ejlee 2013.05.27
+		if(data.actionType =='EXTURL'){
+			parent.document.getElementById("listPane").src =data.actionVal;
+		}else{
+			jQuery.submitForm("", parent.contentsLayer, data.actionVal, "");
+		}
+	} else {
+		var menuName = stringReplace(data.menuName,"%20"," ");
+		var activeTab = tabpanel.getActiveTab();
+		var activeTabIsClosable = tabpanel.getClosable(activeTab);
+		
+		if(!isNullStr(data.portalParam)){
+			data.actionVal += data.portalParam;
+		}
+		
+		if (!activeTabIsClosable) {
+			jQuery.addTab(menuName, data.actionVal);
+		} else {
+			jQuery.urlTab(menuName, data.actionVal);
+		}
+	}
+}
+/**
+ * 좌측 메뉴정보를 담고 있는 Map구성
+ */
+var menuMap = new Array();
+function setMenu(menuId, menuData){
+	menuMap[menuId] = menuData;
+}
+function getMenu(menuId){
+	return menuMap[menuId];
+}
+
+/**
+ * 메인메뉴 재생성 (포탈 워크플레이스 추가/삭제시)
+ */
+function refreshMenu () {
+	var f = document.getElementById("frmMenu");
+	f.facade.value = "";
+	f.command.value = "";
+	f.nextpage.value = "/userMainMenu.jsp";
+	f.transaction_yn.value = CommonConstants.COMM_N;
+	jQuery.submitAjaxForm(f, parent.jQuery("#userMainManuWrapper"));
+	setMainMenuAction();
+	setSubMenuAction();
+}
+/**
+ * 통합검색(검색엔진을 위한 메뉴이동 )
+ * 상단 메뉴에서 사용
+ *
+ */
+function goSearchMenu() {
+	var activeSctnDiv = jQuery('select#searchTarget > option:selected' ).val();
+	var searchKeyword = jQuery('input[id=searchKeyword]').val().trim();
+	var topBBSCatId  = jQuery('select#searchTarget > option:selected' ).attr('selCatId');
+	
+	var name = jQuery.getMessage("ACL-000379");
+	var menuName = stringReplace(name,"%20"," ");
+	var _menuParam = {
+			menuTreeId: '',
+			defaultMenuId: '',
+			imageFileName: '',
+			menuName: menuName,
+			menuKind: 'USER',
+			menuId : '',
+			activeSctnDiv : activeSctnDiv,
+			searchKeyword : searchKeyword,
+			topBBSCatId : topBBSCatId,
+			searchWholeYn : 'Y' //MBC - 통합검색 상세검색 기간설정 전체안되는 현상 수정, 2016.11.19 : 박나래
+	};
+
+	var actionVal = _webapp + '/XClickController?nextpage=/thirdparty/search/diquest/srchContents.jsp?' + 
+						jQuery.param(_menuParam);
+	
+	var activeTab = tabpanel.getActiveTab();
+	var activeTabIsClosable = tabpanel.getClosable(activeTab);
+	//MBC - 검색시 통합검색탭이 없는경우 추가, 있는경우 통합검색탭으로 이동 처리, 2016.11.29 : 박나래
+	var searchTabIdx = jQuery('#searchTab').val();
+	if (!_init || (!activeTabIsClosable ) || searchTabIdx==undefined) {
+		jQuery.addTab(menuName, actionVal, 'searchTab');
+	} else {
+//		jQuery.urlTab(menuName, actionVal);
+		jQuery.urlTab(menuName, actionVal, searchTabIdx);
+		jQuery.focusTab(searchTabIdx);
+	}
+	
+	
+	_init = true;
+}
+
+
+/**
+ * MBC / 메뉴액션 스크립트 추가 (게시판 지정 맵 바로가기) / hjkim
+ * @param topMenuId: 게시판 탑메뉴ID
+ * @param leftMenuId: 게시판 리스트 좌측메뉴ID
+ * @param categoryId: 카테고리ID
+ * @param bbsId: 게시판ID
+ * @author hjkim
+ * @since 2016. 11. 03.
+ */
+function menuActionForBBS(topMenuId, leftMenuId, categoryId, bbsId){
+	
+	var actionUrl = "/XClickController?facade=BBSArticleFacade&command=listArticle&nextpage=/bbs/articleGenList.jsp&menuGbn=USERMAP&bbsId="+ bbsId +"&modeGbn=USER&categoryId="+categoryId;
+	var jsonParam = {"portalLeftMenuId": leftMenuId, portalRightUrl : actionUrl , "portalParam" : "&bbsId="+bbsId};
+	
+	menuAction("topSubMenu",topMenuId,jsonParam);
+}
+
+/**
+ * MBC / 풀다운메뉴 영역 마우스 인/아웃 이벤트
+ * @param menuId: 해당영역 topMenuId
+ * @Description : 기존영역에 대해 style[on, hover] 이벤트는 삭제!
+ * @author hjkim
+ * @since 2016. 11. 05. 
+ */
+function menuEventSet(menuId){
+	jQuery("li[name="+menuId+"]").addClass("m_menuon");
+	jQuery("li[name="+menuId+"] a").css("color", "#fff");
+}
+
+/**
+ * MBC / 풀다운메뉴 영역 마우스 인/아웃 이벤트
+ * @param menuId: 해당영역 topMenuId
+ * @Description : 기존영역에 대해 style[on, hover] 이벤트는 삭제!
+ * @author hjkim
+ * @since 2016. 11. 05. 
+ */
+function menuEventout(menuId){
+	jQuery("li[name="+menuId+"]").removeClass("m_menuon");
+	jQuery("li[name="+menuId+"] a").css("color", "#697378");
+}
+
+/**
+ * VER : MBC_4차지원, REFID : MBC_PRJ4-5, AUTHOR : hyungyu, Song
+ * [메뉴클릭영역변경] 좌메뉴의 텍스트외 영역클릭시 액션동작하도록 수정관련.
+ * markup 을 변경하기엔 영향도가 커서 TD 에 click 이벤트만 추가하여 사용합니다.
+ * @since 2016.11.10
+ * @author 송현규
+ * @param event
+ * @param tdObj
+ * @param menuId
+ * @returns {Boolean}
+ */
+function cefLeftMenuClick(event, tdObj, menuId){
+	if(jQuery('span#'+menuId, tdObj).length > 0){
+		var target = xClickLib.getEventTarget(event);
+		// TD right jsp 등의 버튼을 클릭한 경우는 무시하도록 한다.
+//		log.debug(target.outerHTML);
+//		log.debug(target.onclick);
+		// IE10이하버전에서 target을 가져오지 못하므로, target이 있는 경우만 조건타도록 수정함. 2016.11.16 .pbm
+		if(target && target != tdObj && target.onclick)return;
+		leftMenuClick(jQuery('span#'+menuId, tdObj)[0]);
+	}
+	return false;
+}
+/**
+ * 
+ * 
+ 상단메뉴
+ HELP/사내도우미 팝업
+ * 
+ */
+function popupAddressHepler(){
+	var params = {
+		nextpage : "/sample/AddressHelper.jsp",
+		msgId : "MBC-000002",
+		workplaceType : "<%=PortalConstants.WPTYPE_PERSON%>",
+		themeMode : CommonConstants.THEMETYPE_USER
+	};
+	var url = _webapp + "/XClickController?" + jQuery.param(params);
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	var popupWindow = openPopupWindowInCenter(url, "AddressHeplerPop", 1000, 700, true);
+}
+
+
+/**
+ * 상단 메뉴 클릭 이벤트
+ * param : menuId
+ * 
+ * */
+function user_menuAction_extends(menuId){
+	var _top = jQuery(top);
+	var _dom = _top[0].document.getElementById(menuId);
+	$(_dom).trigger('click');
+};
+
+/**
+ * MBC / 2017.04.17 / 비밀번호 변경 페이지 LDAP팝업 호출로 변경  / yhkim
+ * MBC One password 초기화 팝업 호출
+ */
+function openLdapPasswdInitPop() {
+	var mbcLdapPasswdInitURL = "https://net.mbc.co.kr/net/emp_pop_pw.jsp";
+
+	var width = "400";
+	var height = "390";
+	var vTop = ((screen.height - height) / 2)-100;
+	var vLeft = (screen.width - width) / 2;
+	var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=no';
+	
+	var win = window.open(mbcLdapPasswdInitURL, "ldapPasswdInitPop", sFeatures);
+
+	win.focus();
+}
+
+/**
+ * 전자결재 사용자 환경설정 Open
+ * @author yhkim
+ */
+function appUserConfigPop(){
+	var url = "/XClickController?";
+	var params = {
+		facade : "AppUserConfigFacade",
+		command : "viewUserConfigApp",
+		nextpage : "/app/config/appUserConfigPop.jsp",
+		msgId : "COMMON-000180",
+		userMode : "USER"
+	};
+	url += jQuery.param(params); // serialize & encode
+
+	var urlStr = _webapp + url;
+	openPopupWindowInCenter(urlStr, 'appUserConfigPop', 600, 590, true);
+};

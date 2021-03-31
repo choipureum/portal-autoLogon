@@ -1,0 +1,1538 @@
+/***********************************************************
+	DESC : 유틸리티
+		 	 : 메소드 추가필요시 운영자에게 연락바람 
+	@author HJ.Lee
+	@since 2010.08.16
+************************************************************/
+
+/**
+ * VER : REG_2015.03 , REFID : REQ563, AUTHOR : SungYongJe
+ * [REQ563] 2015-03-02 [한양정밀] 브라우저의 페이지 뒤로가기시 읽음 처리 관련 문의 
+ * 2015.03.03 by ty.choi
+ * 배열 객체의 contains 메소드 추가
+ */
+Array.prototype.contains = function(element) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == element) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * HTML문자로 변환
+ * & -> &amp; , < -> &lt;,  > -> &gt;
+ */
+String.prototype.entityify = function() {
+    return this.replace(/&/g, "&amp;").replace(/</g,"&lt;").replace(/>/g, "&gt;");
+};
+
+/**	
+ * trim().공백문자열 제거	
+ */
+String.prototype.trim = function() {
+    return this.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1");
+};
+/**
+* ltrim(). 좌측문자열 제거
+*/
+String.prototype.ltrim = function() {
+		var str = this;
+    while (str.length>0){
+       if(str.charAt(0)==' '){
+           str=str.substring(1,str.length);              
+		   }
+       else
+          return str;	    
+   	 }
+	return str;
+};
+
+/**
+* 오른쪽 공백 문자제거
+*/
+String.prototype.rtrim = function() {
+		var str = this;
+    while (str.length>0){
+       if(str.charAt(str.length-1)==' '){
+           str=str.substring(0,str.length-1);              
+	   }
+       else
+           return str;	    
+ }	
+   return str;
+};
+
+
+/**	
+ * HTML문자를 Text로 변환
+ * VER : REG_2015.05, REFID : DEV150511_34, AUTHOR : ejlee
+ */
+String.prototype.toText = function() {
+   var str = this.toString();
+	str = stringReplace(str, "&amp;", "!*!");
+	str = stringReplace(str, "!*!", "&");
+	str = stringReplace(str, "&#039;", "\'");
+	str = stringReplace(str, "&#60;", "<");
+	str = stringReplace(str, "&#62;", ">");
+	
+	return str;
+};
+
+/**
+ * 해당 스트링이 널인지 체크
+ */
+function isNullStr ( strVal )
+{
+	if ( ( strVal == null )
+		|| ( strVal == "undefined" )
+		|| ( strVal == "null" )
+		|| ( (strVal+"").trim() == "" ) )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+
+/**
+ * 해당스트링이 boolean형인지 체크
+ */
+function parseBoolean ( str )
+{
+	if((typeof str) == "boolean"){
+		return str
+	}
+	if ( str == "true"
+		|| str == "yes" )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+* 문자열 대체
+*/
+function stringReplace(replace, search, sub){
+    var result = "";
+    var i;
+    var pos = 0;
+
+    do{
+        i = replace.indexOf(search,pos);
+
+        if(i != -1){
+            result = replace.substring(0, i);
+            result = result + sub;
+            result = result + replace.substring(i + search.length);
+            replace = result;
+            pos = i + sub.length;
+        }
+    } while(i != -1);
+    return replace ;
+}
+
+
+/**
+ * 문자열에 한글 여부 체크
+ *
+ * @param str 검사할 문자열 
+ * @return boolean
+ */
+function containHangul(str) {
+	var regexp = /[ㄱ-ㅎ가-힣]/g;
+	return regexp.test(str);
+}
+
+/**
+ * 오늘날짜를 리턴 yyyy-MM-dd
+ */
+function getTodayDate()
+{
+	var today = new Date();
+	var month = today.getMonth();
+	month = (month < 9) ? ("0" + (1+month)) : (1+month); 
+	
+	var day = today.getDate();
+	day = (day < 10) ? ("0" + day) : day;
+	var startdate = today.getFullYear() + "-" + month + "-" + day;
+	return startdate;
+}
+/**
+ * 날짜 유효성체크
+ */
+function checkDate(strDate) {
+	
+	var arrDate;
+	var chkDate;
+	
+	if (strDate.indexOf("-") != -1) {
+		arrDate = strDate.split("-");
+	}
+	else{
+		if (strDate.indexOf("/") != -1) {
+			arrDate = strDate.split("/");
+		}
+		else{
+			if (strDate.length == 8) {
+				arrDate = strDate.substring(0,4)+"/"+strDate.substring(4,6)+"/"+strDate.substring(6,8);
+				arrDate = arrDate.split("/");
+			}
+			else{
+				return false;
+			}
+		}
+	}
+
+	if (arrDate.length != 3) {
+		return false;
+	}
+
+	if (arrDate[0].length != 4 || arrDate[1].length != 2 || arrDate[2].length != 2) {
+		return false;
+	}
+
+	chkDate = new Date(arrDate[0] + "/" + arrDate[1] + "/" + arrDate[2]);
+	
+	if (isNaN(chkDate) == true ||
+		arrDate[1] != chkDate.getMonth() + 1 ||
+		arrDate[2] != chkDate.getDate()) {
+		return false;
+	}
+	
+	return true;
+}
+
+/**
+* 글자수를 리턴합니다(2Byte체크)
+*/
+function calByte(aquery) 
+{
+
+    var tmpStr;
+    var temp=0;
+    var onechar;
+    var tcount;
+    tcount = 0;
+
+    tmpStr = new String(aquery);
+    temp = tmpStr.length;
+
+    for (k=0;k<temp;k++)
+    {
+            onechar = tmpStr.charAt(k);
+            if (escape(onechar) =='%0D') { } else if (escape(onechar).length > 4) { tcount += 2; } else { tcount++; }
+    }
+    return tcount;
+}
+/**
+* 원하는 자리에서 숫자를 반올림한다.
+*/
+function doRound(cnj_x,cnj_y) {
+	return Math.round(cnj_x * Math.pow(10, cnj_y)) / Math.pow(10, cnj_y);
+}
+
+/**
+ * CheckBox 전체선택(disabled 항목은 선택 안함)
+ *
+ * @param checkBoxObj CheckBox Object
+ * @param delimeter   value값 구분자
+ */
+
+function checkToggle( checkBoxObj , field_id , rangeObject)
+{
+	if( rangeObject == null ) rangeObject = document;
+
+	var flag = true;
+
+	if ( checkBoxObj != null )
+	{
+		if ( checkBoxObj.tagName == "INPUT" )
+		{
+			flag = !checkBoxObj.checked;
+		}
+		else
+		{
+			flag = checkBoxObj.getAttribute ("checked");
+			
+			if ( flag )
+			{
+				checkBoxObj.setAttribute ("checked", false);
+			}
+			else
+			{
+				checkBoxObj.setAttribute ("checked", true );
+			}
+		}
+	}
+	
+	var fieldObj;
+	
+	
+	if(rangeObject.rows){
+		fieldObj = rangeObject.rows;
+	}else{
+		fieldObj = rangeObject.getElementsByName( field_id );
+	}
+
+	
+	if ( fieldObj != null )
+	{
+		var fieldLen ;
+		
+		if(rangeObject.rows){
+			fieldLen = rangeObject.rows.length;
+		}else{
+			fieldLen = rangeObject.getElementsByName(field_id ).length;
+		}
+		
+		
+		//var fieldLen = rangeObject.getElementById( field_id ).length;
+		
+		if (  fieldLen != null  )
+		{
+			for ( i=0; i< fieldLen ; i++ )
+			{
+				
+				if (rangeObject.rows){
+					if (!rangeObject.rows[i].cells[0].childNodes[0].disabled){
+						rangeObject.rows[i].cells[0].childNodes[0].checked  = !flag;
+						jQuery(rangeObject.rows[i].cells[0].childNodes[0]).trigger('change');
+					}
+				}else {
+					if(!rangeObject.getElementsByName( field_id )[i].disabled){
+						rangeObject.getElementsByName( field_id )[i].checked = !flag;
+						jQuery(rangeObject.getElementsByName( field_id )[i]).trigger('change');
+					}
+				}
+				
+			}		
+		}
+		else
+		{
+			if (!rangeObject.all( field_id ).disabled){
+				rangeObject.all( field_id ).checked = !flag;	
+			}	
+		}
+	}
+	//체크박스 다시 원위치 .
+	//checkBoxObj.checked=false
+}
+
+function checkToggleTwo( checkBoxObj , field_id , rangeObject)
+{
+	if( rangeObject == null ) rangeObject = document;
+
+	var flag = true;
+
+	if ( checkBoxObj != null )
+	{
+		if ( checkBoxObj.tagName == "INPUT" )
+		{
+			flag = !checkBoxObj.checked;
+		}
+		else
+		{
+			flag = checkBoxObj.getAttribute ("checked");
+			
+			if ( flag )
+			{
+				checkBoxObj.setAttribute ("checked", false);
+			}
+			else
+			{
+				checkBoxObj.setAttribute ("checked", true );
+			}
+		}
+	}
+	
+	var fieldObj;
+	
+	
+	if(rangeObject.rows){
+		fieldObj = rangeObject.rows;
+	}else{
+		fieldObj = rangeObject.getElementsByName( field_id );
+	}
+
+	
+	if ( fieldObj != null )
+	{
+		var fieldLen ;
+		
+		if(rangeObject.rows){
+			fieldLen = rangeObject.rows.length;
+		}else{
+			fieldLen = rangeObject.getElementsByName(field_id ).length;
+		}
+		
+		
+		//var fieldLen = rangeObject.getElementById( field_id ).length;
+		
+		if (  fieldLen != null  )
+		{
+			for ( i=0; i< fieldLen ; i++ )
+			{
+				
+				if (rangeObject.rows){
+					if (!rangeObject.rows[i].cells[1].childNodes[0].disabled){
+						rangeObject.rows[i].cells[4].childNodes[0].checked  = !flag;
+						jQuery(rangeObject.rows[i].cells[4].childNodes[0]).trigger('change');
+					}
+				}else {
+					if(!rangeObject.getElementsByName( field_id )[i].disabled){
+						rangeObject.getElementsByName( field_id )[i].checked = !flag;
+						jQuery(rangeObject.getElementsByName( field_id )[i]).trigger('change');
+					}
+				}
+				
+			}		
+		}
+		else
+		{
+			if (!rangeObject.all( field_id ).disabled){
+				rangeObject.all( field_id ).checked = !flag;	
+			}	
+		}
+	}
+	//체크박스 다시 원위치 .
+	//checkBoxObj.checked=false
+}
+/**
+ * CheckBox 선택된 값 리턴
+ *
+ * @param checkBoxObj CheckBox Object
+ * @param delimeter   value값 구분자
+ */
+function getCheckedValue(checkBoxObj , delimeter) 
+{
+		var strlist  = new String() ;
+	
+    if (checkBoxObj){
+	    if (checkBoxObj.length){
+			for (var i=0; i < checkBoxObj.length; i++){
+				if (checkBoxObj[i].checked){
+					strlist = strlist + checkBoxObj[i].value+delimeter;
+				}
+			}
+			if( strlist.length > 0 ) strlist = strlist.substring(0, strlist.length - 1 );
+		 } 
+		 else {
+			 if (checkBoxObj.checked) {
+				strlist = checkBoxObj.value;
+			 }
+ 	   }
+	}
+	return strlist;
+}
+
+/**
+ * CheckBox 선택된 값 리턴 (중복 제거)
+ *
+ * @param checkBoxObj CheckBox Object
+ * @param delimeter   value값 구분자
+ */
+function getCheckedValueNoDup(checkBoxObj , delimeter) 
+{
+		var strlist  = new String() ;
+	
+    if (checkBoxObj){
+	    if (checkBoxObj.length){
+			for (var i=0; i < checkBoxObj.length; i++){
+				if (checkBoxObj[i].checked){
+					if(strlist.indexOf(checkBoxObj[i].value+delimeter) > -1){
+						
+					}else{
+						strlist = strlist + checkBoxObj[i].value+delimeter;
+					}
+				}
+			}
+			if( strlist.length > 0 ) strlist = strlist.substring(0, strlist.length - 1 );
+		 } 
+		 else {
+			 if (checkBoxObj.checked) {
+				strlist = checkBoxObj.value;
+			 }
+ 	   }
+	}
+	return strlist;
+}
+
+/**
+ * CheckBox 선택된 갯수 리턴
+ *
+ * @param checkBoxObj CheckBox Object
+ * @param delimeter   value값 구분자
+ */
+function getCheckedCount(checkBoxObj , delimeter) 
+{
+	var strlist  = new String() ;
+	var count = 0;
+	
+    if (checkBoxObj){
+	    if (checkBoxObj.length){
+			for (i=0; i < checkBoxObj.length; i++){
+				if (checkBoxObj[i].checked){
+					count++;
+				}
+			}
+		 } 
+		 else {
+			 if (checkBoxObj.checked) {
+				 count = 1;
+			 }
+ 	   }
+	}
+	return count;
+}
+
+function setUnChecked(checkBoxObj) 
+{
+	var strlist  = new String() ;
+	
+    if (checkBoxObj){
+	    if (checkBoxObj.length){
+			for (i=0; i < checkBoxObj.length; i++){
+				if (checkBoxObj[i].checked){
+					checkBoxObj[i].checked = false;
+				}
+			}
+		 } else {
+			 if (checkBoxObj.checked) {
+				checkBoxObj.checked = false;
+			 }
+ 	   }
+	}
+	return strlist;
+}
+/**
+* 글자수를 리턴합니다(2Byte체크)
+*/
+function is2byte(aquery) 
+{
+
+    var tmpStr;
+    var temp=0;
+    var onechar;
+    var tcount;
+    tcount = 0;
+
+    tmpStr = new String(aquery);
+    temp = tmpStr.length;
+
+    for (k=0;k<temp;k++)
+    {
+            onechar = tmpStr.charAt(k);
+            if (escape(onechar) =='%0D') { 
+            } else if (escape(onechar).length > 4) { 
+            	return true
+            } else { 
+            }
+    }
+    return false;
+}
+/**
+* 숫자유효 체크!
+*/
+function numCheck(obj) { 
+  var num = "0123456789"; 
+  if( isNaN(obj.value) &&  obj.value.trim() != "") {
+  	obj.value= obj.defaultValue;
+  	obj.focus(); 
+	alert(jQuery.getMessage('COMMON-000072'));
+	return false; 
+  } 
+   return true;
+}
+/**
+* 주민번호 체크
+*/
+function checkResNo(serial){
+	if (serial1.length != 13){
+		return false;
+  } else {
+		var str_serial1 = serial.substring(0, 6);
+		var str_serial2 = serial.substring(7, 13);
+		alert(str_serial1);
+		alert(str_serial2);
+		var digit=0;
+		
+		for (var i=0;i<str_serial1.length;i++){
+			var str_dig=str_serial1.substring(i,i+1);
+			if (str_dig<'0' || str_dig>'9'){ 
+				digit=digit+1 ;
+			}
+		}
+
+		if ((str_serial1 == '') || ( digit != 0 )){
+			return false;   
+		}
+	
+		var digit1=0
+		for (var i=0;i<str_serial2.length;i++){
+			var str_dig1=str_serial2.substring(i,i+1);
+			if (str_dig1<'0' || str_dig1>'9'){ 
+				digit1=digit1+1; 
+			}
+		}
+
+		if ((str_serial2 == '') || ( digit1 != 0 )){
+			return false;   
+		}
+
+
+		if (str_serial1.substring(2,3) > 1){
+			return false;   
+		}
+
+		if (str_serial1.substring(4,5) > 3){
+			return false;   
+		} 
+
+		if (str_serial2.substring(0,1) > 4 || str_serial2.substring(0,1) == 0){
+			return false;   
+		}
+
+		var a1=str_serial1.substring(0,1);
+		var a2=str_serial1.substring(1,2);
+		var a3=str_serial1.substring(2,3);
+		var a4=str_serial1.substring(3,4);
+		var a5=str_serial1.substring(4,5);
+		var a6=str_serial1.substring(5,6);
+		
+		var check_digit=a1*2+a2*3+a3*4+a4*5+a5*6+a6*7;
+		
+		var b1=str_serial2.substring(0,1);
+		var b2=str_serial2.substring(1,2);
+		var b3=str_serial2.substring(2,3);
+		var b4=str_serial2.substring(3,4);
+		var b5=str_serial2.substring(4,5);
+		var b6=str_serial2.substring(5,6);
+		var b7=str_serial2.substring(6,7);
+		
+		var check_digit=check_digit+b1*8+b2*9+b3*2+b4*3+b5*4+b6*5 ;
+		
+		check_digit = check_digit%11;
+		check_digit = 11 - check_digit;
+		check_digit = check_digit%10;
+
+		if (check_digit != b7){
+			return false;   
+		} else {
+			return true;
+		}
+	}
+}
+/** =============================================
+Comment: 사업자등록번호 체크
+Return : Boolean
+Usage  : checkCompNmbr(formName)
+--------------------------------------------- **/
+function checkCompNmbr(formName, label){
+	var str = formName.value;
+	
+	while (str.indexOf('-')!=-1){
+		str = str.replace("-","");
+	}
+
+	if(isNaN(str)) { 
+		window.alert(label+"은(는) 숫자로만 작성하셔야 합니다");
+		formName.value="";
+		formName.focus();
+		return false;
+	}
+
+	if (str.length != 10) { 
+		alert(label + "의 자릿수가 올바르지 않습니다."); 
+		return false; 
+    } 
+         
+	sumMod = 0; 
+	sumMod += parseInt(str.substring(0,1)); 
+	sumMod += parseInt(str.substring(1,2)) * 3 % 10; 
+	sumMod += parseInt(str.substring(2,3)) * 7 % 10; 
+	sumMod += parseInt(str.substring(3,4)) * 1 % 10; 
+	sumMod += parseInt(str.substring(4,5)) * 3 % 10; 
+	sumMod += parseInt(str.substring(5,6)) * 7 % 10; 
+	sumMod += parseInt(str.substring(6,7)) * 1 % 10; 
+	sumMod += parseInt(str.substring(7,8)) * 3 % 10; 
+	sumMod += Math.floor(parseInt(str.substring(8,9)) * 5 / 10); 
+	sumMod += parseInt(str.substring(8,9)) * 5 % 10; 
+	sumMod += parseInt(str.substring(9,10)); 
+ 
+	if (sumMod % 10 != 0) 
+	{ 
+		alert(label + "은(는) 올바른 " + label + "가 아닙니다"); 
+		return false; 
+	}
+	return true; 
+}	
+
+/*
+*	Textarea 글자수 제한 
+*/
+function CheckStrLen(maxlen,field){
+	var temp; //들어오는 문자값...
+	var msglen;
+	msglen = maxlen*2;
+	var value= field.value;
+  
+	l =  field.value.length; 
+	tmpstr = "" ;
+	
+	if (l == 0){
+		value = maxlen*2;
+	}else {
+		for(k=0;k<l;k++){
+			temp =value.charAt(k);
+	
+			if (escape(temp).length > 4)
+				msglen -= 2;
+			else
+				msglen--;
+    
+			if(msglen < 0){
+				alert("총 영문 "+(maxlen*2)+"자 한글 " + maxlen + "자 까지 보내실수 있습니다.");
+				field.value= tmpstr;
+				break;
+			}else {
+				tmpstr += temp;
+			}
+		}
+	}
+}
+
+/*
+*	Radio 버튼 값 	가져오기 
+*/
+function getRadioValue(x) { 
+	if(isUndefined(x.length) && x.tagName.toLowerCase() == "input" && x.type.toLowerCase() == "radio"){
+		if(x.checked){
+			return x.value;
+		}
+	}
+	for(var i=0; i<x.length; i++){
+	  if (x[i].checked==true) return x[i].value;
+	}
+	return "";
+}
+
+
+/*
+* 대, 소문자 변경 - stmarine - 
+* FireFox: event 인자로 받아서 처리. event에 setter가 없기 때문에 input object 인자로 받아서 처리. eykang
+* ex> <input type='text' name='upChar' onKeyPress='setUpperCase(event, this)'>
+* 	  <input type='text' name='lowChar' onKeyPress='setLowerCase(event, this)'>
+*/
+function setUpperCase(e, obj){
+	var key = e.which || window.event.keyCode;
+ 
+  if ((key >= 97) && (key <= 122)) {      //소문자 ->대문자	
+		obj.value += String.fromCharCode(key).toUpperCase(); 
+		e.preventDefault ? e.preventDefault() : e.returnValue = false; 			
+	}
+}
+function setLowerCase(e, obj){
+	var key = e.which || window.event.keyCode;
+	
+	if ((key >= 65) && (key <= 90))  {      //대문자 ->소문자	
+		obj.value+=String.fromCharCode(key).toLowerCase(); 
+		e.preventDefault ? e.preventDefault() : e.returnValue = false; 				
+	}
+}
+/*
+* 숫자입력만 - stmarine - 
+* FireFox: event 인자로 받아서 처리. eykang
+* ex> <input type='text' name='num' style='ime-mode:disabled;' onKeyPress='onlyNum(event);'>
+*/
+function onlyNum(e) {
+	var key = e.which || window.event.keyCode;
+	
+	if((key>57||key<48) && key!=45){
+		e.preventDefault ? e.preventDefault() : e.returnValue = false;
+	}
+}
+
+/*
+ * 숫자 이외이의 문자는 제거
+ * MBC추가 - 2016.08.11, eykang
+ * ex) <input type='text' name='num' onKeyUp="removeCharacter(this);">
+ */
+function removeCharacter(obj){
+	var str = obj.value;
+	obj.value = str.replace(/[^\d]/g, '');
+}
+
+/*
+* 입력화면의 첫 입력내용에 Focus - stmarine - 
+* Input Parameter : frm  - form 이름
+* 					obj  - focus 객체이름
+* Output Parameter : null
+* ex> 
+*/
+function firstFocus(frm, obj) {
+	try {
+		var frmObj = eval(frm + "." + obj);
+		if (frmObj) frmObj.focus();
+	} catch(e) {
+		alert(e.description);
+	}
+}
+
+/**
+* 해당OBJ의 포맷을 yyyy-MM-dd로 셋팅한다!
+* onKeyDown
+*/
+function dateFormat( obj ) {
+	if( obj.value == '' ) return;
+    var src;
+    var i; 
+    var	factor; 
+    var	su; 
+    var	SpaceSize = 0;
+    var chkValue;
+
+    chkValue = "";
+    su = obj.value.length;
+
+    if (event.keyCode != 8 && event.keyCode != 36 && event.keyCode != 37 && event.keyCode != 39 && event.keyCode != 46)
+    {
+	    for(i=0; i < su ; i++)
+	    {
+	       src = obj.value.substring(i,i+1);
+	    
+	       if (src != "-")
+	       {
+	          factor = parseInt(src);
+	          if (isNaN(factor))
+	          {
+	        	  alert(jQuery.getMessage('COMMON-000072'));
+	              obj.focus();
+	          }
+	          else
+	          {
+	              chkValue += src;
+	          }  
+	       }  
+	    }
+	    
+	    obj.value = chkValue;
+	    
+	    su = "";
+	
+		for(i=0; i < parseInt(obj.value.length) ; i++)
+		{
+			su = su + obj.value.substring(i,i+1);
+			switch (i){
+				case 3 :
+					su = su + "-"			
+					break
+				case 5 :
+					su = su + "-"			
+					break
+			}
+		}
+	
+	    obj.value = su; 
+		if( !checkDate(obj.value) ) {
+			obj.value = obj.defaultValue
+			alert(check_date);
+			obj.focus();
+			return false;
+		}
+	    return true; 
+    }
+}
+/***********************************************/
+/*  JavaScript Basic Function                  */
+/*  (By LeeHJ 2006.09.30)                      */
+/***********************************************/
+function isAlien(a) {
+   return isObject(a) && typeof a.constructor != 'function';
+}
+function isArray(a) {
+    return isObject(a) && a.constructor == Array;
+}
+function isBoolean(a) {
+    return typeof a == 'boolean';
+}
+function isEmpty(o) {
+    var i, v;
+    if (isObject(o)) {
+        for (i in o) {
+            v = o[i];
+            if (isUndefined(v) && isFunction(v)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+function isFunction(a) {
+    return typeof a == 'function';
+}
+function isNull(a) {
+    return a == null;
+}
+function isNumber(a) {
+    return typeof a == 'number' && isFinite(a);
+}
+function isObject(a) {
+    return (a && typeof a == 'object') || isFunction(a);
+}
+function isString(a) {
+    return typeof a == 'string';
+}
+function isUndefined(a) {
+    return typeof a == 'undefined';
+} 
+
+/**
+*	Textarea 글자수 제한 
+* input param : korbyte - 국문 한글자당 DB에서 차지하는 byte (일반 2byte, UTF-8 3byte)
+*               maxlen  - DB Comlumn Size
+*               filed   - form내의 object (** value 아님).<b> 
+* 사용방법 : 저장시의 validCheck 부분에서 처리.
+*          ex> 
+*					if ( !CheckStrLen2(3, 255, f.title) ) {
+*						alert("............");
+*						f.title.focus();
+*						return false;
+*					}
+*/
+function CheckStrLen2(korbyte, maxlen, field){
+	var temp; //들어오는 문자값...
+
+	for(k=0;k<field.value.length;k++){
+		temp = field.value.charAt(k);
+		//utf-8은 한글 한문자 3byte
+		if (escape(temp).length > 4)
+			maxlen -= korbyte;
+		else
+			maxlen--;
+	}
+	if(maxlen < 0){
+		return false;
+	}
+	return true;
+}
+
+/**
+ java.net.EncodeURL.encode()로 인코딩된 문자열이 javascript의 decodeURI()로
+  정상 변환되지 않는 문제에 대한 해결책으로 java.net.DecodeURL.decode() 와 같은
+  디코딩 알고리즘을 사용하는 javascript함수를 추가함
+ 2008-01-15 by Esh
+ */
+function decodeURL(str){
+    var s0, i, j, s, ss, u, n, f;
+    s0 = "";                // decoded str
+    for (i = 0; i < str.length; i++){   // scan the source str
+        s = str.charAt(i);
+        if (s == "+"){s0 += " ";}       // "+" should be changed to SP
+        else {
+            if (s != "%"){s0 += s;}     // add an unescaped char
+            else{               // escape sequence decoding
+                u = 0;          // unicode of the character
+                f = 1;          // escape flag, zero means end of this sequence
+                while (true) {
+                    ss = "";        // local str to parse as int
+                        for (j = 0; j < 2; j++ ) {  // get two maximum hex characters for parse
+                            sss = str.charAt(++i);
+                            if (((sss >= "0") && (sss <= "9")) || ((sss >= "a") && (sss <= "f"))  || ((sss >= "A") && (sss <= "F"))) {
+                                ss += sss;      // if hex, add the hex character
+                            } else {--i; break;}    // not a hex char., exit the loop
+                        }
+                    n = parseInt(ss, 16);           // parse the hex str as byte
+                    if (n <= 0x7f){u = n; f = 1;}   // single byte format
+                    if ((n >= 0xc0) && (n <= 0xdf)){u = n & 0x1f; f = 2;}   // double byte format
+                    if ((n >= 0xe0) && (n <= 0xef)){u = n & 0x0f; f = 3;}   // triple byte format
+                    if ((n >= 0xf0) && (n <= 0xf7)){u = n & 0x07; f = 4;}   // quaternary byte format (extended)
+                    if ((n >= 0x80) && (n <= 0xbf)){u = (u << 6) + (n & 0x3f); --f;}         // not a first, shift and add 6 lower bits
+                    if (f <= 1){break;}         // end of the utf byte sequence
+                    if (str.charAt(i + 1) == "%"){ i++ ;}                   // test for the next shift byte
+                    else {break;}                   // abnormal, format error
+                }
+            s0 += String.fromCharCode(u);           // add the escaped character
+            }
+        }
+    }
+    return s0;
+}
+
+// for firefox 용  
+// 이준희
+function fireEvent(element,event){
+    if (document.createEventObject){
+        // 익스플로러용
+        var evt = document.createEventObject();
+        return element.fireEvent('on'+event,evt)
+    }
+    else{
+        //firefox용
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent(event, true, true ); 
+        return !element.dispatchEvent(evt);
+    }
+}
+ 
+// for firefox 용  moveRow
+// 이준희
+function moveRow(table, from, to){
+	var tbody = table.tBodies[0]; 
+	
+	  var trFrom = tbody.rows[from]; 
+	  tbody.removeChild(trFrom); 
+	  var trTo = tbody.rows[to];
+	  if (trTo){
+		  tbody.insertBefore(trFrom, trTo);
+	  }else{
+		  tbody.insertBefore(trFrom, null);
+	  }
+
+}
+
+// for firefox 용 특정테이블 row에 해당하는 객체가 있는 지 체크, 주로 checkid에 사용
+// 이추앙 
+function getObjectForTableRow(tableRow,objectName){
+   	// oChkbox = oRow[j].cells[0].childNodes[0]; 대신 아래와 같이 사용
+   	var oChkbox = null;
+   	for (var j1=0 ; j1 < tableRow.cells.length ; j1++) {
+   		try {
+    		for (var j2=0 ; j2 < tableRow.cells[j1].childNodes.length ; j2++) {
+    			var nodeName=tableRow.cells[j1].childNodes[j2].id + "";
+   				if (nodeName.toUpperCase() == objectName.toUpperCase() ) {
+   					oChkbox = tableRow.cells[j1].childNodes[j2];
+   					return oChkbox;
+   				}
+    		}
+    	}catch(E){ continue; }
+   	}
+   	return oChkbox;
+}
+
+var KEY_ARROW_UP  = 38;
+var KEY_ARROW_DOWN  = 40;
+
+//선택Item -> Up Move
+function upItems(oSelect) {
+    var idx = oSelect.selectedIndex;
+    if(idx == -1){
+    	messagePop("COMMON-000230", "ALERT", 300, 170) // 선택된 항목이 없습니다.
+        return;
+    }
+    if( idx == 0 ){
+    	return;
+    } 
+    var tmp1 = oSelect.children[idx-1].style.backgroundColor;
+    var tmp2 = oSelect.children[idx].style.backgroundColor;
+    swapNode(oSelect.children[idx-1], oSelect.children[idx]);  
+    oSelect.children[idx-1].style.backgroundColor=tmp1;
+    oSelect.children[idx].style.backgroundColor=tmp2;
+}
+//선택Item -> Down Move
+function downItems(oSelect) {
+    var idx = oSelect.selectedIndex;
+    if(idx == -1){
+    	messagePop("COMMON-000230", "ALERT", 300, 170) // 선택된 항목이 없습니다.
+        return;
+    }
+    if( idx == oSelect.length - 1 ){
+    	 return;
+    }
+    var tmp1 = oSelect.children[idx].style.backgroundColor;
+    var tmp2 = oSelect.children[idx+1].style.backgroundColor;
+
+	swapNode(oSelect.children[idx], oSelect.children[idx+1]);
+    
+    oSelect.children[idx].style.backgroundColor=tmp1;
+    oSelect.children[idx+1].style.backgroundColor=tmp2;
+    oSelect.children[idx+1].selected = true;
+}
+
+//keyEvent-> Up/Down Item Move event Fire
+function onSortKeyDown(e) {
+	var heSelect = document.getElementById("sortList");
+	if (heSelect) {
+	    if (e.keyCode == KEY_ARROW_UP) {
+	    	upItems(heSelect);
+	    } else if (e.keyCode == KEY_ARROW_DOWN) {
+	    	downItems(heSelect);
+	    }
+	}
+}
+
+/**
+* FireFox에서 swapNode를 지원하지 않기 때문에 메서드를 정의하여 사용합니다.
+* FireFox적용. 2009.08.28, eykang
+*/
+function swapNode(item1, item2) {
+	var itemtmp = item1.cloneNode(true);
+	
+	var parent = item1.parentNode;
+	
+	item2 = parent.replaceChild(itemtmp,item2);
+	
+	parent.replaceChild(item2,item1);
+	
+	parent.replaceChild(item1,itemtmp);
+	itemtmp = null;
+}
+
+
+/**
+* key값확인
+*/
+function keyEnter(e,fn,str){
+	e = jQuery.event.fix(e);
+	if(e.which == 13 || e.keyCode == 13){
+		e.preventDefault();
+		if (isFunction(fn)) {
+			if (str != undefined) {
+		  	fn.call(this,str);
+		  }
+		  else {
+		  	fn.call();
+		  }
+		//}else if (isString(str)){
+		//	search(fn);
+		}	else {
+			search();
+		}
+	}
+}
+
+/**
+ * 주어진 string이 null또는 공백일경우 defaultValue를 리턴한다.
+ */
+function getString(str,defaultValue){
+	if(isNullStr(str)){
+		return defaultValue;
+	}else{
+		return str;
+	}
+}
+
+function getJSONtoUrl(query) {
+    var obj = "", url = "", param = "",
+        qs = query.indexOf("?"),
+        eq = query.indexOf("="),
+        am = query.indexOf("&");
+    var min = (eq == -1)? am : ((am == -1)? eq : Math.min(eq,am));
+
+    if (qs == -1) {
+        if (eq == -1 && am == -1) url = query;
+        else param = query;
+    }else if (min == -1 || qs < min) {
+        url = query.substring(0,qs);
+        param = query.substr(qs + 1);
+    }else{
+        param = query;
+    }
+    if (url!=="") {
+    	obj += "\"url\":\"" + url + "\""; 
+    }
+    var a = param.split("&"), b;
+    for (var i=0,n=a.length; i<n; i++) {
+    	if (a[i] !== "") {
+	        b = a[i].split("=");
+	        if (b[0] !== "") {
+	        	obj += ( obj !== "" ) ? "," : "";
+	        	obj += "\"" + b[0] + "\":\"" + b[1] + "\"";
+	        }
+        }
+    }
+    obj = "{" + obj + "}";
+    return obj;
+}
+
+/**
+ * 본문안의 이미지 내용 정리. 
+ */
+function arrangeContentImgFiles(contentValue, imgFileList, contentFileObj, delFileObj) {
+	var existFiles = "";
+	var delFiles = "";
+	
+	for (var i=0; i < imgFileList.length; i++) {
+		var imgFileId = imgFileList[i];
+		if ( contentValue.indexOf(imgFileId) == -1 ) {
+			delFiles += imgFileId + "\14";
+		} else {
+			existFiles += imgFileId + "\14";	
+		}
+	}	
+	if (existFiles != null && existFiles !=""){
+		contentFileObj.value += "\14" + existFiles;
+	}
+	if (delFiles != null && delFiles !=""){
+		delFileObj.value += "\14" + delFiles;
+	}
+}
+
+/**
+ * Form내의 File관련 Ojbect Value 정리
+ */
+function arrangeFormFileObject(obj) {
+	if (obj.value == "") return;
+	
+	var fileValue = "";
+	var arrFiles = obj.value.split("\14");
+	for (var i=0; i<arrFiles.length; i++) {
+		if (arrFiles[i].trim() == "") continue;
+		
+		fileValue += arrFiles[i] + "\14";
+	}
+	obj.value = fileValue;
+}
+
+/**
+ * Textarea 높이조절 Function
+ * @param {Object} $
+ */
+(function($){
+	jQuery.fn.taResize = function(options){
+
+		options = jQuery.extend({
+			timer:100
+		}, options);
+	
+		return this.each(function(i){
+			var $t = jQuery(this),
+				t = this;
+
+			t.style.resize = 'none';
+			t.style.overflow = 'hidden';
+			
+			/**
+			 * VER : REG_2015.10 , REFID : REQ896, AUTHOR : hyungyu, Song
+			 * jre 1.8.0.60_b27 에서 applet 로딩시 아래 value 셋팅하는 스크립트와 충돌이 발생하는듯 프리징 현상 발생. 
+			 * 불필요한 부분이라 제거합니다. 2015.10.01 hyungyu 
+			t.style.height = '0px';
+			t.value = "W\nW\nW";
+			var H3 = t.scrollHeight;
+			t.value = "W\nW\nW";
+			var H4 = t.scrollHeight;
+			var H = H4 - H3;
+			*/
+			var tVal = null;
+			var H = 0;
+
+			$t.before("<div id=\"ataa_"+t.id+"\"></div>");
+
+			var $c = jQuery('#ataa_'+t.id),
+				c = $c.get(0);
+
+			c.style.padding = '0px';
+			c.style.margin = '0px';
+
+			$t.appendTo($c);
+
+			$t.bind('focus', function(){
+				t.startUpdating();
+			}).bind('blur', function(){
+				t.stopUpdating();
+			});
+
+			this.heightUpdate = function(){
+				if (tVal != t.value){
+					tVal = t.value;
+					t.style.height = '0px';
+					var tH = t.scrollHeight + H;
+					t.style.height = tH + 'px';
+					
+					// ie7 height 보정
+					/*
+					if($.browser.msie && /MSIE 7.0/.test(navigator.userAgent)){
+						t.style.height = (tH+6) + 'px';
+					}
+					*/
+					c.style.height = 'auto';
+					c.style.height = c.offsetHeight + 'px';
+				}
+			};
+
+			this.startUpdating = function(){
+				t.interval = window.setInterval(function(){
+					t.heightUpdate();
+				}, options.timer);
+			};
+			this.stopUpdating = function(){
+				clearInterval(t.interval);	
+			};
+
+			jQuery(function(){
+				t.heightUpdate();
+			});
+		});
+	};
+})(jQuery);
+
+/**
+ * 
+ */
+var _toggleAddMenu = function(attachObj, id, userOpt){
+	var $layer = jQuery("#"+id);
+	var opt = jQuery.extend({"leftAlign" : true, "growUp" : false}, userOpt);
+	opt.width = $layer.css("width"); // 실제넓이적용 (영문로케일 고려)
+	var $attachObj = jQuery(attachObj);
+	var parentPos = $attachObj.position();
+	var minWidth = $attachObj.width();
+	var wrapperDiv = jQuery("#addMenuWrapper");
+	if(wrapperDiv.length == 0){
+		if(jQuery.browser.msie && jQuery.browser.version == "7.0"){
+			wrapperDiv = jQuery("<div id='addMenuWrapper' style='position:absolute;'></div>");
+		}else{
+			wrapperDiv = jQuery("<div id='addMenuWrapper' style='position:relative;'></div>");
+		}
+	}
+	
+	// 다른버튼에 붙어있을경우
+	if($attachObj.find("#addMenuWrapper").length == 0 && $layer.css("display") != "none"){
+		_closeAddMenuAll();
+	}
+	
+	if(opt.leftAlign && !opt.growUp){
+		wrapperDiv.css({"float":"left" ,"margin-top":$attachObj.height()}).prependTo($attachObj);
+	}else if(!opt.leftAlign && !opt.growUp){
+		wrapperDiv.css({"float":"right" ,"margin-top":$attachObj.height()}).appendTo($attachObj);
+	}else if(!opt.leftAlign && opt.growUp){
+		wrapperDiv.css({"float":"right" ,"margin-top":0}).appendTo($attachObj);
+	}else{
+		wrapperDiv.css({"float":"left" ,"margin-top":0}).prependTo($attachObj);
+	}
+	
+	var layerCssOpt = {};
+	if(opt.leftAlign){
+		if(opt.growUp){
+			layerCssOpt = { top: "auto", bottom : 0, left : 0, "min-width": minWidth, "width" : opt.width };
+		}else{
+			layerCssOpt = { top : 0, bottom:"auto", left : 0, "min-width": minWidth, "width" : opt.width };
+		}
+	}else{
+		if(opt.growUp){
+			layerCssOpt = { top: "auto", bottom : -5, right : -2, "min-width": minWidth, "width" : opt.width };
+		}else{
+			layerCssOpt = { top : -5, bottom: "auto", right : -2, "min-width": minWidth, "width" : opt.width };
+		}
+	}
+	
+//	$layer.css(layerCssOpt)
+//		.appendTo(wrapperDiv.css({"z-index":"10"}))
+//		.toggle();
+//	
+//	if($layer.css("display") == "none"){
+//		$attachObj.attr("class","sBtn");
+//	}else{
+//		$attachObj.attr("class","sBtn_c");
+//	}
+	//VER : REG_2015.11, REFID : ARC, AUTHOR : jhhan
+	//두 개 이상의 addMenuLayer가 있을 경우 겹쳐지는 현상으로 인해 수정함
+	//모든 addMenu를 다 닫고 새로 띄움
+	var isVisible = $layer.css("display") != "none";
+	_closeAddMenuAll();
+	if(!isVisible){
+		$layer.css(layerCssOpt)
+		.appendTo(wrapperDiv.css({"z-index":"10"}))
+		.show();
+	}
+	if(isVisible){
+		$attachObj.attr("class","sBtn");
+	}else{
+		$attachObj.attr("class","sBtn_c");
+	}
+};
+
+var _closeAddMenuAll = function(){
+	for(i = 0; i < jQuery("._addMenuDiv").length; i++){
+		var _this = jQuery("._addMenuDiv")[i];
+		var btnIds = _this.getAttribute("parentId");
+		_this.style.display = "none";
+		for(j = 0; j < btnIds.split(",").length; j++){
+			jQuery("#"+btnIds.split(",")[j]).attr("class", "sBtn");
+		}
+	}
+};
+
+/**
+ * CommonConstants (.java와 동일)
+ */
+function CommonConstants () {}
+// 공통 상수
+CommonConstants.COMM_ALL = "ALL";
+CommonConstants.COMM_Y = "Y";
+CommonConstants.COMM_N = "N";
+
+// 로케일
+CommonConstants.COMM_LOCAL_KO = "ko";
+CommonConstants.COMM_LOCAL_EN = "en";
+CommonConstants.COMM_LOCAL_JA = "ja";
+CommonConstants.COMM_LOCAL_ZH = "zh";
+
+// DELIMITER
+CommonConstants.DELIMITER_13 = "\13";
+CommonConstants.DELIMITER_14 = "\14";
+
+// User Type
+CommonConstants.USERTYPE_ADMIN = "ADMIN";	
+CommonConstants.USERTYPE_USER = "USER";	
+
+// Theme Type
+CommonConstants.THEMETYPE_ADMIN = "ADMIN";	
+CommonConstants.THEMETYPE_USER = "USER";	
+	
+// United Addr 구분 - 통합 주소록 구분
+CommonConstants.UNITED_ADDR_ORG = "ORG";  // 조직도
+CommonConstants.UNITED_ADDR_DEPTGRP = "DEPTGROUP";  // 부서그룹
+CommonConstants.UNITED_ADDR_DEPT = "DEPT";  // 부서
+CommonConstants.UNITED_ADDR_ROLE = "ROLE";  // ROLE
+CommonConstants.UNITED_ADDR_USER = "USER";  // USER
+CommonConstants.UNITED_ADDR_TITLE = "TITLE";  // 직함
+CommonConstants.UNITED_ADDR_MYADDR = "MYADDR";  //개인주소록 
+CommonConstants.UNITED_ADDR_ADDR = "ADDR";  // 인물정보
+CommonConstants.UNITED_ADDR_COMMUNITY = "COMM";  // 커뮤니티
+CommonConstants.UNITED_ADDR_APPLINE = "APP";  // 개인결재선
+CommonConstants.UNITED_ADDR_EMAIL = "EMAIL";  // EMAIL (외부 사용자)
+CommonConstants.UNITED_ADDR_SEARCH = "SEARCH";  // 통합검색
+	
+// 명령 모드
+CommonConstants.COMMAND_MODE_ADD = "ADD";  // 추가
+CommonConstants.COMMAND_MODE_EDIT = "EDIT";  // 수정
+CommonConstants.COMMAND_MODE_DEL = "DEL";  // 삭제
+
+// Splitter LayerType 
+CommonConstants.SPLITTER_LAYERTYPE_G = "g";  // 일반
+CommonConstants.SPLITTER_LAYERTYPE_V = "v";  // 수직
+CommonConstants.SPLITTER_LAYERTYPE_H = "h";  // 수평
+
+// 날짜 구분자 
+CommonConstants.DATE_DELIMITER  = "-";
+
+// 결과 값 리턴 상수 값.
+CommonConstants.RETURN_SUCCESS  = "SUCCESS";
+CommonConstants.RETURN_FAIL  = "FAIL";
+
+
+// solType : 양/음 구분   
+CommonConstants.SOLTYPE_SOLAR = "S"; //양력 
+CommonConstants.SOLTYPE_LUNAR = "L"; //음력
+
+// 오전/오후
+CommonConstants.TIME_AM = "AM";	//오전
+CommonConstants.TIME_PM = "PM";	//오후
+
+// HTML 치환 특수문자
+CommonConstants.HTML_SYMBOL_ENTER = "[|ENT|]";	//엔터키
+
+/**
+ * iframe window 다 뒤져서 특정함수 실행.
+ */
+function triggerFnByWholeWindow(fn, param, upHierachy, _win){
+	var _top = _win || getDomainRootBody()[1];
+	if(upHierachy){
+    	var curwin = window;
+    	if(jQuery.isFunction(fn)){
+			while(curwin != _top){
+				fn.call(this, curwin, param);
+				curwin = curwin.parent;
+				if(!curwin.document)break;
+			}
+    	}
+	}else{ // all windows.
+		fn.call(this, _top, param);
+		var iframes = jQuery("iframe", _top.document);
+		for(var i = 0; i < iframes.length; i++) {
+			//alert( ( (iframes[i].src).indexOf(_top.location.hostname) > 0 )  || ! (iframes[i].src) || (iframes[i].src == ""));
+			if( (iframes[i].src).indexOf(_top.location.hostname) > 0 || ! (iframes[i].src) || (iframes[i].src == "") ){
+				// gw window?
+				triggerFnByWholeWindow(fn, param, false, iframes[i].contentWindow);
+			}
+		}
+	}
+	_top = null;
+}
+
+/**
+ * 같은 도메인환경의 최상의 window, body 리턴.
+ */
+function getDomainRootBody(){
+	var curwin = window;
+	while(curwin && curwin.frameElement){
+		
+		curwin = curwin.parent;
+		try{curwin.parent.location.href;}catch(e){break;}
+		
+	}
+	return [curwin.document.body, curwin];
+}
+
+/**
+ * 현재 iframe 의 domain safe offset 구하기.
+ */
+function getCurrentWindowOffset(){
+	var _offset = {left:0, top:0};
+	var curwin = window;
+	var offsetTarget = null;
+	while(curwin && curwin.frameElement){
+		try{
+			curwin.document.body;
+		}catch(e){break;}
+		 offsetTarget = curwin.frameElement;
+		_offset.left += jQuery(offsetTarget).offset().left;
+		_offset.top += jQuery(offsetTarget).offset().top;
+			
+		curwin = curwin.parent;
+		try{curwin.parent.location.href;}catch(e){break;}
+	}
+		 
+	offsetTarget, curwin = null;
+	return _offset;
+}
+
+/**
+ * VER : REG_2015.03, REFID : REQ430, AUTHOR : hyungyu, Song
+ * 이노릭스 파일컴포넌트의 첨부용량 초과시 메세지 표시 오류
+ */
+function StringBuffer(arg){
+	this.str = arg || "";
+	this.append = function (appendstr){
+		this.str += appendstr;
+		return this;
+	};
+	this.toString = function (){
+		return this.str;
+	};
+	this.reset = function (){
+		this.str = "";
+	};
+}
+
+function Log(){
+	this.error = function(str){
+		write(addTimeStamp(str), 3);
+	};
+	this.info = function(str){
+		write(addTimeStamp(str), 2);
+	};
+	this.debug = function(str){
+		write(addTimeStamp(str), 1);
+	};
+	function addTimeStamp(str){
+		return "["+new Date()+"] "+str;
+	}
+	function write(str, level){
+		if(level == 3){
+			if(window.console && console.error)console.error(str);
+		}else if(level == 2){
+			if(window.console && console.info)console.info(str);
+		}else if(level == 1){
+			if(window.console && console.debug)
+				console.debug(str);
+			else if(window.console && console.info) 
+				console.info(str);
+		}
+	}
+}
+var log = new Log();

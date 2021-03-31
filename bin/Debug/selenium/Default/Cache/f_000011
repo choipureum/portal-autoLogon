@@ -1,0 +1,443 @@
+/**
+ * Description : xClickDragDropHandler (드래그앤드랍 Library)
+ * @author hjkim
+ * @since 2011. 3. 29.
+ */
+
+function xClickDragDropHandler() {}
+
+xClickDragDropHandler.mainWindow = window; // iFrame이 존재하는 구조이기 때문에 최상의 window를 정의해 놓음
+while (xClickDragDropHandler.mainWindow != window.xClickTop) {
+	 // 메인을 정의하는 방법 : window.top까지 parent를 찾다가 메인으로 정의된 window가 중간에 있으면 확정!!
+	if (xClickDragDropHandler.mainWindow != window && xClickDragDropHandler.mainWindow.xClickDragDropHandler && xClickDragDropHandler.mainWindow.xClickDragDropHandler.mainWindow == xClickDragDropHandler.mainWindow) break;
+	xClickDragDropHandler.mainWindow = xClickDragDropHandler.mainWindow.parent;
+}
+
+xClickDragDropHandler.mainHandler = xClickDragDropHandler.mainWindow.xClickDragDropHandler;
+xClickDragDropHandler.dragElements = new xClickLib.map();			// 드래그 기능이 정의된 Element들
+xClickDragDropHandler.dropElements = new xClickLib.map();			// 드랍 기능이 정의된 Element들
+xClickDragDropHandler.onDragStartFunctions = new Array();			// 드래그 시작 이벤트에 attach된 User Define Function들
+xClickDragDropHandler.onDragFunctions = new Array();				// 드래그 중 이벤트에 attach된 User Define Function들
+xClickDragDropHandler.onDropFunctions = new Array();				// 드랍 이벤트에 attach된 User Define Function들
+xClickDragDropHandler.onDropEndFunctions = new Array();				// 드랍 완료 이벤트에 attach된 User Define Function들
+
+xClickDragDropHandler.setMain = function () { // main으로 정의
+	xClickDragDropHandler.mainWindow = window;
+	xClickDragDropHandler.mainHandler = xClickDragDropHandler.mainWindow.xClickDragDropHandler;
+	
+	xClickDragDropHandler.readyInterval = null;					// 드래그 준비 딜레이 (클릭 이벤트 충돌 대기상태)
+	xClickDragDropHandler.ready = false;						// 드래그 준비 여부
+	xClickDragDropHandler.start = false;						// 드래그 시작 여부
+	xClickDragDropHandler.dragElement = null;					// 현재 드래그 중인 Element
+	xClickDragDropHandler.dropElement = null;					// 현재 드랍 한 Element
+	xClickDragDropHandler.parameter = null;						// 드랍 시 전달 할 값
+	xClickDragDropHandler.pastElement = null;					// 드래그 시 이전에 포커스 되었던 Element (Cursor 처리 때문에 필요)
+	xClickDragDropHandler.pastCursor = null;					// 이전 포커스 Element가 가지고 있건 Cursor Style
+
+	xClickDragDropHandler.execUserFunctions = function (arFunctions, e) { // User Define Function 실행
+		for (var i = 0; i < arFunctions.length; i++) {
+			arFunctions[i](e);
+		}
+	};
+
+	xClickDragDropHandler.getDragObjectByElement = function (windowTarget, HTMLElement) { // 첫번째 인자 window 포함 하위 윈도우 중 Element의 DragObject를 반환
+		var windowReturn = xClickDragDropHandler.getWindowByElement(windowTarget, HTMLElement);
+		if (windowReturn) return windowReturn.xClickDragDropHandler.dragElements.get(HTMLElement);
+	};
+
+	xClickDragDropHandler.getDropObjectByElement = function (windowTarget, HTMLElement) { // 첫번째 인자 window 포함 하위 윈도우 중 Element의 DropObject를 반환
+		var windowReturn = xClickDragDropHandler.getWindowByElement(windowTarget, HTMLElement);
+		if (windowReturn) return windowReturn.xClickDragDropHandler.dropElements.get(HTMLElement);
+	};
+
+	xClickDragDropHandler.getHandlerByElement = function (windowTarget, HTMLElement) { // 첫번째 인자 window 포함 하위 윈도우 중 Element의 소속 Handler를 반환
+		var windowReturn = xClickDragDropHandler.getWindowByElement(windowTarget, HTMLElement);
+		if (windowReturn) return windowReturn.xClickDragDropHandler;
+	};
+	
+	xClickDragDropHandler.getWindowByElement = function (windowTarget, HTMLElement) { // 첫번째 인자 window 포함 하위 윈도우 중 Element의 소속 window를 반환
+		return xClickDragDropHandler.getWindowByDocument(windowTarget, HTMLElement.ownerDocument);
+	};
+
+	xClickDragDropHandler.getWindowByDocument = function (windowTarget, docTarget) { // 첫번째 인자 window 포함 하위 윈도우 중 document의 소속 window를 반환
+		if (windowTarget.document == docTarget) return windowTarget;
+		var frames = windowTarget.frames;
+		for (var i = 0; i < frames.length; i++) {
+			try {
+				var windowReturn = xClickDragDropHandler.getWindowByDocument(frames[i], docTarget);
+				if (windowReturn) return windowReturn;
+			} catch (err) {
+			}
+		}
+		return false;
+	};
+	
+	xClickDragDropHandler.getDropElementsByPosition = function (e) { // 마우스 포지션에 위치하는 DropElement 찾기 (여러개 일 수 있으므로 배열로 return)
+		var arDropElements = new Array();
+		var nMainX = xClickDragDropHandler.getMainX(e);
+		var nMainY = xClickDragDropHandler.getMainY(e);
+		return xClickDragDropHandler.makeDropElementsByCurrentPosition(arDropElements, window, nMainX, nMainY);
+	};
+
+	xClickDragDropHandler.makeDropElementsByCurrentPosition = function (arDropElements, windowTarget, x, y) { // 재귀호출을 통해 getDropElementsByPosition에서 넘겨받은 array를 완성
+		if (windowTarget.xClickDragDropHandler) {
+			for (var i = 0; i < windowTarget.xClickDragDropHandler.dropElements.length; i++) {
+				var heDropElement = windowTarget.xClickDragDropHandler.dropElements.getKeyByIndex(i);
+				var nLeft = xClickDragDropHandler.getAbsoluteLeft(heDropElement);
+				var nTop = xClickDragDropHandler.getAbsoluteTop(heDropElement);
+				if (x >= nLeft && x <= nLeft+heDropElement.offsetWidth && y >= nTop && y <= nTop+heDropElement.offsetHeight) {
+					arDropElements.push(heDropElement);
+				}
+			}
+		}
+
+		var frames = windowTarget.frames;
+		for (var i = 0; i < frames.length; i++) {
+			try {
+				var heIframe = frames[i].frameElement;
+				var nLeft = xClickDragDropHandler.getAbsoluteLeft(heIframe);
+				var nTop = xClickDragDropHandler.getAbsoluteTop(heIframe);
+				if(heIframe.src && (heIframe.src).indexOf(_webapp) < 0){//cross-domain 체크방식변경. hyungyu. 2014.9
+					continue;
+				}
+				if (x >= nLeft && x <= nLeft+heIframe.offsetWidth && y >= nTop && y <= nTop+heIframe.offsetHeight) {
+					arDropElements = xClickDragDropHandler.makeDropElementsByCurrentPosition(arDropElements, frames[i], x-nLeft, y-nTop);
+				}
+			} catch (err) {
+			}
+		}
+		
+		return arDropElements;
+	};
+
+	xClickDragDropHandler.setBrowserDragEffect = function (windowTarget, bEffect) { // 브라우저의 기본 드래그 제어 (text range 등)
+		windowTarget.document.body.onselectstart = function () {return bEffect;};
+		windowTarget.document.body.ondragstart = function () {return bEffect;};
+
+		var frames = windowTarget.frames;
+		for (var i = 0; i < frames.length; i++) {
+			try { xClickDragDropHandler.setBrowserDragEffect(frames[i], bEffect); } catch (err) {}
+		}
+	};
+};
+
+xClickDragDropHandler.onMouseDown = function (e) {	// 마우스 다운 시 Drop 기능 정의 여부를 확인하고 필요한 정보를 설정
+	if (xClickLib.isMouseButtonLeft(e) && xClickDragDropHandler.mainHandler && !xClickDragDropHandler.mainHandler.dragElement) {
+		var heTarget = xClickLib.isIE ? e.srcElement : e.target;
+		while (heTarget != document.body && heTarget != document.documentElement)
+		{
+			if (!heTarget || !heTarget.tagName) {
+				break;
+			} else if (xClickDragDropHandler.dragElements.get(heTarget)) {
+				// 1. 브라우저의 기본 드래그 막기
+				xClickDragDropHandler.mainHandler.setBrowserDragEffect(xClickDragDropHandler.mainWindow, false);
+				if (typeof e.preventDefault != 'undefined' && heTarget.className.indexOf("drag_obj") < 0 ){ e.preventDefault();} 
+				// 2. 드래그 Element, 객체, parameter 설정
+				xClickDragDropHandler.mainHandler.dragElement = heTarget;
+				xClickDragDropHandler.mainHandler.parameter = xClickDragDropHandler.mainHandler.getDragObjectByElement(xClickDragDropHandler.mainWindow, heTarget).parameter;
+				break;
+			}
+			
+			heTarget = heTarget.parentNode;
+		}
+	}
+};
+
+xClickDragDropHandler.onMouseMove = function (e) { // 마우스 이동 시 드래그 상태에 따라 필요한 처리 수행
+	if (xClickDragDropHandler.mainHandler && xClickDragDropHandler.mainHandler.dragElement) {
+		var heTarget = xClickLib.isIE ? e.srcElement : e.target;
+		if (!xClickDragDropHandler.mainHandler.start) { // 최초 이동시
+			if (!xClickDragDropHandler.mainHandler.ready) { // 클릭과의 충돌을 피하기 위해 interval을 통해 1/10초 동안 유지되어야 드래그 가동!!
+				if (xClickDragDropHandler.mainHandler.readyInterval == null) {
+					xClickDragDropHandler.mainHandler.readyInterval = xClickDragDropHandler.mainWindow.setInterval(function () {
+						xClickDragDropHandler.mainWindow.clearInterval(xClickDragDropHandler.mainHandler.readyInterval);
+						xClickDragDropHandler.mainHandler.ready = true;
+						xClickDragDropHandler.mainHandler.readyInterval = null;
+					}, 100);
+				}
+			} else if (heTarget.ownerDocument) {
+				// 1. start Flag 처리 및 Effect UI 생성
+				xClickDragDropHandler.mainHandler.start = true;
+				var htmlEffect = xClickDragDropHandler.mainHandler.getDragObjectByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.getDragElement()).effect;
+				if (htmlEffect && htmlEffect != "") {
+					var div = xClickDragDropHandler.mainWindow.document.createElement("div");
+					div.id = "xClickDragDropEffect";
+					div.style.position = "absolute";
+					div.style.zIndex = 999;
+					div.style.cursor = xClickDragDropHandler.mainHandler.getDragObjectByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.getDragElement()).cursor;
+					div.style.visibility = "hidden";
+					div.innerHTML = htmlEffect;
+					xClickDragDropHandler.mainWindow.document.body.appendChild(div);
+					div.style.left = (xClickDragDropHandler.getMainX(e) + xClickDragDropHandler.mainWindow.document.documentElement.scrollLeft + xClickDragDropHandler.mainWindow.document.body.scrollLeft - (div.offsetWidth/2)) + "px";
+					div.style.top = (xClickDragDropHandler.getMainY(e) + xClickDragDropHandler.mainWindow.document.documentElement.scrollTop + xClickDragDropHandler.mainWindow.document.body.scrollTop - (div.offsetHeight/2)) + "px";
+					div.style.visibility = "visible";
+				}
+				// 2. 기존 Cursor Style 보관 및 신규 Style 적용
+				xClickDragDropHandler.mainHandler.pastElement = heTarget;
+				xClickDragDropHandler.mainHandler.pastCursor = heTarget.style.cursor;
+				heTarget.style.cursor = xClickDragDropHandler.mainHandler.getDragObjectByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.getDragElement()).cursor;
+				// 3. User Define Function 실행 (ondragstart)
+				xClickDragDropHandler.mainHandler.execUserFunctions(xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.mainHandler.dragElement).onDragStartFunctions, e);
+			}
+		} else if (heTarget && heTarget.tagName) { // 일반적인 드래그 중
+			// 1. Effect UI 이동
+			var div = xClickDragDropHandler.mainWindow.document.getElementById("xClickDragDropEffect");
+			if (div) {
+				div.style.left = (xClickDragDropHandler.getMainX(e) + xClickDragDropHandler.mainWindow.document.documentElement.scrollLeft + xClickDragDropHandler.mainWindow.document.body.scrollLeft - (div.offsetWidth/2)) + "px";
+				div.style.top = (xClickDragDropHandler.getMainY(e) + xClickDragDropHandler.mainWindow.document.documentElement.scrollTop + xClickDragDropHandler.mainWindow.document.body.scrollTop - (div.offsetHeight/2)) + "px";
+			}
+			// 2. 기존 Cursor Style 되돌림 및 신규 Cursor Style 보관, 적용
+			if (xClickDragDropHandler.mainHandler.pastElement != heTarget) {
+				xClickDragDropHandler.mainHandler.pastElement.style.cursor = xClickDragDropHandler.mainHandler.pastCursor;
+				xClickDragDropHandler.mainHandler.pastElement = heTarget;
+				xClickDragDropHandler.mainHandler.pastCursor = heTarget.style.cursor;
+				heTarget.style.cursor = xClickDragDropHandler.mainHandler.getDragObjectByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.getDragElement()).cursor;
+			}
+			// 3. User Define Function 실행 (ondrag)
+			xClickDragDropHandler.mainHandler.execUserFunctions(xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.mainHandler.dragElement).onDragFunctions, e);
+		}
+	}
+};
+
+xClickDragDropHandler.onMouseUp = function (e) { // 마우스 업 시 드랍 처리
+	if (xClickDragDropHandler.mainHandler && xClickDragDropHandler.mainHandler.dragElement) {
+		// Effect UI가 있는 경우는 마우스의 위치로 dropElement를 찾고 그 외에는 속도를 위해 e.target을 사용한다.
+		var div = xClickDragDropHandler.mainWindow.document.getElementById("xClickDragDropEffect");
+		if (div) {
+			xClickDragDropHandler.mainWindow.document.body.removeChild(div);
+			var heDropElements = xClickDragDropHandler.mainHandler.getDropElementsByPosition(e);
+			for (var i = 0; i < heDropElements.length; i++) {
+				// 1. Drop Element 정의
+				xClickDragDropHandler.mainHandler.dropElement = heDropElements[i];
+				// 2. User Define Function 실행 (ondrop)
+				xClickDragDropHandler.mainHandler.execUserFunctions(xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.mainHandler.dragElement).onDropFunctions, e);
+				//xClickDragDropHandler.mainHandler.getDropObjectByElement(xClickDragDropHandler.mainWindow, heDropElements[i]).func();
+				
+				// VER : REG_2016.xx, REFID : REQ1301, AUTHOR : S.H.Byun
+				// 조직도 드래그 앤 드랍 기능 추가
+				xClickDragDropHandler.mainHandler.getDropObjectByElement(xClickDragDropHandler.mainWindow, heDropElements[i]).func(xClickDragDropHandler.mainHandler.getDropObjectByElement(xClickDragDropHandler.mainWindow, heDropElements[i]).parameter);
+			}
+		} else {
+			var heTarget = xClickLib.isIE ? e.srcElement : e.target;
+			while (heTarget != document.body && heTarget != document.documentElement)
+			{
+				if(heTarget.className.indexOf("drag_obj") > -1){
+					break;
+				}
+				else if (!heTarget || !heTarget.tagName) {
+					break;
+				} else if (xClickDragDropHandler.dropElements.get(heTarget)) { // 드랍이 정의된 Element인 경우
+					// 1. Drop Element 정의
+					xClickDragDropHandler.mainHandler.dropElement = heTarget;
+					// 2. User Define Function 실행 (ondrop)
+					xClickDragDropHandler.mainHandler.execUserFunctions(xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.mainHandler.dragElement).onDropFunctions, e);
+//						xClickDragDropHandler.dropElements.get(heTarget).func();
+
+					// VER : REG_2016.xx, REFID : REQ1301, AUTHOR : S.H.Byun
+					// 조직도 드래그 앤 드랍 기능 추가
+					xClickDragDropHandler.dropElements.get(heTarget).func(xClickDragDropHandler.dropElements.get(heTarget).parameter);
+					break;
+				}
+				heTarget = heTarget.parentNode;
+			}
+		}
+
+		// 드랍 정의 여부에 상관없이 무조건 정리해야 하는 것들
+		// 1. 마지막 Element Cursor Style 되돌리기
+		if (xClickDragDropHandler.mainHandler.pastElement) xClickDragDropHandler.mainHandler.pastElement.style.cursor = xClickDragDropHandler.mainHandler.pastCursor;
+		// 2. 브라우저의 기본 드래그 풀기
+		xClickDragDropHandler.mainHandler.setBrowserDragEffect(xClickDragDropHandler.mainWindow, true);
+		// 3. User Define Function 실행 (ondropend)
+		xClickDragDropHandler.mainHandler.execUserFunctions(xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, xClickDragDropHandler.mainHandler.dragElement).onDropEndFunctions, e);
+		// 4. 각종 mainHandler의 정보들 초기화
+		xClickDragDropHandler.mainHandler.dragElement = null;
+		xClickDragDropHandler.mainHandler.dropElement = null;
+		xClickDragDropHandler.mainHandler.parameter = null;
+		xClickDragDropHandler.mainHandler.pastElement = null;
+		xClickDragDropHandler.mainHandler.pastCursor = null;
+		xClickDragDropHandler.mainHandler.start = false;
+		xClickDragDropHandler.mainHandler.ready = false;
+		xClickDragDropHandler.mainWindow.clearInterval(xClickDragDropHandler.mainHandler.readyInterval);
+		xClickDragDropHandler.mainHandler.readyInterval = null;
+	}
+};
+
+if (xClickLib.isIE) { // 이벤트 등록
+	document.attachEvent("onmousedown", xClickDragDropHandler.onMouseDown);
+	document.attachEvent("onmousemove", xClickDragDropHandler.onMouseMove);
+	document.attachEvent("onmouseup", xClickDragDropHandler.onMouseUp);
+} else {
+	window.addEventListener("mousedown", xClickDragDropHandler.onMouseDown, false);
+	window.addEventListener("mousemove", xClickDragDropHandler.onMouseMove, false);
+	window.addEventListener("mouseup", xClickDragDropHandler.onMouseUp, false);
+}
+
+/////////////////////////////////////////////////////////////
+// 여기부터 개발자들이 사용하게 되는 함수들입니다.
+/////////////////////////////////////////////////////////////
+
+xClickDragDropHandler.attachEvent = function (strEvent, objFuntion) { // User Define Function 등록
+	var arEvent;
+	if (strEvent == "ondragstart") {
+		arEvent = xClickDragDropHandler.onDragStartFunctions;
+	} else if (strEvent == "ondrag") {
+		arEvent = xClickDragDropHandler.onDragFunctions;
+	} else if (strEvent == "ondrop") {
+		arEvent = xClickDragDropHandler.onDropFunctions;
+	} else if (strEvent == "ondropend") {
+		arEvent = xClickDragDropHandler.onDropEndFunctions;
+	} else {
+		return;
+	}
+	arEvent.push(objFuntion);
+};
+
+xClickDragDropHandler.clearDragElement = function () { // 드래그 Element 초기화
+	xClickDragDropHandler.dragElements = new xClickLib.map();
+};
+
+xClickDragDropHandler.clearDropElement = function () { // 드랍 Element 초기화
+	xClickDragDropHandler.dropElements = new xClickLib.map();
+};
+
+xClickDragDropHandler.setDragElement = function (heKey, objParameter, styleCursor, htmlEffect) { // 드래그 Element 정의
+	var handlerReturn = xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, heKey);
+	handlerReturn.dragElements.set(heKey, {parameter:objParameter, cursor:styleCursor, effect:htmlEffect});
+};
+
+xClickDragDropHandler.setDropElement = function (heKey, objFunction, objParameter) { // 드랍 Element 정의
+	if (objFunction == null) objFunction = function () {};
+	var handlerReturn = xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, heKey);
+	handlerReturn.dropElements.set(heKey, {func:objFunction, parameter:objParameter});
+};
+
+xClickDragDropHandler.setParameter = function (heKey, objParameter) { // parameter 정의 (드래그 Element가 사전에 정의되어야 하며 key값이 됨)
+	var handlerReturn = xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, heKey);
+	handlerReturn.dragElements.get(heKey).parameter = objParameter;
+	if (heKey == xClickDragDropHandler.getDragElement()) xClickDragDropHandler.mainHandler.parameter = objParameter;
+};
+
+xClickDragDropHandler.setEffect = function (heKey, htmlEffect, e) { // Effect 정의 (드래그 Element가 사전에 정의되어야 하며 key값이 됨)
+	var handlerReturn = xClickDragDropHandler.mainHandler.getHandlerByElement(xClickDragDropHandler.mainWindow, heKey);
+	handlerReturn.dragElements.get(heKey).effect = htmlEffect;
+	if (heKey == xClickDragDropHandler.getDragElement() && htmlEffect && htmlEffect != "") {
+		var div = xClickDragDropHandler.mainWindow.document.getElementById("xClickDragDropEffect");
+		if (!div) {
+			div = xClickDragDropHandler.mainWindow.document.createElement("div");
+			div.id = "xClickDragDropEffect";
+			div.style.position = "absolute";
+			div.style.zIndex = 999;
+			div.style.cursor = xClickDragDropHandler.dragElements.get(heKey).cursor;
+			xClickDragDropHandler.mainWindow.document.body.appendChild(div);
+		}
+		div.style.visibility = "hidden";
+		div.innerHTML = htmlEffect;
+		div.style.left = (xClickDragDropHandler.getMainX(e) + xClickDragDropHandler.mainWindow.document.documentElement.scrollLeft + xClickDragDropHandler.mainWindow.document.body.scrollLeft - (div.offsetWidth/2)) + "px";
+		div.style.top = (xClickDragDropHandler.getMainY(e) + xClickDragDropHandler.mainWindow.document.documentElement.scrollTop + xClickDragDropHandler.mainWindow.document.body.scrollTop - (div.offsetHeight/2)) + "px";
+		div.style.visibility = "visible";
+	} else if (heKey == xClickDragDropHandler.getDragElement()) {
+		var div = xClickDragDropHandler.mainWindow.document.getElementById("xClickDragDropEffect");
+		if (div) {
+			xClickDragDropHandler.mainWindow.document.body.removeChild(div);
+		}
+	}
+};
+
+xClickDragDropHandler.getDragElement = function () { // 현재 진행 중인 드래그 앤 드랍의 드래그 Element 반환
+	return xClickDragDropHandler.mainHandler.dragElement;
+};
+
+xClickDragDropHandler.getDropElementsOnDrag = function (e) { // 드래그중 현재위치에 존재하는 드랍 Element 반환
+	return xClickDragDropHandler.mainHandler.getDropElementsByPosition(e);
+};
+
+xClickDragDropHandler.getDropElement = function () { // 드랍이 발생했을때 해당 Element 반환
+	return xClickDragDropHandler.mainHandler.dropElement;
+};
+
+xClickDragDropHandler.getParameter = function () { // 현재 진행 중인 드래그의 parameter 반환
+	return xClickDragDropHandler.mainHandler.parameter;
+};
+
+xClickDragDropHandler.getDragParameter = function (heKey) { // element에 정의된 dragParameter 반환
+	return xClickDragDropHandler.mainHandler.getDragObjectByElement(xClickDragDropHandler.mainWindow, heKey).parameter;
+};
+
+xClickDragDropHandler.getDropParameter = function (heKey) { // element에 정의된 dropParameter 반환
+	return xClickDragDropHandler.mainHandler.getDropObjectByElement(xClickDragDropHandler.mainWindow, heKey).parameter;
+};
+
+xClickDragDropHandler.getAbsoluteLeft = function (HTMLElement) { // 소속 window 기준의 보이는 위치 Left
+	var windowReturn = xClickDragDropHandler.mainHandler.getWindowByElement(xClickDragDropHandler.mainWindow, HTMLElement);
+	var element = HTMLElement;
+	var nPosition = 0;
+	while (element && element != windowReturn.document.body && element != windowReturn.document.documentElement)
+	{
+		if (element.style.display == "none" || element.style.visibility == "hidden") return -1;
+		nPosition += element.offsetLeft + element.clientLeft;
+		if (element != HTMLElement) nPosition -= element.scrollLeft;
+		var tempParent = element.parentNode;
+		element = element.offsetParent;
+		while (element && element != tempParent) {
+			nPosition -= tempParent.scrollLeft;
+			tempParent = tempParent.parentNode;
+		}
+	}
+	nPosition -= windowReturn.document.documentElement.scrollLeft + windowReturn.document.body.scrollLeft;
+	return nPosition;
+};
+
+xClickDragDropHandler.getAbsoluteTop = function (HTMLElement) { // 소속 window 기준의 보이는 위치 Top
+	var windowReturn = xClickDragDropHandler.mainHandler.getWindowByElement(xClickDragDropHandler.mainWindow, HTMLElement);
+	var element = HTMLElement;
+	var nPosition = 0;
+	while (element && element != windowReturn.document.body && element != windowReturn.document.documentElement)
+	{
+		if (element.style.display == "none" || element.style.visibility == "hidden") return -1;
+		nPosition += element.offsetTop + element.clientTop;
+		if (element != HTMLElement) nPosition -= element.scrollTop;
+		var tempParent = element.parentNode;
+		element = element.offsetParent;
+		while (element && element != tempParent) {
+			nPosition -= tempParent.scrollTop;
+			tempParent = tempParent.parentNode;
+		}
+	}
+	nPosition -= windowReturn.document.documentElement.scrollTop + windowReturn.document.body.scrollTop;
+	return nPosition;
+};
+
+xClickDragDropHandler.getMainX = function (e) { // mainWindow 기준의 보이는 위치 X
+	var heTarget = xClickLib.isIE ? e.srcElement : e.target;
+	var windowTarget;
+	if (heTarget.ownerDocument) {
+		windowTarget = xClickDragDropHandler.mainHandler.getWindowByElement(xClickDragDropHandler.mainWindow, heTarget);
+	} else {
+		windowTarget = xClickDragDropHandler.mainHandler.getWindowByDocument(xClickDragDropHandler.mainWindow, heTarget);
+	}
+	var frameElementLeft = 0;
+	while (windowTarget != xClickDragDropHandler.mainWindow)
+	{
+		frameElementLeft += xClickDragDropHandler.getAbsoluteLeft(windowTarget.frameElement);
+		windowTarget = windowTarget.parent;
+	}
+	return frameElementLeft + e.clientX;
+};
+
+xClickDragDropHandler.getMainY = function (e) { // mainWindow 기준의 보이는 위치 Y
+	var heTarget = xClickLib.isIE ? e.srcElement : e.target;
+	var windowTarget;
+	if (heTarget.ownerDocument) {
+		windowTarget = xClickDragDropHandler.mainHandler.getWindowByElement(xClickDragDropHandler.mainWindow, heTarget);
+	} else {
+		windowTarget = xClickDragDropHandler.mainHandler.getWindowByDocument(xClickDragDropHandler.mainWindow, heTarget);
+	}
+	var frameElementTop = 0;
+	while (windowTarget != xClickDragDropHandler.mainWindow)
+	{
+		frameElementTop += xClickDragDropHandler.getAbsoluteTop(windowTarget.frameElement);
+		windowTarget = windowTarget.parent;
+	}
+	return frameElementTop + e.clientY;
+};
+

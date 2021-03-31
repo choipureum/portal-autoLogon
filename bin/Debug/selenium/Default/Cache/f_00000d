@@ -1,0 +1,1087 @@
+/** =======================================
+ * 할일(TODO)목록 팝업관련 Script
+ * author : hyungyu,Song
+ * date : 2010.11.18
+ ==========================================*/
+
+
+var TODO = function(){};
+var $listLayer = null;
+var $ifrListLayer = null;
+var lnkMsg = "";
+TODO.linkURL = new xClickLib.map();
+
+/**
+ * 메뉴클릭시 할일목록 보임/숨김
+ */
+TODO.openTodoList = function(refreshYn){
+	var targetWindow = document.getElementById("_tabIfr" + tabpanel.getActiveTab()).contentWindow;
+	var ifrListPane = targetWindow.document.getElementById("listPane");
+	if (ifrListPane && ifrListPane.contentWindow.xoSchedule) {
+	// 일정관리는 일정관리용 Todo 로드	
+		ifrListPane.contentWindow.foldTodo();
+	} else {
+	// 일반적인 경우의 Todo 로드
+		var ifrTodoWrapper = targetWindow.document.getElementById("ifrTodoWrapper");
+		var isFirst = false;
+		//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams
+		var cef_prevTargetObjectRight;
+		if (!ifrTodoWrapper) {
+			ifrTodoWrapper = targetWindow.document.createElement("iframe");
+			ifrTodoWrapper.id = "ifrTodoWrapper";
+			ifrTodoWrapper.src = _webapp+"/XClickController?nextpage=/schedule/scheduleTodoWrapper.jsp";
+			ifrTodoWrapper.frameBorder = "no";
+			ifrTodoWrapper.scrolling = "no";
+			ifrTodoWrapper.allowTransparency = true;
+			ifrTodoWrapper.style.position = "absolute";
+			if (_isMobileFullMode) {
+				if (targetWindow.document.getElementById("portalMain")) {
+					ifrTodoWrapper.style.top = "0px";
+					ifrTodoWrapper.style.right = "5px";
+					cef_prevTargetObjectRight = 5;	//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams
+				} else {
+					ifrTodoWrapper.style.top = "65px";
+					ifrTodoWrapper.style.right = "10px";
+					cef_prevTargetObjectRight = 10;	//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams
+				}
+			} else {
+				ifrTodoWrapper.style.bottom = "0px";
+				ifrTodoWrapper.style.right = "0px";
+				cef_prevTargetObjectRight = 0;	//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams
+			}
+			ifrTodoWrapper.style.width = "304px";
+			ifrTodoWrapper.style.height = "384px";
+			ifrTodoWrapper.style.display = "none";
+			$(ifrTodoWrapper).css("z-index","300");	//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams
+			targetWindow.document.body.appendChild(ifrTodoWrapper);
+			isFirst = true;
+		}
+		var todoWindow = ifrTodoWrapper.contentWindow;
+		
+		function funcOpenTodoList () {
+			if (todoWindow.document.getElementById("todoWrapper")) {
+				if (isFirst) {
+					todoWindow.xClickDragDropHandler.setDropElement(todoWindow.document.getElementById("todoWrapper"),
+						function () {
+							document.getElementById("_tabIfr" + tabpanel.getActiveTab()).contentWindow.document.getElementById("listPane").contentWindow.addTodoByDragDrop();
+						}
+					);
+				}
+				
+				todoWindow.$listLayer = todoWindow.$("div#todoWrapper");
+				todoWindow.$ifrListLayer = $(ifrTodoWrapper);
+				refreshYn = isUndefined(refreshYn) ? 	false : refreshYn;
+				
+				//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams ----> Start
+				var cef_targetObject = $("#_tabIfr" + tabpanel.getActiveTab()).contents().find("#ifrTodoWrapper")
+				var cef_otherObject = $("#divScrapContainer");
+				var cef_otherOffset = $(cef_otherObject).offset();
+				var cef_prevObjectLeft = 0, cef_prevObjectRight = 0, cef_prevObjectWidth = 0, cef_objectGap = 20;
+				var cef_objRight;
+
+				if($(cef_otherObject).css("display") != "none") {
+					cef_prevObjectLeft = cef_otherOffset.left;
+					cef_prevObjectWidth = cef_otherObject.width();
+					cef_prevObjectRight = parseInt($(cef_otherObject).css("right").replace("px",""));
+				}
+
+				if (_isMobileFullMode) {
+					if (targetWindow.document.getElementById("portalMain")) {
+						cef_prevTargetObjectRight = 5;
+					} else {
+						cef_prevTargetObjectRight = 10;
+					}
+				} else {
+					cef_prevTargetObjectRight = 0;
+				}
+
+				if(cef_prevObjectLeft > 0){
+					cef_objRight = parseInt(cef_prevObjectWidth) + parseInt(cef_prevTargetObjectRight) + cef_objectGap;
+				}
+				if(cef_prevObjectRight > cef_prevObjectWidth){
+					cef_objRight = cef_prevTargetObjectRight;
+				}
+//				if($(cef_targetObject).css("display") == "none"){
+//					$(ifrTodoWrapper).css("right", cef_objRight);
+//				}else{
+//					$(ifrTodoWrapper).css("right", parseInt(cef_prevTargetObjectRight));
+//				}
+				
+				cef_objRight = isUndefined(cef_objRight)? 0 : cef_objRight;
+				$(ifrTodoWrapper).css("right", cef_objRight);
+				
+				//MBC/RQ_BBS_025/게시물 스크랩 기능 - 스크랩 창과 겹치지 않도록 위지 조정/2016.07.27/ejdreams ----> End
+				
+				if(todoWindow.$ifrListLayer.is(":visible")){
+					activeXshow();
+				}else{
+					activeXhide();
+				}
+				if(refreshYn){
+					todoWindow.$ifrListLayer.show();
+				}else{
+					todoWindow.$ifrListLayer.toggle();
+				}
+	
+				todoWindow.jQuery.submitAjaxForm("", todoWindow.$listLayer, _webapp+"/XClickController?nextpage=/schedule/inc/scheduleTodoListInc.jsp");
+				
+				todoWindow.$("textarea#todoContent",$listLayer).focus();
+			} else {
+				window.setTimeout(funcOpenTodoList, 100);
+			}
+		};
+		
+		window.setTimeout(funcOpenTodoList, 100);
+	}
+};
+
+/**
+ * 최초 열기시에 할일목록 조회
+ * @param {Object} srchEndYn
+ */
+TODO.listScheduleTodo = function(srchEndYn, orderField,isLinkDisabled){
+	lnkMsg = $.getMessage("SCHEDULE-000024");
+	if (srchEndYn == null) {
+		var chkObj = $("input#srchEndYn", $listLayer)[0];
+		if (chkObj.checked) {
+			srchEndYn = "N";
+		}else {
+			srchEndYn = "";
+		}
+	}
+	orderField = (orderField==null)?$("#orderField",$listLayer).val():orderField;
+	$.ajax({
+		url : _webapp+"/AjaxController?",
+		async : true,
+		data : {
+			facade : "ScheduleTodoFacade",
+			command : "listScheduleTodo",
+			srchEndYn : srchEndYn,
+			orderField : orderField
+		},
+		success : function(listData){
+			$("#listTBL",$listLayer).html("");
+			TODO.linkURL = new xClickLib.map();
+			for(var i = 0; i < listData.length; i++){
+				jsonData = listData[i];
+				TODO.linkURL.set(jsonData.id, jsonData.linkurl);
+				TODO.insertRow(jsonData.id, jsonData.content, false, jsonData.imptyn, jsonData.endyn);
+			}
+			//Portlet Edit Mode
+			if(isLinkDisabled != 'Undefined' && isLinkDisabled){
+				jQuery(':input','#listTBL').attr('disabled','true');
+				jQuery('a,div','#listTBL').attr('onclick','');
+			}
+			if($("div#todo_scrollArea").unblock){
+				$("div#todo_scrollArea").unblock();
+			}
+		}
+	});
+};
+
+/**
+ * 상세보기 팝업
+ * @param {Object} todoId
+ */
+TODO.viewTodo = function(todoId){
+	var url = _webapp+"/XClickController?";
+	var params = {
+		facade : "ScheduleTodoFacade",
+		command : "viewScheduleTodo",
+		nextpage : "/schedule/scheduleTodoView.jsp",
+		transaction_yn : "N",
+		todoId : todoId,
+		msgId : "SCHEDULE-000002"
+	};
+	url += jQuery.param(params); // serialize & encode
+	var width = 670;
+	var height = 350;
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	var todoInfoWin = openPopupWindowInCenter(url, 'todoInfoPop', width, height, true);
+};
+
+/**
+ * "완료감추기" 선택시
+ * @param {Object} obj
+ */
+TODO.checkEndYn = function(obj){
+	var orderField = $("input#orderField",$listLayer).val();
+	if(obj.checked){
+		TODO.listScheduleTodo("N",orderField);
+	}else{
+		TODO.listScheduleTodo("",orderField);
+	}
+};
+
+/**
+ * 정렬순서 변경시
+ * @param {Object} obj
+ */
+TODO.selectOrderField = function(obj){
+	var orderField = $(obj).val();
+	var chkObj = $("input#srchEndYn",$listLayer)[0];
+	if(chkObj.checked){
+		TODO.listScheduleTodo("N",orderField);
+	}else{
+		TODO.listScheduleTodo("",orderField);
+	}
+};
+
+/**
+ * 입력데이터 초기 중요여부 체크 (이미지클릭)
+ */
+TODO.toggleNewImpt = function(){
+	var chkObj = $("input#imptYn", $listLayer)[0];
+	if(chkObj.checked){
+		TODO.uncheckImpYn();
+	}else{
+		TODO.checkImpYn();
+	}
+};
+
+/**
+ * 중요도 변경(hidden 체크박스 체크)
+ */
+TODO.checkImpYn = function(){
+	var chkObj = $("input#imptYn", $listLayer)[0];
+	$("#span_newImptYn").addClass("icon_star_on")
+						.removeClass("icon_star_off");
+	chkObj.checked = true;
+};
+
+/**
+ * 중요도 변경(hidden 체크박스 해제)
+ */
+TODO.uncheckImpYn = function(){
+	var chkObj = $("input#imptYn", $listLayer)[0];
+	$("#span_newImptYn").addClass("icon_star_off")
+						.removeClass("icon_star_on");
+	chkObj.checked = false;
+};
+
+/**
+ * 입력필드 포커스시 작업
+ * @param {Object} obj : textarea element
+ */
+TODO.focusIn = function(obj){
+	var f = $("#formTODOList")[0];
+	$.validationEngine.closePrompt(f.todoContent, false); 
+	/*
+	if($(obj).attr("init") == "Y"){// init
+		$(obj).removeClass("water")
+					.val("")
+					.attr("init","");
+	}
+	*/
+};
+
+/**
+ * 1. Shift + 엔터로 추가
+ * @param {Object} e
+ */
+TODO.chkInput = function(e){
+	e = $.event.fix(e);
+	if(e.which == 13){
+		// shift key 확인
+		if(e.shiftKey){
+			e.preventDefault();
+			TODO.add();
+		}
+	}
+};
+
+/**
+ * 할일 추가
+ */
+TODO.add = function(){
+	var f = $("#formTODOList")[0];
+	var obj = $("textarea#todoContent",$listLayer);
+	var val = obj.val();
+	val = val.replace(new RegExp("\r\n","g"),"\n");
+	val = val.replace(new RegExp("\n","g"),"\r\n");
+	var imptYn = $("input#imptYn",$listLayer)[0];
+	var chkByte = 600; // UTF-8 기준
+	if(isNullStr(val)){
+		return;
+	}
+	if(!CheckStrLen2(3, chkByte, obj[0])){
+		// 총 영문 $1자, 한글 $2자까지 입력 가능합니다.
+		var addMsg = chkByte+"\13"+chkByte/3;
+		$.validationEngine.buildPrompt(f.todoContent, $.getMessage('COMMON-000138', addMsg), false); 
+		return;
+	}
+	// db insert
+	$.ajax({
+		async : false,
+		url : _webapp+"/AjaxController?",
+		data : {
+			facade : "ScheduleTodoFacade",
+			command : "addScheduleTodoAjax",
+			content : val,
+			imptYn : imptYn.checked?"Y":"N",
+			endYn : "N",
+			formdata_bean : "ScheduleTodoVO",
+			transaction_yn : "Y"
+		},
+		success : function(data){
+			// 실 저장 데이터 기준으로 표시함.
+			// <br> 도 바뀌므로 entitify 제거함. 서버에서toHtml() 처리. hyungyu
+			TODO.insertRow(data.id, data.content, true, data.imptyn, data.endyn, data.linkurl);
+			obj.focus();
+			obj.val("");
+		}
+	});
+};
+
+/**
+ * 화면에 할일 추가
+ * //VER : REG_2015.10, REFID : METRO_THEME, AUTHOR : jhhan
+ * metro 테마일때 포틀릿에만 적용
+ * @param {Object} id
+ * @param {Object} content
+ */
+TODO.insertRow = function(id, content, isNew, imptYn, endYn){
+			var linkURL = TODO.linkURL.get(id);
+			var row = "<ui id=\""+id+"\"/>"; // 행 삭제시 사용
+			var endYnClass = (endYn=="Y")?"icon_check_on":"icon_check_off";
+			var contentClass = (endYn=="Y")?"line_through":"";
+			var imptClass = (imptYn=="Y")?"icon_star_on":"icon_star_off";
+			
+			var contents = "<li><span><input type=\"checkbox\" id=\"chkid\" name=\"\" value=\""+id+"\"/></span>";
+			contents+= "<span id=\"endYnImg\" class=\""+endYnClass+"\" onclick=\"TODO.toggleEndYn('"+id+"',this);\">";
+			contents+=" 	<input type=\"hidden\" id=\"endYn_"+id+"\" value=\""+endYn+"\" /></span>";
+			contents+="	<span id=\"imptImg\" class=\""+imptClass+"\" onclick=\"TODO.toggleImptYn('"+id+"',this);\">";
+			contents+="	<input type=\"hidden\" id=\"imptYn_"+id+"\" value=\""+imptYn+"\" /></span>";
+			contents+="<a href=\"#\" onclick=\"TODO.viewTodo('"+id+"');return false;\">"+content+"</a></li>"
+			
+			var $contents = $(contents);
+			
+//			var chkbox = "<span><input type=\"checkbox\" id=\"chkid\" name=\"\" value=\""+id+"\"/></span>";
+//			var endYnImg = "<span id=\"endYnImg\" class=\""+endYnClass+"\" onclick=\"TODO.toggleEndYn('"+id+"',this);\">";
+//			endYnImg += " 	<input type=\"hidden\" id=\"endYn_"+id+"\" value=\""+endYn+"\" /></span>";
+//			
+//			var imptImg = "	<span id=\"imptImg\" class=\""+imptClass+"\" onclick=\"TODO.toggleImptYn('"+id+"',this);\">";
+//			imptImg += "	<input type=\"hidden\" id=\"imptYn_"+id+"\" value=\""+imptYn+"\" /></span>";
+			
+			
+			var linkTD = "<span style=\"width:1%\" id=\"td_link\" nowrap class=\"f11\"/>";
+			
+			$linkText = $(linkTD);
+			if(!isUndefined(linkURL) && !isNullStr(linkURL)){
+				$linkText = $(linkTD).append("&nbsp;|&nbsp;<a href=\"#\" onclick=\"TODO.popupLink('"+id+"');return false;\" ondblclick=\"return false;\"><span class=\"\">"+lnkMsg+"</span></a>&nbsp;");	
+			}
+			$row = $(row).append(contents)
+						 .append($linkText);
+
+	var $listTbl = $("div#listTBL", $listLayer);
+	if(isNew){ // 추가시
+		$listTbl.prepend($row);
+	}else{// list 조회시
+		$listTbl.append($row);
+	}
+};
+/**
+ * 화면에 할일 추가
+ * @param {Object} id
+ * @param {Object} content
+ */
+TODO.insertRow= function(id, content, isNew, imptYn, endYn){
+			var linkURL = TODO.linkURL.get(id);
+			var row = "<tr id=\""+id+"\" height=\"25\"/>"; // 행 삭제시 사용
+			var chkbox = "<td style=\"width:1%\"><input type=\"checkbox\" id=\"chkid\" name=\"\" value=\""+id+"\"/></td>";
+			var endYnClass = (endYn=="Y")?"icon_check_on":"icon_check_off";
+			var contentClass = (endYn=="Y")?"line_through":"";
+			var imptClass = (imptYn=="Y")?"icon_star_on":"icon_star_off";
+			
+			var endYnImg = "<td style=\"width:1%\"><div id=\"endYnImg\" class=\""+endYnClass+"\" onclick=\"TODO.toggleEndYn('"+id+"',this);\"></div>";
+			endYnImg += " 	<input type=\"hidden\" id=\"endYn_"+id+"\" value=\""+endYn+"\" /></td>";
+			
+			var imptImg = "	<td style=\"width:1%\"><div id=\"imptImg\" class=\""+imptClass+"\" onclick=\"TODO.toggleImptYn('"+id+"',this);\"></div>";
+			imptImg += "	<input type=\"hidden\" id=\"imptYn_"+id+"\" value=\""+imptYn+"\" /></td>";
+			
+			var contents = "<td style=\"width:96%\">";
+			contents += "	<table style=\"table-layout:fixed;width:100%;\" cellspacing=\"0\" cellpadding=\"0\"><tr>";
+			contents += "		<td nowrap>";
+			
+			contents += "		<div id=\"td_content\" style=\"width:100%;overflow:hidden;text-overflow:ellipsis;\">";
+			contents += "			<a href=\"#\" onclick=\"TODO.viewTodo('"+id+"');return false;\"><span class=\""+contentClass+"\" id=\"content_"+ id +"\" >"+content+"</span></a>";
+			contents += "		</div>";
+			
+			contents += "		</td>";
+			contents += "	</tr></table></td>";
+			var $contents = $(contents);
+			
+			var linkTD = "<td style=\"width:1%\" id=\"td_link\" nowrap class=\"f11\"/>";
+			
+			$linkText = $(linkTD);
+			if(!isUndefined(linkURL) && !isNullStr(linkURL)){
+				$linkText = $(linkTD).append("&nbsp;|&nbsp;<a href=\"#\" onclick=\"TODO.popupLink('"+id+"');return false;\" ondblclick=\"return false;\"><span class=\"span_link\"><span>"+lnkMsg+"</span></span></a>&nbsp;");	
+			}
+			$row = $(row).append(chkbox)
+						 .append(endYnImg)
+						 .append(imptImg)
+						 .append($contents)
+						 .append($linkText);
+
+	var $listTbl = $("table#listTBL", $listLayer);
+	if(isNew){ // 추가시
+		$listTbl.prepend($row);
+	}else{// list 조회시
+		$listTbl.append($row);
+	}
+};
+
+/**
+ * 리스트에서 완료처리
+ * @param {Object} todoId
+ * @param {Object} obj
+ */
+TODO.toggleEndYn = function(todoId, obj){
+	var srchEndYn = $("input#srchEndYn",$listLayer)[0];
+	var endYn = "";
+	endYn = ($(obj).hasClass("icon_check_on"))?"N":"Y"; // change
+	$.ajax({
+		async : true,
+		url : _webapp+"/AjaxController?",
+		data : {
+			facade : "ScheduleTodoFacade",
+			command : "editScheduleTodoAjax",
+			todoId : todoId,
+			endYn : endYn,
+			editGbn : "END",
+			formdata_bean : "ScheduleTodoVO",
+			transaction_yn : "Y"
+		},
+		success : function(data){
+			// 화면 update
+			if(endYn=="Y"){
+				if(srchEndYn.checked){
+					// remove
+					$("tr#"+todoId).hide(400, function(){ $(this).remove(); });			
+				}else{
+					$(obj).addClass("icon_check_on")
+								.removeClass("icon_check_off");
+				}		
+			}else{
+				$(obj).addClass("icon_check_off")
+							.removeClass("icon_check_on");
+			}
+			$("tr#"+todoId).find("span#content_"+todoId).toggleClass("line_through",endYn=="Y");
+
+		}
+	});
+};
+
+/**
+ * 리스트에서 중요할일 변경
+ * @param {Object} todoId
+ * @param {Object} obj
+ */
+TODO.toggleImptYn = function(todoId, obj){
+	var imptYn = "";
+	imptYn = ($(obj).hasClass("icon_star_on"))?"N":"Y"; // change
+	$.ajax({
+		async : true,
+		url : _webapp+"/AjaxController?",
+		data : {
+			facade : "ScheduleTodoFacade",
+			command : "editScheduleTodoAjax",
+			todoId : todoId,
+			imptYn : imptYn,
+			editGbn : "IMPT",
+			formdata_bean : "ScheduleTodoVO",
+			transaction_yn : "Y"
+		},
+		success : function(data){
+			// 화면 update
+			if(imptYn=="Y"){
+				$(obj).addClass("icon_star_on")
+					  .removeClass("icon_star_off");
+			}else{
+				$(obj).addClass("icon_star_off")
+					  .removeClass("icon_star_on");
+			}
+		}
+	});
+};
+
+
+/* 하단버튼 */
+
+/**
+ * 메인 팝업에서 다운로드.
+ */
+TODO.download = function(){
+	var f = document.frmTodoDown;
+	// 현재 검색조건
+	var srchEndYn = jQuery("input#srchEndYn", $listLayer); // 완료감추기
+	var orderField = jQuery("select#orderField", $listLayer); // Sort
+		
+	f.facade.value = "ScheduleTodoFacade";
+	f.command.value = "downloadTodoList";
+	f.nextpage.value = "";
+	f.orderField.value = orderField[0].value;
+	f.srchEndYn.value = srchEndYn.attr("checked")?"N":"Y";
+		
+	jQuery.submitForm(f, "todoWrapperFix");
+};
+
+/**
+ * 일정 메인화면에서 다운로드.
+ */
+TODO.downloadInSchedule = function(){
+	var f = document.frmSchedule;
+	// 현재 검색조건
+	var srchEndYn = jQuery("input#srchEndYn", "#todoWrapperForSchedule"); // 완료감추기
+	var orderField = jQuery("select#orderField", "#todoWrapperForSchedule"); // Sort
+	
+	f.action = _webapp + "/DownController";
+	f.facade.value = "ScheduleTodoFacade";
+	f.command.value = "downloadTodoList";
+	f.nextpage.value = "";
+	f.orderField.value = orderField[0].value;
+	f.srchEndYn.value = srchEndYn.attr("checked")?"N":"Y";
+		
+	jQuery.submitForm(f, "ifrProc");
+	
+	f.action = _webapp + "/XClickController";
+};
+
+/**
+ * 선택건 삭제
+ */
+TODO.delMulti = function(){
+	var delList = getCheckedValue($("input#chkid", $listLayer),'\13');
+	if(isNullStr(delList)){
+		return;
+	}
+	$.ajax({
+		url : _webapp+"/AjaxController?",
+		data : {
+			facade : "ScheduleTodoFacade",
+			command : "delScheduleTodo",
+			delList : delList,
+			transaction_yn : "Y"
+		},
+		success : function (data){
+			// data.idstr :e.g) #aaa,#bbb,#ccc - selector 로 사용
+			$("tr"+data.idstr).remove();
+		}
+	});
+};
+
+/**
+ * 창숨기기
+ */
+TODO.close = function(){
+	if($ifrListLayer.is(":visible")){
+        parent.activeXshow();
+    }
+	$ifrListLayer.toggle();
+};
+
+/**
+ * 링크정보 존재시 팝업호출
+ * @param href
+ */
+TODO.viewLinkPOP = null;
+TODO.popupLink = function(id){
+	var url = TODO.linkURL.get(id);
+	var nextpage = "";
+	var width = 950;
+	var height = 700;
+	// 모듈에 따라 팝업사이즈 조절
+	var params = url.split("&");
+	var keyValue;
+	for(var i = 0; i < params.length; i++){
+		keyValue = params[i].split("=");
+		if(keyValue[0].indexOf("nextpage") > -1){
+			nextpage = keyValue[1];
+			break;
+		}
+	}
+	if(nextpage.indexOf("/mailView.jsp") > -1){
+		width = 950;
+		height = 700;
+		// VER : REG_2015.05, REFID : DEV150511_17, AUTHOR : jhhan 
+		//보안메일인 경우 패스워드 체크 추가
+		if(url.indexOf("securityYn=Y") > -1){
+			if(!setAppPasswdConfirm(id)) return;
+		}
+	}else if(nextpage.indexOf("/articleView.jsp") > -1){
+		width = 950;
+		height = 700;
+	}else if(nextpage.indexOf("/scheduleViewPop.jsp") > -1){
+		width = 570;
+		height = 550;
+	}else if(nextpage.indexOf("/shareReqViewPop.jsp") > -1){
+		width = 800;
+		height = 570;
+	}else if(nextpage.indexOf("/appProcessFlowChartMain.jsp") > -1){
+		height = window.screen.availHeight - 100;
+		width = 800;
+		if(url.indexOf("contentType=HWP") > -1){
+			width = 1024;
+		}
+		url = url + "&todoYn=Y";
+		
+		// VER : REG_2015.05, REFID : DEV150511_75, AUTHOR : ejlee 
+		//보안결재인 경우 패스워드 체크 추가
+		if(url.indexOf("securityYn=Y") > -1){
+			if(!setAppPasswdConfirm(id)) return;
+		}
+	}
+	if ( TODO.viewLinkPOP != null ){
+		TODO.viewLinkPOP.close();
+	}
+	TODO.viewLinkPOP = openPopupWindowInCenter(url, 'linkPop', width, height, false);
+};
+
+
+/**
+* 전자결재 문서보안 팝업호출
+* VER : REG_2015.05, REFID : DEV150511_75, AUTHOR : ejlee 
+*/
+function setAppPasswdConfirm(id){
+	//clickObj : app.js에서는 상세보기 처리를 위해 obj를 넘기지만 할일목록에서는 id로 넘긴다. 
+	var params = {
+		popTitle 	: jQuery.getMessage("APP-000182"),
+		layerId 	: "DIV_appSecPasswdPop",
+		width 		: 300,
+		height 		: 200,
+		clickObj 	: id, 
+		nextpage 	: "/app/pop/appSecPasswdPop.jsp"
+	};
+	$.openModalDIV(params);
+}
+
+/**
+ * appSecPasswdPop 콜백함수
+ * VER : REG_2015.05, REFID : DEV150511_75, AUTHOR : ejlee
+ */
+function afterPasswdConfirm(clickId){
+	var height = window.screen.availHeight - 100;
+	var width = 800;
+	var url =  TODO.linkURL.get(clickId);
+	url = url + "&todoYn=Y";
+	if ( TODO.viewLinkPOP != null ){
+		TODO.viewLinkPOP.close();
+	}
+	TODO.viewLinkPOP = openPopupWindowInCenter(url, 'linkPop', width, height, false);
+}
+
+
+/* ----------- Popup 용 script ------------- */
+
+/**
+ * 단건삭제
+ * @param {Object} todoId
+ */
+TODO.del = function(todoId){
+	var f = $("#formTODO")[0];
+	with(f){
+		facade.value = "ScheduleTodoFacade",
+		command.value = "delScheduleTodo",
+		nextpage.value = "/common/result/resultProcess.jsp";
+		ifrId.value = "POPPanel";
+		closeYn.value = "Y";
+		transaction_yn.value = "Y";
+		delList.value = todoId.value;
+	}
+	$.submitForm(f,"ifrHidden");
+};
+
+/**
+ * 수정
+ */
+TODO.edit = function(){
+	var f = $("#formTODO")[0];
+	var chkByte = 600;
+	if(!CheckStrLen2(3, chkByte, f.content)){ // UTF-8 기준 600byte 제한
+		// 총 영문 $1자, 한글 $2자까지 입력 가능합니다.
+		var addMsg = chkByte+"\13"+chkByte/3;
+		$.validationEngine.buildPrompt(f.content,$.getMessage('COMMON-000138',addMsg),false); 
+		return;
+	}
+	if($(f).validationEngine({returnIsValid:true})){
+		with(f){
+			facade.value = "ScheduleTodoFacade",
+			command.value = "editScheduleTodo",
+			nextpage.value = "/common/result/resultProcess.jsp";
+			ifrId.value = "POPPanel";
+			closeYn.value = "Y";
+			transaction_yn.value = "Y";
+		}
+		$.submitForm(f,"ifrHidden");
+	}
+};
+
+/**
+ * 기한설정여부 선택
+ * @param {Object} obj
+ */
+TODO.selectLimitYn = function(obj){
+	// info setting enable/disable
+	var f = $("#formTODO")[0];
+	if (obj.value == "Y"){
+		$("#limitDate",f).attr("disabled",false)
+						.addClass("validate[required]")
+						.datepicker("enable");
+	}else{
+		$("#limitDate",f).attr("disabled",true)
+						.removeClass("validate[required]")
+						.datepicker("disable");
+	}
+};
+
+/**
+* 달력(datepicker) 초기화
+*/
+TODO.initCalendar = function(curDateStr) {
+	var f = $("#formTODO")[0];
+	
+	var dates = $('#alarmDay, #limitDate', f).datepicker($.extend($.datepicker.regional[_locale],{
+		changeMonth : false,
+		changeYear : true,
+		dateFormat : "yy-mm-dd",
+		gotoCurrent : false,
+		numberOfMonths : 1,
+		buttonImage: _cmDir + "/img/icon_calendar.gif",
+		buttonImageOnly: true,
+		showOn: "both", // "both","button" : click event 붙일 개체
+		showOtherMonths: true,		
+		selectOtherMonths: true,
+		showButtonPanel : false,
+		minDate : curDateStr // option 에서 지정한 dateFormat 과 일치하여야 합니다.
+		,mouseWheel : false
+	}));
+};
+
+/**
+ * Timezone 변경시 시간 재설정
+ * @param {Object} obj
+ */
+var preTimezone; // jsp loading 시 초기화
+selectGMT = function(obj){	
+	var f = document.formTODO;
+	var preDate = f.alarmDay.value;
+	var preHour = f.alarmHour.value;
+	var preMin = f.alarmMin.value;
+	var timezone = obj.value;
+
+	// 시간 +/-
+	var url = _webapp+"/AjaxController?";
+	var param = {
+		facade : "CommonFacade",
+		command : "getNewTimezoneDateAjax",
+		timeZone : timezone,
+		preTimeZone : preTimezone,
+		date : preDate,
+		hour : preHour,
+		min : preMin
+	};
+	$.ajax({
+		url: url,
+		data : param,
+		async : true,
+	 	success: function(data){
+			preTimezone = timezone;
+			//alert(data.newdate);
+			var date = (data.newdate).split("^");
+			var newDate = date[0];
+			var newHour = date[1];
+			var newMin = date[2];
+			f.alarmDay.value = newDate;
+			f.alarmHour.value = newHour;//.indexOf("0")==0?newHour.substring(1,2):newHour;
+			f.alarmMin.value = newMin;
+		}
+	});
+};
+
+/**
+ * 사용자가 선택한 시간 유효성 체크. (서버시간 기준임)
+ * @param {Object} timezone
+ * @param {Object} date
+ * @param {Object} hour
+ * @param {Object} min
+ */
+isValidAlarmDate = function(){
+	var f = document.formTODO;
+	
+	if(jQuery("[name=alarmYn]:checked").val() == "Y"){
+		var timezone = f.timeZone.value;
+		var date = f.alarmDay.value;
+		var hour = f.alarmHour.value;
+		var min = f.alarmMin.value;
+		
+		var url = _webapp + "/AjaxController?";
+		var param = {
+			facade : "CommonFacade",
+			command : "chkBookDateAjax",
+			timeZone : timezone,
+			date : date,
+			hour : hour,
+			min : min
+		};
+		$.ajax({
+			url: url,
+			data : param,
+			async : false,
+		 	success: function(data){
+				if(data.result == 'true'){
+					TODO.edit();
+				}else{
+					alert($.getMessage("COMMON-000172"));//예약시각을 현재 이후로 설정하세요.
+				}
+			}
+		});
+	}else{
+		TODO.edit();
+	}
+};
+
+/**
+ * 알람설정 클릭
+ */
+function clickAlarmYn () {
+	if (document.getElementById("alarmYn").checked) {
+		document.getElementById("alarmInfo").style.display = "";
+	} else {
+		document.getElementById("alarmInfo").style.display = "none";
+	}
+}
+
+/*========================== MBC / 2016.09.26 / 네이버웍스 관련 함수 추가 / jcpark --> start ==========================*/
+
+/**
+ * 리스트에서 완료처리
+ * @param {Object} todoId
+ * @param {Object} obj
+ */
+TODO.nwToggleEndYn = function(todoData, obj, limitYn){
+	var todoTitle = "";
+	
+	if(limitYn == "Y") {
+		todoTitle = $("#limitYtodoTitle").html();
+	}else {
+		todoTitle = $("#limitNtodoTitle").html();
+	}
+	
+	var endYn = "";
+	//endYn = ($(obj).hasClass("icon_check_on"))?"N":"Y"; // change
+	endYn = (obj.checked)?"Y":"N"; // change
+	
+	$.ajax({
+		async : true,
+		url : _webapp+"/AjaxController?",
+		data : {
+			facade : "CefScheduleTodoFacade",
+			command : "editNWScheduleTodoAjax",
+			endYn : endYn,
+			formdata_bean : "ScheduleTodoVO",
+			nwTodoCalString : todoData
+		},
+		success : function(data){
+			// 화면 update
+			if(endYn=="Y"){
+				/*$(obj).addClass("icon_check_on")
+							.removeClass("icon_check_off");*/
+				
+				obj.checked = true;
+				
+				todoTitle = todoTitle.strike();
+				if(limitYn == "Y") {
+					$("#limitYtodoTitle").html(todoTitle);
+				}else {
+					$("#limitNtodoTitle").html(todoTitle);
+				}
+			}else{
+				/*$(obj).addClass("icon_check_off")
+							.removeClass("icon_check_on");*/
+				
+				obj.checked = false;
+				
+				todoTitle = todoTitle.replace(/(<([^>]+)>)/gi, "");
+				if(limitYn == "Y") {
+					$("#limitYtodoTitle").html(todoTitle);
+				}else {
+					$("#limitNtodoTitle").html(todoTitle);
+				}
+			}
+		}
+	});
+};
+
+/**
+ * 최초 열기시에 할일목록 조회
+ * @param {Object} srchEndYn
+ */
+TODO.listNWScheduleTodo = function(srchEndYn, orderField,isLinkDisabled){
+	lnkMsg = $.getMessage("SCHEDULE-000024");
+	if (srchEndYn == null) {
+		var chkObj = $("input#srchEndYn", $listLayer)[0];
+		if (chkObj.checked) {
+			srchEndYn = "N";
+		}else {
+			srchEndYn = "";
+		}
+	}
+	orderField = (orderField==null)?$("#orderField",$listLayer).val():orderField;
+	$.ajax({
+		url : _webapp+"/AjaxController?",
+		async : true,
+		data : {
+			facade : "CefScheduleTodoFacade",
+			command : "listNWScheduleTodo",
+			srchEndYn : srchEndYn,
+			orderField : orderField
+		},
+		success : function(listData){
+			$("#listTBL",$listLayer).html("");
+			//TODO.linkURL = new xClickLib.map();
+			for(var i = 0; i < listData.length; i++){
+				jsonData = listData[i];
+				//TODO.linkURL.set(jsonData.id, jsonData.linkurl);
+				TODO.nwInsertRow(jsonData.id, jsonData.content, false, jsonData.imptyn, jsonData.endyn);
+			}
+			//Portlet Edit Mode
+			if(isLinkDisabled != 'Undefined' && isLinkDisabled){
+				jQuery(':input','#listTBL').attr('disabled','true');
+				jQuery('a,div','#listTBL').attr('onclick','');
+			}
+			if($("div#todo_scrollArea").unblock){
+				$("div#todo_scrollArea").unblock();
+			}
+		}
+	});
+};
+
+/**
+ * 화면에 할일 추가
+ * @param {Object} id
+ * @param {Object} content
+ */
+TODO.nwInsertRow= function(id, content, isNew, imptYn, endYn){
+			//var linkURL = TODO.linkURL.get(id);
+			var row = "<tr id=\""+id+"\" height=\"25\"/>"; // 행 삭제시 사용
+			var chkbox = "<td style=\"width:1%\"><input type=\"checkbox\" id=\"chkid\" name=\"\" value=\""+id+"\"/></td>";
+			var endYnClass = (endYn=="Y")?"icon_check_on":"icon_check_off";
+			var contentClass = (endYn=="Y")?"line_through":"";
+			var imptClass = (imptYn=="Y")?"icon_star_on":"icon_star_off";
+			
+			var endYnImg = "<td style=\"width:1%\"><div id=\"endYnImg\" class=\""+endYnClass+"\" onclick=\"TODO.toggleEndYn('"+id+"',this);\"></div>";
+			endYnImg += " 	<input type=\"hidden\" id=\"endYn_"+id+"\" value=\""+endYn+"\" /></td>";
+			
+			var imptImg = "	<td style=\"width:1%\"><div id=\"imptImg\" class=\""+imptClass+"\" onclick=\"TODO.toggleImptYn('"+id+"',this);\"></div>";
+			imptImg += "	<input type=\"hidden\" id=\"imptYn_"+id+"\" value=\""+imptYn+"\" /></td>";
+			
+			var contents = "<td style=\"width:96%\">";
+			contents += "	<table style=\"table-layout:fixed;width:100%;\" cellspacing=\"0\" cellpadding=\"0\"><tr>";
+			contents += "		<td nowrap>";
+			
+			contents += "		<div id=\"td_content\" style=\"width:100%;overflow:hidden;text-overflow:ellipsis;\">";
+			contents += "			<a href=\"#\" onclick=\"TODO.nwViewTodo('"+id+"');return false;\"><span class=\""+contentClass+"\" id=\"content_"+ id +"\" >"+content+"</span></a>";
+			contents += "		</div>";
+			
+			contents += "		</td>";
+			contents += "	</tr></table></td>";
+			var $contents = $(contents);
+			
+			//var linkTD = "<td style=\"width:1%\" id=\"td_link\" nowrap class=\"f11\"/>";
+			
+			//$linkText = $(linkTD);
+//			if(!isUndefined(linkURL) && !isNullStr(linkURL)){
+//				$linkText = $(linkTD).append("&nbsp;|&nbsp;<a href=\"#\" onclick=\"TODO.popupLink('"+id+"');return false;\" ondblclick=\"return false;\"><span class=\"span_link\"><span>"+lnkMsg+"</span></span></a>&nbsp;");	
+//			}
+			$row = $(row).append(chkbox)
+						 .append(endYnImg)
+						 .append(imptImg)
+						 .append($contents)
+						 //.append($linkText)
+						 ;
+
+	var $listTbl = $("table#listTBL", $listLayer);
+	if(isNew){ // 추가시
+		$listTbl.prepend($row);
+	}else{// list 조회시
+		$listTbl.append($row);
+	}
+};
+
+/**
+ * 상세보기 팝업
+ * @param {Object} todoId
+ */
+TODO.nwViewTodo = function(todoId){
+	var url = _webapp+"/XClickController?";
+	var params = {
+		facade : "CefScheduleTodoFacade",
+		command : "viewScheduleTodo",
+		nextpage : "/cef/schedule/nwScheduleTodoView.jsp",
+		transaction_yn : "N",
+		todoId : todoId,
+		msgId : "SCHEDULE-000002"
+	};
+	url += jQuery.param(params); // serialize & encode
+	var width = 670;
+	var height = 350;
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	var todoInfoWin = openPopupWindowInCenter(url, 'todoInfoPop', width, height, true);
+};
+
+/**
+ * "완료감추기" 선택시
+ * @param {Object} obj
+ */
+TODO.nwCheckEndYn = function(obj){
+	var orderField = $("input#orderField",$listLayer).val();
+	if(obj.checked){
+		TODO.listNWScheduleTodo("N",orderField);
+	}else{
+		TODO.listNWScheduleTodo("",orderField);
+	}
+};
+
+/**
+ * 메인 팝업에서 다운로드.
+ */
+TODO.nwDownload = function(){alert("1122");
+	var f = document.frmTodoDown;
+	// 현재 검색조건
+	var srchEndYn = jQuery("input#srchEndYn", $listLayer); // 완료감추기
+	var orderField = jQuery("select#orderField", $listLayer); // Sort
+		
+	f.facade.value = "CefScheduleTodoFacade";
+	f.command.value = "nwDownloadTodoList";
+	f.nextpage.value = "";
+	f.orderField.value = orderField[0].value;
+	f.srchEndYn.value = srchEndYn.attr("checked")?"N":"Y";
+		
+	jQuery.submitForm(f, "todoWrapperFix");
+};
+
+/**
+ * 선택건 삭제
+ */
+TODO.nwDelMulti = function(){
+	var delList = getCheckedValue($("input#chkid", $listLayer),'\13');
+	if(isNullStr(delList)){
+		return;
+	}
+	$.ajax({
+		url : _webapp+"/AjaxController?",
+		data : {
+			facade : "CefScheduleTodoFacade",
+			command : "delNWScheduleTodo",
+			delList : delList,
+			transaction_yn : "Y"
+		},
+		success : function (data){alert("data.idstr= "+data.idstr);
+			// data.idstr :e.g) #aaa,#bbb,#ccc - selector 로 사용
+			$("tr"+data.idstr).remove();
+		}
+	});
+};
+/*========================== MBC / 2016.09.26 / 네이버웍스 관련 함수 추가 / jcpark --> end ==========================*/

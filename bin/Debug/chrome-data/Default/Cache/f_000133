@@ -1,0 +1,1761 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Cache-Control" content="no-cache"/> 
+	<meta http-equiv="Pragma" content="no-cache"/>
+	<meta http-equiv="Expires" content="0"/>
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/jquery/css/jquery.validationEngine.css?_xclickstatic" media="screen" title="no title" charset="utf-8" />
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/portal/css/portlet_metro.css?1.99_xclickstatic"></link>
+	
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/content_new/type_metro3/css/layout_metro.css?1.99_xclickstatic" charset="utf-8" />
+	
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/content_new/type_metro3/css/style.css?1.99_xclickstatic" charset="utf-8" />
+	
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc/cef/webFont/css/webFont.css" charset="utf-8" />
+	
+	<script type="text/javascript" src="/xclick_mbc/common/js/jquery-1.6.4.min.js?_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/jquery.blockUI.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/xclick.variable.js.jsp"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/common.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/xclick.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/xClickLib.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/schedule/js/scheduletodo.js?1.99_xclickstatic"></script>
+	
+	
+	<style type="text/css">
+			.hurbListDiv {
+				border-right: solid; border-right-width: 1px; border-right-color: gray; width: 33%; text-align: center;
+			}
+			.hurbListMain {
+				background:#FFFFFF; clear:both; position:fixed; height: 150px; bottom:70px; border: solid; padding:5px 0;
+			}
+			.hurbMain {
+				padding-bottom:5px; clear:both; bottom:0px; height: 15px; border-top-color: #8C8C8C; border-top-style: solid; border-top-width: 2px;
+				margin-bottom: 5px; table-layout:fixed;
+			}
+			
+/* 			메트로일 경우 스타일 */
+/* padding-top:10px; padding-bottom:5px; clear:both; bottom:0px; height: 15px; border-top-color: #8C8C8C; border-top-style: solid; border-top-width: 2px;
+	margin-top:10px; margin-bottom: 5px; table-layout:fixed; */
+			
+/* 			//_portalLayoutOffsetMain  */
+/* width:100%; padding:5px 0; clear:both; position:fixed; bottom:0; bottom:30px; height: 20px; border-top-color: #8C8C8C; border-top-style: solid; border-top-width: 2px; */
+		</style>
+	<script>
+		function hurbListToggle(display_hurbList, none_hurbList){
+			if(document.getElementById(display_hurbList).style.display == "none"){
+				document.getElementById(display_hurbList).style.display = "";
+				if(document.getElementById(none_hurbList).style.display == ""){
+					document.getElementById(none_hurbList).style.display = "none";
+				}
+			}else{
+				document.getElementById(display_hurbList).style.display = "none";
+			}
+		}
+		
+		//MBC / 2016.12.12 / 팝업체크하였으나, 새창으로 조회되는 현상 수정. / gmlwh
+		function winOpen(url){
+			var pop = null;
+			var height = 800;//(screen.availHeight-133)
+			var width = 1400;//(screen.availWidth-20)
+			var vTop = Math.max(0, ((screen.height - height) / 2)-100);
+			var vLeft = (screen.width - width) / 2;
+			
+			var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes';
+			//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+			//Windows10관련 긴급패치 : Edge 브라우저에서 팝업시 화면높이에 따라 강제로 Maxmize 되는 문제.
+			if(navigator.userAgent.indexOf("Edge") > -1){
+				if(height > screen.availHeight - 100){
+					// Edge .. 지정한 높이가 화면높이보다 크거나 100px 미만으로 차이가 나면 브라우저가 Maxmize 로 창을 띄움... 체크해보고 최대높이는 화면-100 으로 처리함. hyungyu.
+					height = screen.availHeight - 100;
+				}
+				// top, left 는 무시됨.. Bug 인지 컨셉인지 모르겠슴..
+				sFeatures = 'width='+width+',height='+height+',top=0,left=0,location=no,resize=yes,resizable=yes,scrollbars=yes,menubar=yes';
+			}
+			
+			pop = window.open(url, '',sFeatures);
+			
+			if(!pop){
+				pop = setTimeout(function() { window.open(url, '', sFeatures); }, 0);
+			}
+			//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+			//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+			if(navigator.userAgent.indexOf("Edge") == -1){
+				pop.focus();
+			}
+			
+			if(xClickTop._popupWindowsMap){
+				xClickTop._popupWindowsMap.set('', pop);
+			}
+			return pop;
+		}
+		
+		//포탈 우측하단, 유용한사이트 / 계열사 및 자회사 메뉴 토글처리 : 박나래
+		function mViewToggle(gbn, thisVal){
+			if(gbn==1){
+				jQuery('#m_view2').hide();
+				jQuery('#m_site2').attr('class', 'm_site_down');
+			}else{
+				jQuery('#m_view1').hide();
+				jQuery('#m_site1').attr('class', 'm_site_down');
+			}
+			if(jQuery('#m_view'+gbn).css("display")=="none"){
+				jQuery('#m_view'+gbn).show();
+				jQuery('#m_site'+gbn).attr('class', 'm_site_up');
+			}else{
+				jQuery('#m_view'+gbn).hide();
+				jQuery('#m_site'+gbn).attr('class', 'm_site_down');
+			}
+		}
+		
+		//회사양심함으로 이동, 개발서버 기준 세팅 : 박나래
+		function moveComForm(){
+		var f = document.frmMain;
+		var bbsId = "FC_00000000u";
+		var categoryId = "PDSBBS";
+		var topMenuId = "PDSBBS";
+		var leftMenuId = "PDSBBS_LIST";
+		
+		if (xClickTop.document.getElementById(topMenuId)) {
+			var actionUrl = "/XClickController?facade=BBSArticleFacade&command=listArticle&nextpage=/bbs/articleGenList.jsp&menuGbn=USERMAP&bbsId="+ bbsId +"&modeGbn=USER&categoryId="+categoryId;
+			var jsonParam = {"portalLeftMenuId": leftMenuId, portalRightUrl : actionUrl , "portalParam" : "&bbsId="+bbsId};
+			xClickTop.menuAction("topSubMenu",topMenuId,jsonParam);
+		}
+		};
+
+		//MBC뉴스레터로 이동, ghlee 20190509
+		function moveMBCNewsletter(){
+		var f = document.frmMain;
+		var bbsId = "BBS387";
+		var categoryId = "MBCBBS";
+		var topMenuId = "MBCBBS";
+		var leftMenuId = "MBCBBS_LIST";
+		
+		if (xClickTop.document.getElementById(topMenuId)) {
+			var actionUrl = "/XClickController?facade=BBSArticleFacade&command=listArticle&nextpage=/bbs/articleGenList.jsp&menuGbn=USERMAP&bbsId="+ bbsId +"&modeGbn=USER&categoryId="+categoryId;
+			var jsonParam = {"portalLeftMenuId": leftMenuId, portalRightUrl : actionUrl , "portalParam" : "&bbsId="+bbsId};
+			xClickTop.menuAction("topSubMenu",topMenuId,jsonParam);
+		}
+		};		
+		
+		//MBC / 2016.10.23 / 네이버웍스 메일쓰기 팝업 띄우기 / jcpark
+		function popupNwMail(email) {
+			var url = "https://mail.worksmobile.com/write/popup?";
+			
+			var params = {
+				to : email
+			};
+			
+			url += jQuery.param(params);
+			
+			var popupOptions = "left=0, top=0, width=950, height=650, toolbar=no, status=no, scrollbars=yes, resizable=yes, menubar=no";
+			var writeNwMailPop = window.open(url, "writeNwMailPop", popupOptions);
+		}
+		
+		//IT문의 
+		function popupITcallcenter(){
+			var params = {
+				nextpage : "/sample/ITcallcenter.jsp",
+				msgId : "MBC-000001",
+				workplaceType : "PERSON",
+				themeMode : CommonConstants.THEMETYPE_USER
+			};
+			var url = _webapp + "/XClickController?" + jQuery.param(params);
+			//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+			//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+			var popupWindow = openPopupWindowInCenter(url, "ITcallcenterPop", 1000, 700, true);
+			
+			/*	var params = {
+				facade : "CefPortalFacade",
+				command : "getDailyMenu",
+				nextpage : "/sample/TodayMenuPopup.jsp",
+				msgId : "CEF-100044",//오늘의메뉴
+				workplaceType : "PERSON",
+				themeMode : CommonConstants.THEMETYPE_USER
+			};
+			var url = _webapp + "/XClickController?" + jQuery.param(params);
+			//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+			//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+			var popupWindow = openPopupWindowInCenter(url, "TodayMenuPopup", 850, 360, true);*/
+		}
+		
+		// 2016-11-30 jtlim => 개인정보처리방침 팝업 호출 추가
+		function popPrivacy(email) {
+			//var url = "";
+			var url = "/XClickController?";
+			var params = {
+				nextpage : "/cef/mbc/privacy.html",
+				msgId : "CEF-100321"
+			};
+			url += jQuery.param(params); // serialize & encode
+			
+			var width = 1000;
+			//var height = 700;
+			var height = window.screen.height - 80; 
+			openPopupWindowInCenter(url, "popPrivacy", width, height, false);
+		}
+		
+	</script>
+<!-- 	.div_portal_main { /*position:absolute; left:5px; top:2px; right:5px;*/ margin-bottom:30px; bottom: 0px; /*overflow:auto;*/ } -->
+	
+</head>
+<body class="contents_bg" style="margin:0px; overflow:hidden;  background-color:#E8E8E8">
+	<form id="frmMain" name="frmMain" method="post" action="/xclick_mbc/XClickController" style="margin:0;">
+		<input type="hidden" id="facade" name="facade" value="">
+<input type="hidden" id="command" name="command" value="null">
+<input type="hidden" id="nextpage" name="nextpage" value="">
+<input type="hidden" id="sort_column" name="sort_column" value="">
+<input type="hidden" id="sort_cond" name="sort_cond" value="">
+<input type="hidden" id="transaction_token_key" name="transaction_token_key" value="MBC1SS84cdea655cf3fc874a8d34fbb5f83659">
+<input type="hidden" id="transaction_yn" name="transaction_yn" value="N">
+<input type="hidden" id="_xcsparam" name="_xcsparam" value="">
+<input type="hidden" id="paging_listcnt" name="paging_listcnt" value="15">
+<input type="hidden" id="formdata_bean" name="formdata_bean" value="">
+<input type="hidden" id="refreshYn" name="refreshYn" value="N">
+<input type="hidden" id="ifrId" name="ifrId" value="">
+<input type="hidden" id="leftPaneMenuId" name="leftPaneMenuId" value="">
+<input type="hidden" id="_tokenid" name="_tokenid" value="bL76kDWVRpbrLajJjNSlE+ev06+cL4ICgFJs5A!!">
+
+		<input type="hidden" id="workplaceId" name="workplaceId" value="WP70"/>
+		<input type="hidden" id="workplaceType" name="workplaceType" value="COMPANY"/>
+		<input type="hidden" id="userMode" name="userMode" value="USER"/>
+		<input type="hidden" id="themeMode" name="themeMode" value="USER"/>
+	</form>
+	<div style="display : ">
+	<div id="resolution">
+    <div class="prevBtn" onclick="right();"></div>
+    <div class="nextBtn" onclick="left();"></div>
+    <div id="prevMask"></div>
+    <div id="nextMask"></div>
+	</div>
+</div>
+	<div id="portalMain" class="div_portal_main" style='display:none;bottom:5px;zoom:1;overflow-y:auto;overflow-x:hidden; '>
+
+	<div style="zoom:1; ">
+		<table cellpadding="0px" cellspacing="0px" style="width:100%; margin:0 auto;table-layout:fixed;" id="_portalLayoutOffsetMain">
+<tbody>
+<tr>
+<td id="posId_0" style="width:30%; vertical-align:top; padding-right:12px">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3168_window">
+
+<input id="CH3168" type="hidden" value="CH3168"/>
+<input type="hidden" value="Cef사용자정보_iMBC"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3168_td" valign="top">
+    	<div id="CH3168_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3168_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3168/ws/normal/pm/view/userch/controller=/portletAjax;')});}else{jQuery('#CH3168_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3168/ws/normal/pm/view/userch/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3170_window">
+
+<input id="CH3170" type="hidden" value="CH3170"/>
+<input type="hidden" value="받은 메일함_ver3"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3170_td" valign="top">
+    	<div id="CH3170_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3170_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3170/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH3170_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3170/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3169_window">
+
+<input id="CH3169" type="hidden" value="CH3169"/>
+<input type="hidden" value="iMBC HR결재 포틀릿"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3169_td" valign="top">
+    	<div id="CH3169_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3169_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3169/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH3169_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3169/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3407_window">
+
+<input id="CH3407" type="hidden" value="CH3407"/>
+<input type="hidden" value="일정정보_리스트형 V2"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3407_td" valign="top">
+    	<div id="CH3407_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3407_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3407/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH3407_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3407/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3172_window">
+
+<input id="CH3172" type="hidden" value="CH3172"/>
+<input type="hidden" value="My Works_iMBC"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3172_td" valign="top">
+    	<div id="CH3172_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3172_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3172/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH3172_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3172/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script></td>
+<td id="posId_1" style="width:40%; vertical-align:top; padding-right:12px">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2486_window">
+
+<input id="CH2486" type="hidden" value="CH2486"/>
+<input type="hidden" value="멀티이미지배너1_ver2"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2486_td" valign="top">
+    	<div id="CH2486_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2486_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2486/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2486_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2486/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3083_window">
+
+<input id="CH3083" type="hidden" value="CH3083"/>
+<input type="hidden" value="iMBC게시판탭포틀릿(다중)"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3083_td" valign="top">
+    	<div id="CH3083_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3083_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3083/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH3083_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3083/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2480_window">
+
+<input id="CH2480" type="hidden" value="CH2480"/>
+<input type="hidden" value="Cef게시글"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2480_td" valign="top">
+    	<div id="CH2480_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2480_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2480/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2480_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2480/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2483_window">
+
+<input id="CH2483" type="hidden" value="CH2483"/>
+<input type="hidden" value="게시판탭포틀릿(다중)_ver2"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2483_td" valign="top">
+    	<div id="CH2483_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2483_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2483/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2483_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2483/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH3087_window">
+
+<input id="CH3087" type="hidden" value="CH3087"/>
+<input type="hidden" value="Cef게시글"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH3087_td" valign="top">
+    	<div id="CH3087_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH3087_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3087/ws/normal/pm/view/userch/controller=/portletAjax;')});}else{jQuery('#CH3087_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH3087/ws/normal/pm/view/userch/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2698_window">
+
+<input id="CH2698" type="hidden" value="CH2698"/>
+<input type="hidden" value="일일식단_ver2"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2698_td" valign="top">
+    	<div id="CH2698_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2698_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2698/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2698_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2698/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script></td>
+<td id="posId_2" style="width:30%; vertical-align:top;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2713_window">
+
+<input id="CH2713" type="hidden" value="CH2713"/>
+<input type="hidden" value="자원 포틀릿"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2713_td" valign="top">
+    	<div id="CH2713_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2713_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2713/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2713_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2713/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2695_window">
+
+<input id="CH2695" type="hidden" value="CH2695"/>
+<input type="hidden" value="주가정보 포틀릿"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2695_td" valign="top">
+    	<div id="CH2695_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2695_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2695/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2695_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2695/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2696_window">
+
+<input id="CH2696" type="hidden" value="CH2696"/>
+<input type="hidden" value="매출일보 포틀릿"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2696_td" valign="top">
+    	<div id="CH2696_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2696_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2696/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2696_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2696/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="channel_area" id="CH2697_window">
+
+<input id="CH2697" type="hidden" value="CH2697"/>
+<input type="hidden" value="웹 통계분석 포틀릿"/>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="CH2697_td" valign="top">
+    	<div id="CH2697_contents" width='100%'>
+    		<div style='min-height:100px;min-width:200px;'><script>jQuery.ajaxSetup({cache:true});if(jQuery.browser.version == '6.0' || jQuery.browser.version == '7.0'){jQuery(document).ready(function(){jQuery('#CH2697_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2697/ws/normal/pm/view/controller=/portletAjax;')});}else{jQuery('#CH2697_contents').load('/xclick_mbc/portletAjax/wp/WP70/ch/CH2697/ws/normal/pm/view/controller=/portletAjax;');}</script></div>
+    	</div>
+    </td>
+  </tr>
+</table>
+
+</div> 
+
+<script>
+	
+</script></td>
+</tr>
+</tbody></table>
+	</div>
+	
+	
+	
+	
+	<br/>
+			  <div class="m_foot">
+			    <div class="sub_menu">
+			      <div>
+			        <span class="m_link">
+						<!-- 2016-11-30 jtlim => 개인정보처리방침 팝업 변경 -->
+			        	<!-- <a onclick="winOpen('http://help.imbc.com/rules/privacy.html')">개인정보처리방침</a> -->
+			        	
+						<!--<a onclick="moveMBCNewsletter()">MBC뉴스레터</a>
+			        	<a onclick="winOpen('http://mbcnow.mbc.co.kr/wad0/wad0005_p.jsp?empno=1617178724768MBCCodeValues175.148.137.92.150.125.112.129.101')">(구)주간MBC</a>-->
+			        	<a onclick="winOpen('http://www.imbc.com/withmbc/clean/')">클린센터</a>
+						
+			        	<a onclick='popupNwMail("gwsupport@mbc.co.kr")'>엠포털문의</a>
+						
+			        </span>
+			        <div class="m_site">
+					
+			        	<a id="m_site2" class="m_site_down" onclick="mViewToggle(2, this);">유용한 사이트</a>
+					
+			        	<a id="m_site1" class="m_site_down" onclick="mViewToggle(1, this);">계열사 및 자회사</a>
+			        </div>
+			        <div class="m_view" id="m_view1" style="display: none; z-index: 2;">
+			          <ul>
+			            <li>
+			            	<a onclick="winOpen('http://mbcgn.kr/')" target="_blank">MBC 경남</a><br/>
+			            	<a onclick="winOpen('http://www.busanmbc.co.kr/')" target="_blank">부산 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.dgmbc.com/')" target="_blank">대구 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.tjmbc.co.kr/')" target="_blank">대전 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.kjmbc.co.kr/')" target="_blank">광주 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.ulsanmbc.co.kr/')" target="_blank">울산 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.gnmbc.co.kr/')" target="_blank">MBC 강원영동</a><br/>
+			            </li>
+			            <li>
+			            	<a onclick="winOpen('http://www.jmbc.co.kr/')" target="_blank">전주 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.jejumbc.com/')" target="_blank">제주 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.chmbc.co.kr/')" target="_blank">춘천 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.mbccb.co.kr/rb/')" target="_blank">MBC 충북</a><br/>
+<!-- 			            	<a onclick="winOpen('http://www.mbccj.co.kr/')" target="_blank">청주 MBC</a><br/> -->
+			            	<a onclick="winOpen('http://www.ysmbc.co.kr/')" target="_blank">여수 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.phmbc.co.kr/')" target="_blank">포항 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.mokpombc.co.kr/')" target="_blank">목포 MBC</a><br/>
+			            </li>
+			            <li>
+			            	<a onclick="winOpen('http://andongmbc.co.kr/adboard/index.php')" target="_blank">안동 MBC</a><br/>
+			            	<a onclick="winOpen('http://www.wjmbc.co.kr/')" target="_blank">원주 MBC</a><br/>
+<!-- 			            	<a onclick="winOpen('https://www.cjmbc.co.kr/')" target="_blank">충주 MBC</a><br/> -->
+			            	<a onclick="winOpen('http://www.mbccni.co.kr/')" target="_blank">MBC C&amp;I</a><br/>
+			            	<a onclick="winOpen('http://www.mbcac.com/')" target="_blank">MBC 아카데미</a><br/>
+			            	<a onclick="winOpen('http://www.mbcart.com/')" target="_blank">MBC 아트</a><br/>
+			            	<a onclick="winOpen('http://www.imbc.com/')" target="_blank">iMBC</a><br/>
+			            	<a onclick="winOpen('http://www.mbcplus.com/')" target="_blank">MBC 플러스</a><br/>
+			            </li>
+			            <li>
+			            	<a onclick="winOpen('http://www.mbc-america.com/')" target="_blank">MBC AMERICA</a><br/>
+			            	<a onclick="winOpen('http://www.mbcplaybe.co.kr/')" target="_blank">MBC PlayBe</a><br/>
+			            	<a onclick="winOpen('http://www.mbcnanum.co.kr/')" target="_blank">MBC 나눔</a>
+			            </li>
+			          </ul>
+			        </div>
+					
+			        <div class="m_view2" id="m_view2" style="display: none; z-index: 2;">
+			          <ul style="margin-top: 10px;">
+			            <li>
+			            	<a onclick="winOpen('http://edu.evermbc.com/p12/gateway/elearning.jsp?sabun=IM_220114')" target="_blank">아카데미이러닝</a><br/>
+			            	<a onclick="winOpen('http://www.mbcsoccer.com/')" target="_blank">꿈나무축구재단</a><br/>
+			            	<a onclick="winOpen('http://www.kcc.go.kr/')" target="_blank">방송통신위원회</a><br/>
+			            	<a onclick="winOpen('http://www.kba.or.kr/')" target="_blank">한국방송협회</a><br/>
+			            	<a onclick="winOpen('http://withmbc.imbc.com/center/index.html')" target="_blank">시청자센터</a><br/>
+			            	<a onclick="winOpen('http://www.kbs.co.kr/')" target="_blank">KBS</a><br/>
+			            	<a onclick="winOpen('http://www.sbs.co.kr/')" target="_blank">SBS</a>
+			            </li>
+			          </ul>
+			        </div>
+					
+					
+			        <div class="m_QRcode" style="z-index: 99;">
+			        	<ul>
+			        		<li>
+			        			<span><strong>모바일앱 다운로드</strong></span><br />
+			        			<a onclick="winOpen('https://app.mbc.co.kr/AppPortal/default_ios.asp')">아이폰</a><br />
+			        			<a onclick="winOpen('https://app.mbc.co.kr/AppPortal/default_android.asp')">안드로이드</a>
+			        		</li>
+			        		<li style="width:80px;"><img style="width:67px; margin-top:-3px;" src="/xclick_mbc_resource/themes/ko/portal/img/QRapp.png?1.99_xclickstatic"  alt=""/></li>
+			        	</ul>
+			        </div>
+			      </div>
+			    </div>
+				
+				
+					
+			    <div class="m_cop" style="background : none; padding-left:0;">
+			      <p><img height="18px" src = "/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/IM_logo2.png">
+				  &nbsp;(주)아이엠비씨&nbsp;&nbsp;|&nbsp;&nbsp;대표이사 박태경&nbsp;&nbsp;|&nbsp;&nbsp;서울특별시 마포구 성암로 255 (03925) &nbsp;&nbsp;|&nbsp;&nbsp;대표전화 02-2105-1122</p>
+								  
+				
+						
+				
+
+				
+				  
+				  
+				  
+				  
+			      <p class="m_sns">
+			      <a onclick="winOpen('https://twitter.com/withMBC')"><img src="/xclick_mbc_resource/themes/ko/portal/img/icon_sns01.png?1.99_xclickstatic"  alt=""/></a>&nbsp;
+			      <a onclick="winOpen('https://www.facebook.com/MBC')"><img src="/xclick_mbc_resource/themes/ko/portal/img/icon_sns02.png?1.99_xclickstatic"  alt=""/></a>&nbsp;
+
+
+			      <a onclick="winOpen('https://www.youtube.com/channels?q=mbc')"><img src="/xclick_mbc_resource/themes/ko/portal/img/youtube.png?1.99_xclickstatic"  alt=""/></a>&nbsp;
+			      
+			      </p>
+			    </div>
+			  </div>
+	
+				
+	</div>
+	<script>
+		jQuery("#portalMain").fadeIn(0);
+	</script>
+	
+	
+	
+<!-- 	<div style="width:100%;padding:5px 0;clear:both; position:fixed; bottom:0; border-top-color: #EAEAEA; border-top-style: solid; border-top-width: 1px;"> -->
+	<div class="foot">
+ 		
+ 		 <div class="workplace">
+            <p class="mode"> 
+            <a id="workplaceList">
+            
+								
+								<span class="sch_date" style="cursor:pointer; " onclick="location.href = '/xclick_mbc/workplace/wp/WP70'; ">
+iMBC
+								</span>
+								
+            </a> 
+            </p>
+            <p class="edit">
+            	<!-- MBC / 2016.11.01 / [CBT 결과 정리] 워크플레이스 추가, 수정, 삭제 버튼 제거 / gmlwh  -->
+
+			
+             <a><img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/workplace_mody.png?1.99_xclickstatic"  onclick="editWorkplace(); " alt="" title="워크플레이스 수정"/></a> 
+			
+             <a><img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/workplace_align.png?1.99_xclickstatic"  onclick="openWorkplaceSortPop(); " alt="" title="워크플레이스 정렬"/></a>
+              </p>
+        </div>
+		 
+	</div>
+	
+	<script type="text/javascript" src="/xclick_mbc/common/js/json2.js?_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/jquery.validationEngine.js?1.99_xclickstatic"></script>
+	
+	
+	<script type="text/javascript" src="/xclick_mbc/common/js/xClickLib.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/xClickDragDropHandler.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/portal/js/portlet.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/portal/js/portletDrag.js?1.99_xclickstatic"></script>
+	<script type="text/javascript">
+		xClickDragDropHandler.setMain();					
+		var g_dragEffectBg;									
+		var g_channelElement;								
+		var g_windowDir = "/xclick_mbc_resource/themes/ko/portal/window/portlet_gradation";					
+		var g_isCop = false;							
+		
+		
+		jQuery(document).ready(function () {
+			/**
+			 * 탭이름을 현재 워크플레이스 이름으로 변경!!
+			 */
+			parent.document.getElementById("tabTd"+window.frameElement.id.replace("_tabIfr", "")).childNodes[0].innerHTML = "iMBC";
+			
+			dragInit();
+			
+		});
+		
+	
+		/**
+		 * 추가팝업실행
+		 */
+		function openWorkplaceAddPop () {
+			var params = {
+				nextpage : "/portal/admin/workplace/pop/workplaceAddPop.jsp",
+				msgId : "PORTAL-000083",
+				workplaceType : "PERSON",
+				themeMode : CommonConstants.THEMETYPE_USER
+			};
+			var url = _webapp + "/XClickController?" + jQuery.param(params);
+			//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+			//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+			var popupWindow = openPopupWindowInCenter(url, "workplaceAddPop", 550, 250, true);
+		}
+	
+		/**
+		 * 수정
+		 */
+		function editWorkplace () {
+			var f = document.getElementById("frmMain");
+			f.facade.value = "WorkplaceFacade";
+			f.command.value = "viewWorkplace";
+			f.nextpage.value = "/portal/workplace/workplaceManager.jsp";
+			f.transaction_yn.value = CommonConstants.COMM_N;
+			jQuery.submitForm(f, "_self");
+		}
+		
+		/**
+		 * 우선순위이동 팝업실행
+		 */
+		function openWorkplaceSortPop () {
+			var params = {
+				facade : "WorkplaceFacade",
+				command : "listWorkplaceSort",
+				nextpage : "/portal/admin/workplace/pop/workplaceSortPop.jsp",
+				msgId : "PORTAL-000084",
+				workplaceType : "PERSON",
+				themeMode : CommonConstants.THEMETYPE_USER
+			};
+			var url = _webapp + "/XClickController?" + jQuery.param(params);
+			//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+			//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+			var popupWindow = openPopupWindowInCenter(url, "workplaceSortPop", 350, 380, true);
+		}
+		
+		/**
+		 * 하단 바로가기 재생성 (정렬시 실행)
+		 */
+		function refreshList () {
+			var url = _webapp+ "/AjaxController";
+			var param = {
+				facade :"WorkplaceFacade",
+				command : "listWorkplaceAjax",
+				ajax_result_type : "JSON"
+			};
+			
+			jQuery.ajax({
+				url : url,
+				async: true,
+				data : param,
+				error : function(xhr, status, error){
+					alert(error);
+				},
+				success : function (data){
+					var strHTML = "";
+					for (var i = 0; i < data.length; i++) {
+						var jo = data[i];
+						if (i > 0) strHTML += " | ";
+						strHTML += "<span class=\"";
+						strHTML += "WP70" == jo.workplaceId ? "sch_date" : "portal_date";
+						strHTML += "\" style=\"cursor:pointer; \" onclick=\"location.href = '/xclick_mbc/workplace/wp/"+jo.workplaceId+"'; \">"+jo.workplaceName+"</span>";
+					}
+					document.getElementById("workplaceList").innerHTML = strHTML;
+				}
+			});			
+		}
+		function left(){
+			document.getElementById('portalMain').scrollLeft=document.getElementById('portalMain').scrollLeft+150;
+		}
+		function right(){
+			document.getElementById('portalMain').scrollLeft=document.getElementById('portalMain').scrollLeft-150;
+		}
+	</script>
+</body>
+</html>

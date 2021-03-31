@@ -1,0 +1,2499 @@
+/***********************************************************
+	DESC : 프레임웍 공통 JS
+	     : 메소드 추가필요시 운영자에게 연락바람 
+	@author HJ.Lee
+	@since 2010.08.16
+************************************************************/
+
+function getDomains(){
+	var dns, arrDns, str;
+	dns = document.location.href;
+	arrDns = dns.split("//");
+	str = arrDns[0]+"//"+arrDns[1].substring(0,arrDns[1].indexOf("/"));
+	return str;
+}
+//var top = parent;
+var xClickTop = parent;
+//크로스 도메인 컨트롤 시작 S.H.Byun
+var curHref = this.location.href;
+var windowObj = window;
+var idx = 0;
+var _dispWebUrl = "";
+
+try{
+	_dispWebUrl = stringReplace(_weburl,":80/","/");
+	_dispWebUrl = stringReplace(_dispWebUrl,":443/","/");
+}catch(Exception){
+	_dispWebUrl = getDomains();
+}
+
+
+while(1==1){
+	if(curHref.indexOf("/main.jsp") > -1 || curHref.indexOf("/login.jsp") > -1 || curHref.indexOf("/sysMain.jsp") > -1
+			|| curHref.indexOf("XClickController?isDispath=true") > -1
+			|| windowObj.document.referrer.indexOf(_dispWebUrl) == -1
+			|| windowObj == windowObj.parent
+			|| curHref.indexOf("/dispatcherKMS.jsp") > -1){
+//		top = windowObj;
+		xClickTop = windowObj;
+		break;
+	}else{
+		windowObj = windowObj.parent;
+		curHref = windowObj.location.href;
+	}
+}
+var XClick = function(){};
+XClick.XCS_PARAM_EQ_REPLACE 	= "\07"; //=을 대신 
+//2013.06.20 \08,\09 는 \0 가 blank 로 인식되어 변경함. hyungyu - xclick.js 동일
+XClick.XCS_PARAM_AMP_REPLACE                 = "\16";////"\08"; //&를 대신
+XClick.XCS_PARAM_PCNT_REPLACE                = "\17";//"\09"; //%를 대신
+
+
+/**
+*   헤더 타이틀 클릭시 소트
+*   해당 JSP의 JavaScript query()호출한다.
+*   개발자가 별도의 작업이 필요하면 이 메소드를  Overriding한다.
+*/
+function headerSort(clickObj, column,sortcolumn,sortcond){
+	var $f = $(clickObj).closest('form');
+	if( $f.length == 0) {
+		alert('FORM TAG NOT FOUND!');
+		return;
+	}
+    if(column == sortcolumn && sortcond == 'ASC'){
+	   sortcond = 'DESC';
+    }else{
+	   sortcond = 'ASC';
+    }
+    var f = $f[0];
+    if( f.currpage_no ) {
+	    f.currpage_no.value=1;
+	}
+    f.sort_column.value=column;
+    f.sort_cond.value=sortcond;
+    try{	
+	   query(f);
+    }catch(Exception){
+	   alert("query(form) method not found! "+ Exception.description);
+    }
+}
+
+/**
+* 프레임웍을 이용하는 Form객체를 찾아 리턴한다.
+* 기준객체는 <input type='hidden' name='facade'>의 상위객체 FORM
+*/
+function findFormElement() {
+	var facadeElement = document.getElementById("facade");
+	if( facadeElement == null || facadeElement == "undefined" ) {
+		alert("facade element not found!");
+		return null;
+	}
+	return facadeElement.parentNode;
+}
+
+/*
+* File 객체
+*/
+function File(path, name, size, tempFileId) {
+	this.path = path;
+	this.name = name;
+	this.size = size;
+	this.tempFileId = tempFileId;
+
+	this.getName = getName;
+	this.getSize = getSize;
+	this.getPath = getPath;
+	this.getTempFileId = getTempFileId;
+}
+function getName() {
+	return this.name;
+}
+function getPath() {
+	return this.path;
+}
+function getSize() {
+	return this.size;
+}
+function getTempFileId() {
+	return this.tempFileId;
+}
+
+/**
+* FORM내에서 srch로 시작하는 객체를 찾아 Param을 생성한다.
+*/
+function getSrchParam(form) {
+	var param = "";
+	if( form == null ) return
+	var elements = form.elements;
+	for(var i = 0; i < elements.length; i++ ) {
+		if( elements[i].name.indexOf("srch") == 0 || 
+				elements[i].name == "currpage_no" || 
+				elements[i].name == "sort_column" || 
+				elements[i].name == "sort_cond") {
+			param += "&"+elements[i].name+"="+encodeURI(elements[i].value);
+		}
+	}
+	return param;
+	
+}
+
+function setCookie( name, value, expiredays ) 
+{ 
+  var todayDate = new Date(); 
+  todayDate.setDate( todayDate.getDate() + expiredays ); 
+  document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";" ;
+}
+
+function set_cookie(name, value) { 
+ document.cookie = name + "=" + value + ";path=/"; 
+} 
+/******************************************
+* 쿠키정보 관련
+*******************************************/
+function getCookie (name) {  
+  var arg = name + "=";  
+  var alen = arg.length;  
+  var clen = document.cookie.length;  
+  var i = 0;  
+  while (i < clen) {    
+	  var j = i + alen;    
+	  if (document.cookie.substring(i, j) == arg)      
+	      return getCookieVal (j);    
+	   i = document.cookie.indexOf(" ", i) + 1;    
+	   if (i == 0) break;   
+  }  
+  return null;
+}
+
+function getCookieVal (offset) {  
+  var endstr = document.cookie.indexOf (";", offset);  
+  if (endstr == -1)    
+    endstr = document.cookie.length;  
+  return unescape(document.cookie.substring(offset, endstr));
+}
+
+function delCookie(name){
+ var today=new Date();
+ //과거 시간 만들기
+ today.setTime(today.getTime()-1);
+ //name 정보 찾기
+ var value=getCookie(name);
+ if(value!=""){
+	 value = stringReplace(value,"\\n","");
+	 value = stringReplace(value,"\\r","");
+	 document.cookie=name+"="+value+"; expires="+today.toGMTString();
+ }
+}
+
+/**
+  * [일반팝업윈도우]
+  * popup 윈도를 화면 중앙에 표시한다.
+  * @param href - 윈도에 표시할 source
+  * @param winName - window name
+  * @param width - width of window
+  * @param height - height of window
+  * @param standard - 표준 윈도 여부 (true, false)
+  * @return 오픈된 윈도 핸들러
+  */
+function openPopupWindowInCenter(href, winName, width, height, standard, tokenId, uTop, uLeft)
+{
+	// VER : MBC_4차지원, REFID : MBC_PRJ4-3, AUTHOR : hyungyu, Song
+	// [세션아웃로그인]팝업함수에서도 세션체크하도록 추가.
+	var isSession = jQuery.sessionCheckAjax('', '_self');
+	if(!isSession) return null;
+	
+	var pop = null;
+	var vTop = !isUndefined(uTop)?uTop : Math.max(0, ((screen.height - height) / 2)-100);
+	var vLeft = !isUndefined(uLeft)?uLeft : (screen.width - width) / 2;
+	
+	var sFeatures = "";
+	// 표준 여부에 따라 feature의 속성이 다르다.
+	// 표준인 경우에는 모든 feature가 no
+	// 표준이 아닌 경우에는 scrollbar와 resize가 가능하다.
+	if (standard){
+		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=no';
+	}
+	else{
+		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes';
+	}
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : Edge 브라우저에서 팝업시 화면높이에 따라 강제로 Maxmize 되는 문제.
+	if(navigator.userAgent.indexOf("Edge") > -1){
+		if(height > screen.availHeight - 100){
+			// Edge .. 지정한 높이가 화면높이보다 크거나 100px 미만으로 차이가 나면 브라우저가 Maxmize 로 창을 띄움... 체크해보고 최대높이는 화면-100 으로 처리함. hyungyu.
+			height = screen.availHeight - 100;
+		}
+		// top, left 는 무시됨.. Bug 인지 컨셉인지 모르겠슴..
+//		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',location=no,resize=yes,resizable=yes';
+		sFeatures = 'width='+width+',height='+height+',top=0,left=0,location=no,resize=yes,resizable=yes';
+	}
+	
+	//href에 tokenid가 없을경우.. 
+	if (href.indexOf('_tokenid') == -1) {
+		if(isNullStr(tokenId)){
+			tokenId = jQuery("#_tokenid").val();	
+		}
+		if(!isNullStr(tokenId)) href += "&_tokenid=" + tokenId;
+	}
+	// themetype 이 없을경우 관리자 페이지인지 판단하여 append
+	if(href.toLowerCase().indexOf("themetype=") == -1){
+		var isAdminTheme = checkAdminPage();
+		if(isAdminTheme){
+			href += "&themeType=ADMIN";
+		}
+	}
+	//EDMS전용탐색기에서 브라우저를 오픈시에는 POST방식으로 띄우면 빈창과 실제창 각각2개뜨므로
+	//바로 오픈처리한다.
+	try{
+		if(_edmsExplorer){
+			pop = window.open(href, winName, sFeatures);
+			pop.focus();
+			return pop;
+		}
+	}catch(exception){}
+	
+	href = stringReplace(href, _webapp, "");
+	var encTxt = jQuery.encrypt(href);
+	var targetjsp = "";
+	if (_isMobileFullMode) {
+		targetjsp = "/common/pop/mobileWindowOpenMain.jsp";
+	
+	// 2016-11-02 jtlim => MBC 결재문서 웹보안 때문에 수정 => URL 로 웹보안 처리함으로 추가함
+	// 인쇄(appPrint.jsp), 문서수정이력 화면(appHistoryView.jsp), 문서수정 화면(eventHandler.jsp), 원문서조회(appProcessFlowChartMain.jsp)
+	} else if( href.indexOf("appPrint.jsp") > 0 || href.indexOf("appHistoryView.jsp") > 0 || href.indexOf("eventHandler.jsp") > 0  || href.indexOf("srchAppView.jsp") > 0 || href.indexOf("appProcessFlowChartMain.jsp") > 0 ) {
+		targetjsp = "/cef/appsecurity/windowOpenMain.jsp";
+
+	} else {
+		targetjsp = "/common/pop/windowOpenMain.jsp";
+	}
+	
+	// 1) post 방식 submit 시 IE11 에서 target을 못찾아 팝업은 get 방식으로 변경 - 2014.1.17 hyungyu, Song
+	// 2) 일부모듈(ex. $f.serialize()..)에서 url 이 2048 byte 초과하여 오류발생. 이경우는 post 전송을 위해 아래와 같이 처리. - 2014.1.28 hyungyu, Song
+	// === 참고) url max length === 
+	// Internet Explorer : 2048 Byte
+	// FireFox, Webkit : 100 KB 이상
+	// Opera : 200 KB 이상
+	var url = _webapp + targetjsp + "?_xcsparam="+encTxt+"&_isPopMode_=Y";
+	// IE 의 경우.. window.open() 시 referrer 정보를 보내지 않아 OneTimeToken 사용시 문제발생. IE는 모두 POST로 변경함. 2014.3.12 hyungyu
+	// 2014.5. 변수가 다양하여 전부 PSOT로 변경함. hyungyu
+	if( true ){ 
+		if(!window.pop_xcsparam)window.pop_xcsparam = new Object();
+		window.pop_xcsparam[winName] = encTxt;
+		var size = window.pop_xcsparam["_size_"] || 0;
+		window.pop_xcsparam["_size_"] = size ++;
+		url = _webapp + "/common/pop/windowOpenMainSubmit.jsp?_tu="+targetjsp+"&_winIdx="+winName;
+	}
+	
+	try{
+		if(xClickTop._popupWindowsMap && xClickTop._popupWindowsMap.get(winName) != null && !xClickTop._popupWindowsMap.get(winName).closed){
+			xClickTop._popupWindowsMap.get(winName).close();
+		}
+	}finally{}
+	pop = window.open(url, winName, sFeatures);
+	// [BIZWELL_PRJ] 2014.12.17 by ikhan
+	// [REQ391] 보안메일경우 팝업 편지보기기능 오류(Chrome)
+	// 크롬에서 모달 close 후 window.open 가 undefined를 반환.
+	// 브라우저 특성으로 보임...........
+	// VER : REG_2015.01.16, REFID : REQ391, AUTHOR : ikhan
+	if(!pop){
+		pop = setTimeout(function() { window.open(url, winName, sFeatures); }, 0);
+	}
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	if(navigator.userAgent.indexOf("Edge") == -1){
+		pop.focus();
+	}
+	/*var f = xClickTop.document._popForm;
+	/////////////////////////////////////////////////////////////////////
+	// 개발시 화면단독으로 오픈시 SysContents.jsp을 포함안할경우 
+	/////////////////////////////////////////////////////////////////////
+	if (f==null || f == 'undefined') {
+	  	var formHtml = '<form id="_popForm" name="_popForm" method="post">'+
+									 '<input type=hidden name="_xcsparam">'+
+									 '<input type=hidden name="_isPopMode_" value="Y">'+
+									 '</form>';
+		$("body").append(formHtml);
+		f = jQuery('#_popForm')[0];
+	}
+	f._xcsparam.value = encTxt;
+	if (_isMobileFullMode) {
+		f.action = _webapp+"/common/pop/mobileWindowOpenMain.jsp";
+	} else {
+		f.action = _webapp+"/common/pop/windowOpenMain.jsp";
+	}
+	f.target = winName;
+	//jQuery.submitForm(f, "");
+*/
+	if(xClickTop._popupWindowsMap){
+		xClickTop._popupWindowsMap.set(winName, pop);
+	}
+	return pop;
+}
+
+/**
+ * [일반팝업윈도우-비세션] 세션체크 하지 않음.
+ * popup 윈도를 화면 중앙에 표시한다.
+ * @param href - 윈도에 표시할 source
+ * @param winName - window name
+ * @param width - width of window
+ * @param height - height of window
+ * @param standard - 표준 윈도 여부 (true, false)
+ * @return 오픈된 윈도 핸들러
+ */
+function openPopupWindowInCenterDo(href, winName, width, height, standard, tokenId, uTop, uLeft)
+{
+	var pop = null;
+	var vTop = !isUndefined(uTop)?uTop : Math.max(0, ((screen.height - height) / 2)-100);
+	var vLeft = !isUndefined(uLeft)?uLeft : (screen.width - width) / 2;
+	
+	var sFeatures = "";
+	// 표준 여부에 따라 feature의 속성이 다르다.
+	// 표준인 경우에는 모든 feature가 no
+	// 표준이 아닌 경우에는 scrollbar와 resize가 가능하다.
+	if (standard){
+		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=no';
+	}
+	else{
+		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=yes';
+	}
+	//pop = window.open("", winName, sFeatures);
+	//pop.focus();
+	//href = stringReplace(href,_webapp,"");
+	//href에 tokenid가 없을경우.. 
+	if (href.indexOf('_tokenid') == -1) {
+		if(isNullStr(tokenId)){
+			tokenId = jQuery("#_tokenid").val();	
+		}
+		if(!isNullStr(tokenId)) href += "&_tokenid=" + tokenId;
+	}
+	// themetype 이 없을경우 관리자 페이지인지 판단하여 append
+	if(href.toLowerCase().indexOf("themetype=") == -1){
+		var isAdminTheme = checkAdminPage();
+		if(isAdminTheme){
+			href += "&themeType=ADMIN";
+		}
+	}
+	
+	href = stringReplace(href, _webapp, "");
+	//href = stringReplace(href, "/XClickController?", "");
+	var encTxt = jQuery.encrypt(href);
+	if (_isMobileFullMode) {
+		pop = window.open(_webapp+"/common/pop/mobileWindowOpenMain.jsp?_xcsparam="+encTxt+"&_isPopMode_=Y", winName, sFeatures);
+	} else {
+		pop = window.open(_webapp+"/common/pop/windowOpenMainDo.jsp?_xcsparam="+encTxt+"&_isPopMode_=Y", winName, sFeatures);
+	}
+	pop.focus();
+	
+	/*
+	var encTxt = jQuery.encrypt(href);
+	var f = document._popForm;
+	/////////////////////////////////////////////////////////////////////
+	// 개발시 화면단독으로 오픈시 SysContents.jsp을 포함안할경우 
+	/////////////////////////////////////////////////////////////////////
+	
+	if (f==null || f == 'undefined') {
+		var formHtml = '<form id="_popForm" name="_popForm" method="post">'+
+		'<input type=hidden name="_xcsparam">'+
+		'<input type=hidden name="_isPopMode_" value="Y">'+
+//		'<input type=hidden name="nextpage" value="'+nextpage+'">'+
+		'</form>';
+		$("body").append(formHtml);
+		f = jQuery('#_popForm')[0];
+	}
+	f._xcsparam.value = encTxt;
+
+	//var nextpage = "";
+	if (_isMobileFullMode) {
+		f.action = _webapp + "/common/pop/mobileWindowOpenMain.jsp";
+	} else {
+		f.action = _webapp + "/common/pop/windowOpenMainDo.jsp";
+	}
+	
+	
+	f.target = winName;
+	jQuery.submitForm(f, "");
+	
+	*/
+	return pop;
+}
+/**
+ * 모달: 메세지 팝업
+ * -msgId가 아닌 바로 메세지를 전달하고자 할경우는 msgId가 null이면서 msgContent를 넘겨주면 된다.
+ * @param msgId
+ * @param btnType
+ * @param width
+ * @param height
+ * @param addMsg
+ * @param msgContent
+ * @returns
+ */
+function messagePop(msgId,btnType,width,height,addMsg,msgContent){
+	//if (_isMobileFullMode) {
+	//Chrome 37(2014.7) showModalDialog 삭제됨. 2014. 8. 28. hyungyu, Song
+	if (_isMobileFullMode || !window.showModalDialog ) {
+		msgContent = msgId && msgId != "" ? jQuery.getMessage(msgId, addMsg) : msgContent;
+		msgContent = msgContent.replace("<br/>", "\n");		
+		msgContent = msgContent.replace(/<.*?>/g, "");
+		//VER : REG_2015.10, REFID : DEV1510_68, AUTHOR : SungYongJe
+		//IE 이외의 브라우저에서 HTML 형태의 값을 replace 하는 부분 추가함. (XssFilter의 내용 추가)
+		msgContent = msgContent.replace("<br>", "\n");	
+		msgContent = msgContent.replace("&amp;","&");	
+		msgContent = msgContent.replace("&#60;","<");	
+		msgContent = msgContent.replace("&#62;",">");	
+		msgContent = msgContent.replace("&#039;","\'");	
+		
+		if (btnType == "CONFIRM") {
+			return confirm(msgContent) ? "OK" : "CANCEL";
+		} else {
+			alert(msgContent);
+			return "OK";
+		}
+	} else {
+		window.focus();
+		var scroll='auto';
+		var arg=this;
+		var tokenId = jQuery("#_tokenid").val();
+		var addMsg = (addMsg==null)?"":encodeURIComponent(addMsg);
+		var popUrl = _webapp+"/common/pop/windowModalMain.jsp?msgId="+msgId+"&btnType="+btnType+"&addMsg="+addMsg+"&_tokenid="+tokenId+"&height="+height+"&msgContent="+encodeURI(msgContent);
+		var options = "";
+		if($.browser.mozilla){
+			var vTop = ((screen.height - height) / 2);
+			var vLeft = (screen.width - width) / 2;
+			
+			options = "dialogLeft:"+vLeft+";dialogTop:"+vTop+";";
+		}
+		if($.browser.msie || _isIE11){
+			width = width + "px";
+			height = height + "px";
+		}
+		//VER : REG_2015.11, REFID : METRO_THEME, AUTHOR : jhhan
+		//mac safari에서 messagePop()이 잘 안보이는 부분 수정
+		if($.browser.safari){
+			height = Number(height) + 40;
+		}
+		var modalPop = showModalDialog(popUrl, arg, "dialogHeight:"+height+";dialogWidth:"+width+";"+options+";help:No;resizable:No;status:No;scroll:No;center:yes;dialogHide:yes;");
+		if(modalPop == "IS"){// session out
+			openMiniLoginPop();
+			return null;
+		}
+		return modalPop;
+	}
+}
+
+function errMessagePop(errorId,errJsp){
+	var href = _webapp + "/XClickController?facade=CommonFacade&command=viewErrorMsg&nextpage=/common/pop/"+errJsp+"&msgid=FORM-000117&errorId="+errorId;
+	//var pop = openPopupWindowInCenter(href, "errorMessage", "620", "290", true, "");
+	var vTop = ((screen.height - 620) / 2) - 100;
+	var vLeft = (screen.width - 290) / 2;
+	var pop = window.open(href, "errpop", 'width=620,height=290,top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=no', true);
+	return pop;
+}
+
+/**
+  * [조직도팝업윈도우]
+  * popup 윈도를 화면 중앙에 표시한다.
+  * @param orgOption - 조직도 팝업 ParamData
+  * @param oSelect - 업무 화면의 참고되는 SelectBox Object
+  * @param companyId - CompanyId (조직도로 표시할 회사ID)
+  * @param callback - 팝업 닫힌후 자동 콜백.
+  */
+function openPopupUnitedAddr(orgOption, companyId, callback) 
+{
+	var compId = _companyId;
+	if( companyId != 'undefined' && companyId != null ) {
+		compId = companyId;
+	}
+	var defaults = {
+		companyId : compId,
+		facade : "",
+		command : "",
+		nextpage : "/common/pop/orgMain.jsp",
+		themeType : orgOption.getThemeMode()
+	};
+	
+	var urlStr = _webapp + "/XClickController?" + orgOption.getParams()+ "&" + jQuery.param(defaults);
+	// VER : REG_2015.11, REFID : DEV1511_3, AUTHOR : ikhan
+	// 팝업 msg 구분을 위해 rcvDeptSelectYn 추가
+	if( orgOption.getAppShow() || (!isNullStr(orgOption.getAddParams().rcvDeptSelectYn) && orgOption.getAddParams().rcvDeptSelectYn == 'N') ) {
+		urlStr += "&msgId=COMMON-000057";  //결재선 지정
+	} else if(orgOption.getRcvOrg() || (!isNullStr(orgOption.getAddParams().rcvDeptSelectYn) && orgOption.getAddParams().rcvDeptSelectYn == 'Y') ){//수신처
+		urlStr += "&msgId=APP-000350";  	//수신처 지정
+	} else if(orgOption.getShareBoxShow()) {
+		urlStr += "&msgId=CEF-100491";  	//MBC / 2017.04.28 / 공유함 선택 / jcpark
+	} else { 
+		urlStr += "&msgId=COMMON-000058";  //조직도 선택
+	}
+
+	var width  = 960;//870;
+	var height = 680;//630;
+	if( !orgOption.getMultiSelect() ) {
+		width = 600;
+		if( !orgOption.getUserShow() ) {
+			height = 620;
+		}
+	}
+	if( orgOption.getSelectPaneJsp() == "/common/pop/mailRight.jsp" ) {
+		//width = 900;
+	}
+	if( orgOption.getSelectPaneJsp() == "/common/pop/appRight.jsp" ) {
+		//width = 920;
+		//height = 660;
+	}
+	
+	jQuery("body").data('openerCallBack', callback);
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	var rtnVal = openPopupWindowInCenter(urlStr, 'orgPopUp', width, height, true);
+	return rtnVal;
+}
+
+
+/**
+ * [조직도팝업윈도우]
+ * popup 윈도를 화면 중앙에 표시한다.
+ * @param orgOption - 조직도 팝업 ParamData
+ * @param oSelect - 업무 화면의 참고되는 SelectBox Object
+ * @param companyId - CompanyId (조직도로 표시할 회사ID)
+ * @param callback - 팝업 닫힌후 자동 콜백.
+ */
+function openPopupUnitedAddrBySh(orgOption, companyId, callback,cefDocProcDeptId) 
+{
+	var compId = _companyId;
+	if( companyId != 'undefined' && companyId != null ) {
+		compId = companyId;
+	}
+	var defaults = {
+		companyId : compId,
+		facade : "",
+		command : "",
+		nextpage : "/common/pop/orgMain.jsp",
+		themeType : orgOption.getThemeMode(),
+		docProcDeptYn : "Y",
+		cefDocProcDeptId : cefDocProcDeptId
+	};
+
+	var urlStr = _webapp + "/XClickController?" + orgOption.getParams()+ "&" + jQuery.param(defaults);
+	if( orgOption.getAppShow() ) {
+		urlStr += "&msgId=COMMON-000057";  //결재선 지정
+	} else if(orgOption.getRcvOrg()){   	//수신처
+		urlStr += "&msgId=APP-000350";  	//수신처 지정
+	} else { 
+		urlStr += "&msgId=COMMON-000058";  //조직도 선택
+	}
+
+	var width  = 960;//870;
+	var height = 680;//630;
+	if( !orgOption.getMultiSelect() ) {
+		width = 600;
+		if( !orgOption.getUserShow() ) {
+			height = 620;
+		}
+	}
+	if( orgOption.getSelectPaneJsp() == "/common/pop/mailRight.jsp" ) {
+		//width = 900;
+	}
+	if( orgOption.getSelectPaneJsp() == "/common/pop/appRight.jsp" ) {
+		//width = 920;
+		//height = 660;
+	}
+	
+	jQuery("body").data('openerCallBack', callback);
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	var rtnVal = openPopupWindowInCenter(urlStr, 'orgPopUp', width, height, true);
+	return rtnVal;
+}
+
+
+
+/**
+ * [부서팝업]
+ * 선택된 부서아이디 리턴
+ * @param {Object} popParams
+ * @param {Object} callback
+ */
+function openPopupDept(popParams, callback) {
+	var defaults = {
+		companyId : _companyId,
+		curId : '',
+		deptId : '',
+		treeId : '',
+		upTreeId : '',
+		depth : '',
+		srchUseYn : "Y",
+		mode : '',
+		nextpage : "/common/pop/orgDeptMain.jsp",
+		msgId : "ACL-000262"
+	};
+	defaults = jQuery.extend(defaults,popParams);
+	defaults.curId = defaults.deptId;
+	
+	var params = jQuery.param(defaults);
+	var urlStr = _webapp + "/XClickController?"+params;
+	var width  = 400;
+	var height = 550;
+	jQuery("body").data('openerCallBackDept', callback);
+	var rtnVal = openPopupWindowInCenter(urlStr, 'orgPopUp', width, height, true);
+}
+
+/**
+ * 부서트리 팝업 후 콜백함수 호출
+ * @param {Object} data
+ */
+function openPopupDept_callBack(data){
+	var callBack = jQuery("body").data('openerCallBackDept');
+	if (typeof(callBack) == 'function') {
+		this.window.focus();
+		callBack.call(this, data);
+	}
+}
+
+/**
+ * 조직도 팝업 후 콜백함수 호출
+ * @param popWin  - 조직도 팝업 Object
+ * @param data - 조직도 팝업에서 선택한 Data (single : JSON String, multi : JSON Array)
+ * @param oSelectId - select box object id (권한설정시에 권한자, 예외자 구분값으로 사용)
+ */
+function openPopupUnitedAddr_callBack(data, oSelectId) {
+	var callBack = jQuery("body").data('openerCallBack');
+	if (typeof(callBack) == 'function') {
+		this.window.focus();
+		callBack.call( this, data, oSelectId );
+	}
+} 
+
+/**
+ * [세부권한팝업]
+ * 
+ * @param {Object} popParams
+ * @param {Object} callback
+ */
+function openPopupDtAuth(popParams, callback) {
+	var defaults = {
+		facade : "DtAuthFacade",
+		command : "listDtAuth",
+		nextpage : "/acl/auth/dtAuthList.jsp",
+		transaction_yn : "N",
+		curAuthMgrComId : "",
+		catId : "",
+		targetId : "",
+		targetName : "",
+		upTargetId : "*",
+		popYn: "Y",
+		msgId : "ACL-000227"					//세부권한관리
+	};
+	defaults = jQuery.extend(defaults,popParams);
+	
+	var params = jQuery.param(defaults);
+	var urlStr = _webapp + "/XClickController?"+params;
+	var width  = 950;
+	var height = 700;
+	jQuery("body").data('openerCallBackDtAuth', callback);
+	var rtnVal = openPopupWindowInCenter(urlStr, 'dtAuthPop', width, height, true);
+};
+
+/**
+ * 세부권한 팝업 후 콜백함수 호출
+ * @param {Object} data
+ */
+function openPopupDtAuth_callBack(data){
+	var callBack = jQuery("body").data('openerCallBackDtAuth');
+	if (typeof(callBack) == 'function') {
+		this.window.focus();
+		callBack.call(this, data);
+	}
+};
+	
+/**
+ * 폼을 AjaxController를 통해서 호출한 후 해당 DIV영역에 삽입합니다
+ * @param {Object} caller Form객체ID
+ * @param {Object} panel  JSP영역 DIV
+ * @param {Object} dataParam 추가Param(&구분자)
+ * @param {Object} callback 성공후 callback function
+ */
+jQuery.submitForm = function(caller,panel,dataParam,callback){
+	 	// VER : REG_2015.11, REFID : DEV1511_239, AUTHOR : ikhan
+	 	// miniLoginDiv 로그인 후 빈화면 보여지는 현상
+		// submit전에 session check
+		// VER : MBC_4차지원, REFID : MBC_PRJ4-3, AUTHOR : hyungyu, Song
+		// [세션아웃로그인]인증체크시 XClickLoginHandler, XClickLoginMaintanenceHandler 는 제외한다.
+		var actionUrl = "";
+		//MBC - caller가 getAttribute 속성이 없는 경우 존재하여 조건 추가 (부재관리 > 달력변경 시). 2016.12.16, eykang 
+		if(isNullStr(dataParam) && caller != null  && caller.getAttribute){
+			// 2016-11-19 jtlim => 송현규 과장한테 문의 후 수정
+			//actionUrl = caller.action;
+			actionUrl = caller.getAttribute("action");
+		}
+		if(actionUrl.indexOf("/XClickLogin") < 0 && location.href.indexOf("windowOpenMainDo.jsp") < 0){
+			var isSession = jQuery.sessionCheckAjax('', '_self');
+			if(!isSession) return false;
+		}
+		
+		if($.validationEngine){
+			$.validationEngine.closePrompt('.formError', true); //Error Contents
+ 		}
+
+		if(!isNullStr(panel)){
+			jQuery('#' + panel, parent.document).find(".formErrorContent").remove();  //valid contents
+		}
+		
+		var isBlock = false;
+		var encryptData = new Array();
+		var encTxt;
+		if(isNullStr(dataParam)){
+			isBlock = $("input#transaction_yn",caller).val() == "Y" && $("input#progressNo",caller).val() != "Y";
+			$(caller).find(".encrypt").each(function(){
+				var value = $(this).val();
+				value = stringReplace(value,'=',XClick.XCS_PARAM_EQ_REPLACE);
+				value = stringReplace(value,'&',XClick.XCS_PARAM_AMP_REPLACE);
+				value = stringReplace(value,'%',XClick.XCS_PARAM_PCNT_REPLACE);
+				encryptData.push($(this).attr('name')+'='+encodeURIComponent(value));
+				//jQuery('#'+$(this).attr('id'),$(caller)).val("");
+			});
+			//_xcsparam data is overring original data in case of dup name object
+			encTxt = jQuery.encrypt(encryptData.join('&'));
+			jQuery("#_xcsparam",$(caller)).val(encTxt);
+		}else{
+			isBlock = dataParam.indexOf("transaction_yn=Y") > 0 && dataParam.indexOf("progressNo=Y") == -1;
+			encTxt = jQuery.encrypt(dataParam);
+			dataParam = "_xcsparam="+encTxt;		
+		}
+		
+		var tokenId = jQuery("#_tokenid").val();
+		if(isBlock){
+			jQuery.progress();
+		}
+
+		if ( isNullStr(dataParam) ) {
+			if (!isNullStr(panel)) {
+				caller.target = jQuery.getTargetName(panel);
+			}
+			jQuery(caller).submit();
+		} else {
+			//alert("xclick.js : " + _webapp + "/XClickController?_tokenid="+ tokenId + "&" + dataParam);
+			/* 2013.08.08 iframe url 제한으로인해 동작하지 않는 경우가 있음 - ( IE 에서 8000 byte 이상으로 테스트 - form 전체를 serialize 하는 경우등. )
+			 * MS의 경우 2,048 기준이라고 명시되어 있으나 약 4000 byte 쯤에서 문제가 생기는듯. 
+			if (isNullStr(panel) || panel.toLowerCase() == "_self") {
+				jQuery(window.frameElement).attr("src", _webapp + "/XClickController?_tokenid="+ tokenId + "&" + dataParam);
+			} else if (jQuery('#' + panel, document)[0]) {
+				jQuery('#' + panel, document).attr("src", _webapp + "/XClickController?_tokenid="+ tokenId + "&" + dataParam);
+			} else {
+				jQuery('#' + panel, parent.document).attr("src", _webapp + "/XClickController?_tokenid="+ tokenId + "&" + dataParam);
+			}
+			*/
+			var f = jQuery('#_dummyForm')[0];
+			if (f == null || f == 'undefined') {
+			  	var formHtml = '<form id="_dummyForm" name="_dummyForm" method="POST">'+
+											 '<input type=hidden name="_xcsparam">'+
+											 '<input type=hidden name="_tokenid" >'+
+											 '</form>';
+				jQuery("body").append(formHtml);
+				f = jQuery('#_dummyForm')[0];
+			}
+			f._xcsparam.value = encTxt;
+			f._tokenid.value = tokenId;
+			f.action = _webapp + "/XClickController";
+			f.target = isNullStr(panel)? "_self": jQuery.getTargetName(panel);
+			jQuery(f).submit();
+		}
+};
+
+/**
+ * 폼을 AjaxController를 통해서 호출한 후 해당 DIV영역에 삽입합니다
+ * @param {Object} caller Form객체ID
+ * @param {Object} panel  JSP영역 DIV
+ * @param {Object} dataParam 추가Param(&구분자)
+ * @param {Object} callback 성공후 callback function
+ */
+jQuery.submitAjaxForm = function(caller,panel, dataParam, async, success){
+		if (!async || async == "") async = false;
+		var encrytObj = $(caller).find(".encrypt").clone();
+		var encryptData = new Array();
+		if(isNullStr(dataParam)){
+			isBlock = $("input#transaction_yn",caller).val() == "Y";
+			$(caller).find(".encrypt").each(function(){
+				var value = $(this).val();
+				value = stringReplace(value,'=',XClick.XCS_PARAM_EQ_REPLACE);
+				value =stringReplace(value,'&',XClick.XCS_PARAM_AMP_REPLACE);
+				encryptData.push($(this).attr('name')+'='+value);
+				jQuery('#'+$(this).attr('id'),$(caller)).val("");
+			});
+			var encTxt = jQuery.encrypt(encryptData.join('&'));
+			jQuery("#_xcsparam",$(caller)).val(encTxt);
+		}else{
+			isBlock = dataParam.indexOf("transaction_yn=Y") > 0;
+			var encTxt = jQuery.encrypt(dataParam);
+			dataParam = "_xcsparam="+encTxt;		
+		}
+		var tokenId = jQuery("#_tokenid").val();
+		jQuery.ajaxSetup({cache:_isCache});
+		$.ajax({
+		   	type: "POST",
+		   	url: _webapp +"/AjaxController?ajax_result_type=HTML&_tokenid="+tokenId,
+		   	async: async,
+		   	data: isNullStr(dataParam) ? $(caller).serialize() : dataParam ,
+		   	success: function(data){
+				var isSucess = data.indexOf("<OK>") >= 0;
+				//정상이 아닌경우에 암호화오브젝트 value을 원상복귀처리한다!
+				if(!isSucess){
+					encrytObj.each(function(){
+						jQuery('#'+$(this).attr('id'),jQuery(caller)).val($(this).val());
+					});
+				}
+				if(isSucess){
+					if(isString(panel)){ //string id 타입일경우 오브젝트를 찾는다.
+						panel = jQuery('#'+panel);
+					}
+					panel.html("");
+					panel.html(data);
+					
+					// VER : MBC_2016.07, REFID : REQ1314 AUTHOR : hyungyu, Song
+					// ajax DOM 셋팅후 콜백함수가 존재할경우 함수 호출 추가.
+					if(jQuery.isFunction(success)){
+						success.call(window, data);
+					}
+				}else if(data.indexOf("<IS>")>=0){ // invalid session
+					openMiniLoginPop();
+				}else if(data.indexOf("<FL>")>=0){
+					// system error 처리추가. hyungyu 161026
+					var errorId = stringReplace(data, "<FL>", "").trim();
+					errMessagePop(errorId , 'error.jsp' );
+				}
+		   },
+		   error : function(xhr, status, error){
+				alert("일시적인 네트워크 오류입니다. 다시 시도해주시기 바랍니다."); //20180405 변경 ghlee
+			}
+		});	
+};
+
+/**
+ * VER : REG_2015.11, REFID : DEV1511_239, AUTHOR : ikhan
+ * miniLoginDiv 로그인 후 빈화면 보여지는 현상
+ * submit전에 session check
+ */
+jQuery.sessionCheckAjax = function(caller,panel, dataParam, async){
+	if (!async || async == "") async = false;
+	var tokenId = jQuery("#_tokenid").val();
+	
+	var isSession = true;
+	$.ajax({
+		type: "GET",
+		url: _webapp +"/AjaxController?nextpage=/portal/portlets/dummy.jsp&ajax_result_type=HTML&_tokenid="+tokenId,
+		async: async,
+		data: isNullStr(dataParam) ? $(caller).serialize() : dataParam ,
+				success: function(data){
+					var isSucess = data.indexOf("<OK>") >= 0;
+					//정상이 아닌경우에 암호화오브젝트 value을 원상복귀처리한다!
+					// VER : MBC_4차지원, REFID : MBC_PRJ4-3, AUTHOR : hyungyu, Song
+					// [세션아웃로그인]tokenId 가 안넘어가는경우 TokenFilter 에서 걸려서 SC 값이 리턴됨 그외는 Filter는 통과하므로 AjaxController 에서 IS 가 리턴되고. hyungyu
+					if(data.indexOf("<IS>")>=0 || data.indexOf("<SC>")>=0){ // invalid session
+						isSession = false;
+						openMiniLoginPop();
+					}
+				},
+				error : function(xhr, status, error){
+					alert("일시적인 네트워크 오류입니다. 다시 시도해주시기 바랍니다."); //20180405 변경 ghlee
+				}
+	});	
+	return isSession;
+};
+
+jQuery.debug = function(error){
+		if(!$("#debugMode")[0]){
+			$("body").after("<div id='debugMode'><div class='debugError' style='overflow-y:visible;'><strong>[디버그Console]-클릭시 창 닫힙니다!</strong></div></div>");
+		}
+		$(".debugError").after("<span class='debugerror'  style='overflow-y:visible;'>"+error+" </span>");
+		$("#debugMode").show();
+		$("#debugMode").dblclick(function(){
+			$(this).hide();
+			/*if($(this).css("height") == '20px')
+				$(this).css("height","300").css("width","100%");
+			else
+			$(this).css("height","20").css("width","20");
+			*/
+		});
+};
+
+jQuery.closeProgress = function(){
+	var panel = window;
+	var curWin = window;
+	var topWin = xClickTop.window;
+
+	var isPopup = topWin.jQuery("#tabContent").length == 0;
+	if(isPopup){
+		panel = topWin;
+	}else{
+		while(curWin != topWin){
+			panel = curWin;
+			curWin = curWin.parent;
+		}
+	}
+	
+	if(!jQuery.browser.msie && parent.activeXshow)parent.activeXshow(undefined, true);
+	try{
+		// VER : MBC_4차지원, REFID : MBC_PRJ4-3, AUTHOR : hyungyu, Song
+		// [세션아웃로그인]스크립트조건문 개선
+		if(panel && panel.jQuery && panel.jQuery.unblockUI){
+			panel.jQuery.unblockUI();
+		}	
+	}catch(e){}
+};
+
+jQuery.progress = function(){
+	var panel = window;
+	var curWin = window;
+	var topWin = xClickTop.window;
+	
+	var isPopup = topWin.jQuery("#tabContent").length == 0;
+	if(isPopup){
+		panel = topWin;
+	}else{
+		while(curWin != topWin){
+			panel = curWin;
+			curWin = curWin.parent;
+		}
+	}
+	
+	if(!jQuery.browser.msie){
+		activeXhide(undefined, true);
+	}
+	if(panel && panel.jQuery.blockUI){
+		panel.jQuery.blockUI({ css: { 
+			border: 'none',
+			width:"auto",
+			left:"50%",
+			background: 'none',
+			opacity: .2 ,
+			cursor:	'default'
+		},
+		overlayCSS:  {
+			opacity: 0.3,
+			cursor:	'default'
+		},
+		message : panel.jQuery("<img id=\"progressIMG\" src=\"" + _cmDir + "/img/loading3.gif\" />") }); 
+	}
+};
+
+/**
+ * 리스트의 선택 표시
+ * @param {Object} msg
+ * @param {Object} addMsg
+ */
+jQuery.activeList = function(pkId) {
+//	section으로 나뉜경우 object가 여러개 존재할 수 있으므로. by ejlee 2013.10.21
+//	var $target = jQuery("a.#list"+pkId);
+//	$target.find("[class*='b']").removeClass("b");
+//	var heStatus = document.getElementById("status"+pkId);
+//	if (heStatus) {
+//		var strCurrentClass = heStatus.className;
+//		if (strCurrentClass.indexOf("_off") < 0) heStatus.className = strCurrentClass + "_off";
+//	}
+	//VER : REG_2015.03 , REFID : REQ563, AUTHOR : SungYongJe
+    //[REQ563] 2015-03-02 [한양정밀] 브라우저의 페이지 뒤로가기시 읽음 처리 관련 문의 
+    //2015.03.03 by ty.choi
+    //현재 선택한 대상이 안읽은 객체일때만 PK ID를 저장한다.
+    var isUnRead = (jQuery("a[id=list"+pkId+"]").find("[class*='b']").length > 0);
+    if ( isUnRead ) {
+        jQuery.setReadId(pkId);
+    }
+
+	jQuery("a[id=list"+pkId+"]").each(function(){
+		$(this).find("[class*='b']").removeClass("b");
+	});
+	jQuery("[id=status"+pkId+"]").each(function(){
+		var strCurrentClass = $(this).attr("class");
+		if (strCurrentClass.indexOf("_off") < 0) $(this).attr("class", strCurrentClass + "_off");
+	});
+};
+/**
+ * TagLib로 생성된 메시지의 내용의 치환 문자를 Arguments와 비교해서 변경한다.
+ * @param msg
+ * @param addContents
+ */
+function addContentsMsg(msg, addMsg){
+	try {
+		if (addMsg != null && addMsg.trim() != "") {
+			var contents = addMsg.split("\13");
+			if (contents != null) {
+				for (var i=0; i<contents.length; i++) {
+					msg = msg.replace("$"+(i+1) , contents[i]);
+				}
+			}
+		}
+	} catch (e) {
+		alert("[addContentsMsg] Failed to add contents ... " + e.description);
+	}
+	return msg;
+}
+
+/*
+* 파일다운로드 
+* @param downMode inline or attachment
+* @param fileId FileMeta의 fileId
+* @param filePath (임시파일의 경우만 해당됨: 임시디렉토리를 뺀 나머지경로)
+* @param saveFileName 저장파일명 - Option
+*/
+function fileDownLoad(downMode, fileId, filePath, saveFileName){
+	
+	// MBC / 모바일에서 접수한 script 웹 script로 치환 / 2017. 03. 03. hjkim 
+	if(downMode.toLowerCase() != 'attachment'){
+		var tmpFileId = downMode;
+		var tmpSaveFileName = fileId;
+		downMode = 'attachment';
+		fileId = tmpFileId;
+		saveFileName = tmpSaveFileName;
+		filePath = '';
+	}
+	
+	if(isNullStr(filePath)) filePath = '';
+	if(isNullStr(saveFileName)) saveFileName = '';
+	if (_isMobileFullMode) {
+		// MBC / 2016. 10. 27. / 모바일기기 웹화면에서 첨부파일 문서 이미지변환 (uFOCS3.0 이용) start / hjkim
+		var sendUrl = jQuery.getSystemValue("xclick-cef","//file/uFOCS/server-send"); 
+		var page = jQuery.getSystemValue("xclick-cef","//file/uFOCS/param-page");      
+		var size = jQuery.getSystemValue("xclick-cef","//file/uFOCS/param-size");
+		var type = jQuery.getSystemValue("xclick-cef","//file/uFOCS/param-type");
+		var webId = jQuery.getSystemValue("xclick-cef","//file/uFOCS/param-webid");
+		var convertFileArr = jQuery.getSystemValue("xclick-cef","//file/uFOCS/convert-file-extension").split(",");
+		var isConvert = false;
+		var fileExt = "";
+		
+		//변환파일 확장자 가능여부 확인
+		if(!isNullStr(saveFileName) && saveFileName.lastIndexOf(".") > 0){
+			fileExt = saveFileName.substring(saveFileName.lastIndexOf(".")+1);
+			for(var i=0; i < convertFileArr.length; i++){
+				if(convertFileArr[i] == fileExt.toLowerCase()){
+					isConvert = true;
+					break;
+				}
+			}
+		}
+		
+		if(isConvert){
+			sendUrl += "?url="+_weburl + "/DownController.do?fileId=" + fileId;
+			sendUrl += "^ext="+fileExt;
+			sendUrl += "^page="+page;
+			sendUrl += "^size="+size;
+			sendUrl += "^type="+type;
+			sendUrl += "^webid="+webId;
+			
+			//팝업호출 (별도 팝업으로 처리)
+			var param  = "&sendUrl="+sendUrl;
+				param += "&type="+type;
+				param += "&fileExt="+fileExt;
+				param += "&fileName="+saveFileName; 
+			var winName = "ImgFileConvertViewPop";
+			var url = _webapp + "/cef/common/cefFileDownLoad.jsp?"+param;
+			var features = "toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes";
+			
+			window.open(url, winName, features);	
+		}else{
+			alert(jQuery.getMessage('CEF-100123')); //지원하지 않는 형식의 파일입니다.	
+		}
+		// MBC / 2016. 10. 27. / 모바일기기 웹화면에서 첨부파일 문서 이미지변환 (uFOCS3.0 이용) end / hjkim
+		
+		//window.open(_webapp + "/common/mobileFileDownload.jsp?fileId=" + fileId);
+	} else {
+	    if (jQuery('#_ifrHidden').length > 0 ) {
+	    }
+	    else {
+				jQuery("body").before("<iframe id='_ifrHidden' style='width:0;height:0;display:none;'></iframe>");
+	    }
+		// 2014.7.25 Webkit 의 경우 inline open(일반파일) 시 창이 안닫힘. hyungyu, (Mozilla 계열은 열기시 자동으로 닫힙니다.)
+		if(navigator.userAgent.toLowerCase().indexOf("webkit") > -1 && downMode == "inline"){
+			if(saveFileName != ''){
+				var pos = saveFileName.lastIndexOf(".");
+				if(pos > 0){
+					var ext = saveFileName.substring(pos+1);
+					if("^jpg^gif^bmp^jpeg^png^".indexOf("^"+ext.toLowerCase()+"^") < 0){
+						downMode = "attachment";
+					}
+				}
+			}
+		}
+	    if (downMode == "attachment") {
+					document.getElementById("_ifrHidden").contentWindow.location.replace(_webapp + "/DownController?fileId=" + fileId + "&down_filename=" + encodeURIComponent(saveFileName));
+	    }
+	    else {
+	        var jsessionId = "";
+	        try {
+	            jsessionId = _jsessionId;
+	        } 
+	        catch (e) {
+	        }
+	        
+	        var win = window.open(_webapp + "/common/fileDownload.jsp?down_mode=inline&fileId=" + fileId + "&jsessionId=" + jsessionId + "&down_filename=" + encodeURIComponent(saveFileName), "", "location=no,menubar=yes,directories=no,status=no,scrollbars=1,resizable=yes");
+	    }
+	}
+}
+
+/*
+ * 파일다운로드 Direct
+ * @param downMode inline or attachment
+ * @param fileId FileMeta의 fileId
+ * @param filePath (임시파일의 경우만 해당됨: 임시디렉토리를 뺀 나머지경로)
+ * @param saveFileName 저장파일명 - Option
+ */
+function fileDownLoadDirect(filePath, saveFileName){
+	if(isNullStr(filePath)) return;
+	if(isNullStr(saveFileName)) return;
+	
+	if (jQuery('#_ifrHidden').length > 0 ) {
+	}
+	else {
+		jQuery("body").before("<iframe id='_ifrHidden' style='width:0;height:0;display:none;'></iframe>");
+	}
+	document.getElementById("_ifrHidden").contentWindow.location.replace(_webapp + "/XClickController.do?facade=AppHwpFacade&command=downloadExcel&excelFilePath=" + filePath + "&downFileName=" + encodeURIComponent(saveFileName));
+}
+
+/**
+ * msgId의 메시지명을 리턴한다.
+ * @param {Object} msgId
+ * @param {Object} addMsg
+ */
+jQuery.getMessage = function(msgId, addMsg, directYn, exceptSessionCheck){
+	if(isNullStr(addMsg)) addMsg = '';
+	var memVal = jQuery.data(document.body, msgId+addMsg);
+	
+	if (!isNullStr(memVal)) {
+		//alert('exist memory value');
+		return memVal;
+	}
+	
+	var baseUrl = _webapp + "/AjaxController?";
+	if(exceptSessionCheck){
+		baseUrl = _webapp + "/AjaxController.do?";
+	}
+	var params = {
+		facade 				: "CommonFacade",
+		command 			: "viewMsg",
+		ajax_result_type 	: "JSON",
+		msgId 				: msgId,
+		addMsg 				: isNullStr(addMsg) ? "" : addMsg,
+		locale					: _locale,
+		directYn				:directYn
+	};
+	var rtnMsg =  "";
+	jQuery.ajaxSetup({cache:_isCache});
+	$.ajax({
+	   	url		: baseUrl + jQuery.param(params)+_cacheInfo,
+		async 	: false,
+	   	success	: function(data){
+	   		rtnMsg =data.result;
+		}
+	});	
+	jQuery.data(document.body, msgId+addMsg, rtnMsg);
+	return  rtnMsg;
+};
+
+/**
+ * 복수개의 msgIds(\14)건에 대한 메시지 JSON형태로 리턴처리
+ * -{원msgId: 실제메세지,...}
+ */
+jQuery.listMessages = function(msgIds, exceptSessionCheck){
+	var memVal = null;
+	try{
+		memVal = xClickTop.jQuery.data(xClickTop.document.body, msgIds);
+	}catch(e){;;}
+
+	if (!isNull(memVal)) {
+		//alert('exist memory value (listMessage)');
+		return memVal;
+	}
+	
+	var baseUrl = _webapp + "/AjaxController?";
+	if(exceptSessionCheck){
+		baseUrl = _webapp + "/AjaxController.do?";
+	}
+	var params = {
+		facade : "CommonFacade",
+		command :"listMsgs",
+		ajax_result_type : "JSON",
+		msgIds : msgIds,
+		locale : _locale		
+	};
+	var rtnMsg =  "{}";
+	jQuery.ajaxSetup({cache:_isCache});
+	$.ajax({
+	   	url: baseUrl + jQuery.param(params)+"&"+_cacheInfo,
+		async : false,
+		ajax_result_type : "JSON",
+	   	success: function(data){
+	   		rtnMsg =data;
+		}
+	});
+	try{
+		xClickTop.jQuery.data(xClickTop.document.body, msgIds, rtnMsg);
+	}catch(e){;;}
+	
+	return  rtnMsg;
+};
+
+jQuery.getSystemValue = function(fileId, xPath, exceptSessionCheck){
+		var memVal = jQuery.data(document.body,fileId+xPath);
+		if(!isNullStr(memVal)) return memVal;
+	
+		var baseUrl = _webapp + "/AjaxController?";
+		if(exceptSessionCheck){
+			baseUrl = _webapp + "/AjaxController.do?";
+		}
+		
+		var params = {
+			facade : "CommonFacade",
+			command :"viewSystemValue",
+			ajax_result_type : "JSON",
+			fileId : fileId,
+			xPath : xPath
+		};
+		var rtnMsg =  "";
+		$.ajax({
+		   	url: baseUrl + jQuery.param(params),
+				async : false,
+		   	success: function(data){
+					 rtnMsg =data.result;
+ 				}
+		});
+		jQuery.data(document.body,fileId+xPath,rtnMsg);
+		return  rtnMsg;
+};
+/**
+ * 우측 contentPanel Resizing시에 넓이,높이 재조정
+ * @param {Object} leftObj - DIV
+ * @param {Object} rightObj - DIV
+ * @param {Object} leftWidth - 좌측넓이숫자(float)
+ * @param {Object} topMargin - 상단검색조건등 높이
+ */
+jQuery.contentPanelResize=function(leftObj,rightObj,leftWidth,topMargin){
+	var divWidth =  $('#'+contentsLayer).width();
+	var divHeight = $('#'+contentsLayer).height();
+	
+	var leftDivWidth = parseInt(leftWidth * divWidth);
+	if(leftWidth!=1){
+		$('#'+leftObj).width(leftDivWidth+'px');	
+	}
+	$('#'+leftObj).height(divHeight-topMargin);
+	if(!isNullStr(rightObj)){
+		$('#'+rightObj).width((divWidth-leftDivWidth-90)+'px').height(divHeight-topMargin);	
+	}
+};
+
+/**
+ * 시스템 디폴트 로케일을 선택하도록 변경.
+ * 
+ * @param {Object} headerSpanId
+ */
+jQuery.changeSysDefaultLocale=function(headerSpanId){
+	$(".Header_" +headerSpanId + "_" +  _defaultLocale).click();
+};
+
+jQuery.localeInfoDisplay=function(selLocale, headerSpanId){
+	$("." +headerSpanId + "_Data" ).each( function(i) {
+	  // alert(selLocale);
+		if ($(this).attr("id").substring($(this).attr("id").length-2) == selLocale ) {
+			  $(this).show();
+		}
+		else {
+			$(this).hide();
+		}
+	});
+};
+/**
+ * 사용자로부터 입력받은 localeHeaderSpanId을 기준으로 삭제한다. 
+ * @param {Object} headerSpanId
+ */
+jQuery.localeInfoClear=function(headerSpanId){
+	$("." +headerSpanId + "_Data" ).each( function(i) {
+			$(this).val('');
+	});
+};
+/**
+ * 사용자로부터 입력받은 localeHeaderSpanId을 기준으로 모두 Disabled처리한다!
+ */
+jQuery.localeInfoDisable=function(headerSpanId){
+	$("." +headerSpanId + "_Data" ).each( function(i) {
+			this.disabled=true;
+	});
+	$("#Header_localeHeaderDisp > *" ).each( function(i) {
+		this.disabled=true;
+	});
+};
+
+/**
+* 모달 Division 팝업
+*/
+jQuery.openModalDIV = function(opt){
+	var params = $.extend({
+		popTitle : "", // theme mode 를 사용할 경우.
+		layerId : "",
+		callbackFn : null,
+		url : "",
+		width : 400,
+		height : "auto"
+	},opt);
+	/*if(isNullStr(params.url)){
+		alert("url is not defined");
+		return;
+	}*/
+	$("body").data("_modalCallbackFn", params.callbackFn);
+	var $wrapper = $("div#" + params.layerId);		
+	// VER : REG_2015.11, REFID : REQ967, AUTHOR : hyungyu, Song 
+	// 2015.11.20 - 모달(ex. 파일전송중)이 떠있을때 타임아웃에 의해 자동완성창이 닫힐 경우 active-x 가 노출될 수 있음.
+	var urlstr = _webapp + "/XClickController?";
+	if($wrapper.length == 0){
+		// jsp load
+		$wrapper = $("<div id=\"" + params.layerId + "\" class=\"\" style=\"\">");
+		$wrapper.css({width:params.width, height:params.height});
+		if(!isNullStr(params.url)){
+			urlstr = _webapp + params.url + "?";
+		}
+		params.callbackFn = null;
+		urlstr += $.param(params);
+		// 본문내의 스크립트로 인해 팝업이 늦게 뜰수 있음. 본문 로딩하는 위치를 변경합니다.(중요도 낮음) hyungyu, Song
+		//$wrapper.load(urlstr);
+	}
+	// block UI option
+	
+	var blockUIOpt = {
+		message : $wrapper,//$wrapper.css("width", params.width + "px"),
+		theme : false,
+		draggable : false,
+		allowBodyStretch: true,
+		//title : params.popTitle,
+		css: { // jquery theme ui 사용하지 않을 경우 (theme : false)
+			padding:	0,
+			margin:		0,
+			width:		params.width,
+			height:		params.height,
+			top:		(isNaN(params.height) || _isMobileFullMode )?"10%" : (($(window).height() / 2 - params.height / 2 )-50) + "px",
+			left:		(($(document).width() / 2 - params.width / 2 )) + "px",
+			//textAlign:	'center',
+			background:'none',
+			cursor:		'',
+			border:		'none'
+		},
+		themedCSS: { // jquery theme ui 사용할 경우
+			width : params.width,
+			height : params.heigit,
+			left:		($(document).width() / 2 - params.width / 2 ) + "px",
+			top:		"15%"
+		},
+		overlayCSS: opt.overlayCSS || {
+			backgroundColor: '#f8f8f8',//'#f8f8f8',
+			opacity:	  	 0.5,
+			cursor:		  	 'default'
+		}
+	};
+	if(params.fadeIn == 0){
+		blockUIOpt.fadeIn = 0;
+	}
+	activeXhide();
+	$.blockUI(blockUIOpt);
+	
+	$wrapper.load(urlstr);
+};
+
+/**
+* 모달 Division 닫기
+* 리턴값 전달
+*/
+jQuery.closeModalDIV = function(rtnVal, unBlockOpt){
+	activeXshow();
+	if(!unBlockOpt)unBlockOpt = {};
+	unBlockOpt.fadeOut = null;
+	$.unblockUI(unBlockOpt);
+	var fn = $("body").data("_modalCallbackFn");
+	if($.isFunction(fn)){
+		$("body").data("_modalCallbackFn",null);
+		fn.call(this, rtnVal);
+	}
+};
+
+/**
+ * 탭의 Active/InActive 및 관련 Form Object의 toggle(show/hide)
+ */
+var activeStatus = "s";
+var inActiveStatus = "none";
+jQuery.objActiveClick = function(divPrefix, obj) {
+	if ( isNullStr(divPrefix) ) divPrefix = "___temp___";
+	
+	var $tabObj = jQuery("#" + obj.id);			// 현재 선택한 Tab
+	var $parentTBL = jQuery($tabObj).closest("table"); // Tab Group Table
+	var $refObj = jQuery("#" + obj.id + divPrefix);		// 현재 Tab과 연결된 Division
+
+	// 현재 선택된 Tab이 Active 상태이면 취소.
+	if (jQuery("span[class*='tabBtn_"+ activeStatus +"']", $tabObj).length > 0) return;
+
+	var $activeTab = jQuery("span[class*='tabBtn_"+ activeStatus +"']", $parentTBL);   // 현재 Active 상태인 Tab의 TD 
+	var $activeRefObj = jQuery("#" + $activeTab.attr("id") + divPrefix);
+	
+	// Active상태인 Tab과 Div을 InActive 상태로 변환한다.
+	var classVal = $activeTab.attr("class");
+	$activeTab.removeClass(classVal).addClass( stringReplace(classVal, activeStatus, inActiveStatus) );
+	if ($activeRefObj.length > 0) $activeRefObj.hide();
+	
+	// 선택한 Tab과 Div을 Active 상태로 변환한다.
+	classVal = $tabObj.attr("class");
+	$tabObj.removeClass(classVal).addClass( stringReplace(classVal, inActiveStatus, activeStatus) );
+	if ($refObj.length > 0) $refObj.show();
+	
+	// 관련 Form Object를 Return 한다.
+	// cause, 해당 Object가 Division이고 position이 absolute로 지정되는 같은 경우를 위한 후처리는 개발자가
+	// 각각 처리한다.
+	
+	jQuery(".formError").remove();
+	return $refObj;
+};
+
+/**
+ * MDI 적용시 form target이 다른 탭의 iframe으로 적용되는 문제(Chrome, Safari Browser)
+ * 방법 : iframe의 id는 현재와 같이 주되, target 대상이되는 iframe의 name은 UUID.generateId(String systemId) 으로 지정합니다.
+ *        그리고 아래 함수 jQuery.getTargetName(String iframeId)을 주면, 해당 iframe의 Name으로 반환 해줍니다.
+ *        단, 일반 Target(_blank, _self, _parent, _top)은 그대로 반환 합니다.
+ */
+jQuery.getTargetName = function(iframeId) {
+	// Null 또는 공백문자시에는 "_balnk"로 Target 지정.
+	if ( isNullStr(iframeId) ) {
+		return "_blank";
+	}
+
+	var iframeName = "";
+	// _blank, _self, _parent, _top 은 원래의 Target 반환.
+	if (iframeId == "_blank" || iframeId == "_self" || iframeId == "_parent" || iframeId == "_top") {
+		iframeName = iframeId;
+	} else {
+		var topWindow = xClickTop.window;
+		var nowWindow = window;
+		/**
+		 * IE.7에서 id변경시 getElementById의 문제점으로 인해 jQuery('#')로 변경!
+		 */
+		while (true) {
+			var element = nowWindow.jQuery('#'+iframeId)[0];
+			if (element && element.name && element.tagName && element.tagName == "IFRAME") {
+				iframeName = element.name;
+				break;
+			} else if (topWindow == nowWindow) {
+				break;
+			}
+			nowWindow = nowWindow.parent;
+		}
+	}
+	// 검색된 iframe이 존재하지 않으면, 자기 자신으로 target을 반환한다.
+	if (isNullStr(iframeId)) {
+		iframeId = "_self";
+	}
+	
+	return iframeName;	
+};
+
+/**
+ * 리스트 상세 보기 선택시 해당 checkbox 만 활성화
+ */
+var $listObj;
+var $listObjId; //게시판 focus 처리 위한 변수
+listActionBind = function (idPrefix , isCheck, articleId) {
+	
+	if(isNullStr(articleId)) articleId = "";
+	
+	$listObj = jQuery("a[id*='"+ idPrefix +"']");             // 체크박스 이벤트 사용
+	$listObjId = jQuery("a[id*='"+ idPrefix+articleId +"']"); // 클릭 이벤트 사용
+	
+	// 리스트 단위별로 이벤트 적용. 
+	$listObj.click(function (event){
+		// 선택한 리스트의 읽은 표시.
+		jQuery(this).find("font[class*='b']").removeClass("b");
+		jQuery(this).find("span[class*='b']").removeClass("b");
+		
+		// 스플리터 일반타입이면 진행하지 않는다.
+		if (isNullStr(parent.layerType) || (!isNullStr(parent.layerType) && parent.layerType == "g" )) {
+			return;
+		}
+		
+		listActive(this, isCheck, idPrefix);
+	});
+
+	// 초기 호출시에 Splitter Layer 타입에 따라서 첫번째 List Action Active
+	if (!isNullStr(parent.layerType) && parent.layerType != "g") {
+		// param & 조건추가 : 기본동작을 원치 않을때...
+		parent.jQuery.chgSplitterIcon(parent.layerType);
+		parent.jQuery.chgSplitterList(parent.layerType);
+
+		listFirstActive();
+	}
+};
+//게시판 splitter layer h,v 일 때 focus를 위해  listFirstActive 함수 변경 by j.h.han
+listFirstActive = function(){
+	if ( $listObjId == undefined ) return;
+	
+	// 게시판 해당 리스트에 id가 존재하면 해당 id클릭
+	// 존재하지 않으면 리스트 첫번째 id클릭 by j.h.han
+	if ( $listObjId.length > 0 ) {
+		var $focusObj = $listObjId.eq(0);
+		$focusObj.trigger('click');
+	} else {
+		var $firstObj = $listObj.eq(0);
+		$firstObj.trigger('click');
+	}
+};
+
+/**
+ * click 이벤트시 활성화 처리만 담당.
+ * 1. event 바인딩시 사용
+ * 2. 분할화면에서 이전/다음 보기기 선택처리
+ */
+listActive = function(element, isCheck, idPrefix){
+	// 선택한 리스트의 읽은 표시.
+	jQuery(element).find("font[class*='b']").removeClass("b");
+	jQuery(element).find("span[class*='b']").removeClass("b");
+
+	// 체크박스 존재시에 처리.
+	if (isCheck) {
+		var pkId = idPrefix ? element.id.substring(idPrefix.length, element.id.length) : element.id;
+		//alert(pkId);
+		var $check = jQuery("input:checkbox[value*='"+ pkId +"'],input:radio[value*='"+ pkId +"']");
+		var $allCheck = jQuery("input:checkbox[id*='"+ $check.attr("id") +"']");
+		$allCheck.attr("checked", false).trigger("change");
+		$check.each(function(index){
+			var isObject = false;
+			var data = this.value;
+			try { data = jQuery.parseJSON(this.value); } catch (err) {}
+			if (typeof(data) == "object") {
+				for (var key in data) {
+					if (data[key] == pkId) {
+						isObject = true;
+						break;
+					}
+				}
+			} else {
+				if (this.value == pkId) isObject = true;
+			}
+			if ( isObject ) {
+				jQuery(this).attr("checked", true).trigger("change");
+			}
+		});
+	} else {
+		var $listTR = jQuery(element).closest("tr[class*='table_m']");
+		var $allTR = $listTR.closest("table").find("tr[class*='table_m']");
+		$allTR.removeClass("table_ms");
+		$listTR.addClass("table_ms");
+	}
+};
+
+jQuery(document).ready(function(){
+	if (jQuery.browser.msie && jQuery.browser.version == '6.0') {
+		jQuery('img[src*=".png"]').each(function(index){
+			this.width = this.height = 1;
+			this.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "',sizingMethod='image');";
+			this.src = '';
+		});
+	}
+
+	// listPane에 최상위로 로드된 화면의 경우 menuId를 바탕으로 leftMenu의 해당 메뉴를 역으로 찾아 focus 처리 해 준다. (history의 경우) 
+	if (window != xClickTop && window.frameElement && window.frameElement.id == "listPane" && document.getElementById("leftPaneMenuId") && document.getElementById("leftPaneMenuId").value != "") {
+		var leftPaneMenuId = document.getElementById("leftPaneMenuId").value;
+		var leftMenuWindow = parent.document.getElementById("leftMenuPane").contentWindow;
+		if(leftMenuWindow.leftMenuClick){
+			leftMenuWindow.leftMenuClick(leftMenuWindow.document.getElementById(leftPaneMenuId), true);
+		}
+	}
+});
+$(window).load(function() {
+	try{
+		jQuery.closeProgress();
+	}catch(e){}
+	
+	
+	// VER : REG_2015.11, REFID : DEV1511_204, AUTHOR : hyungyu, Song 
+	// 2015.11.20 - 그룹웨어 전체 화면에 대해 파일의 드랍을 막는다. HTML5업로드 영역은 별도로 받아들이고..
+	// 드랍커서 효과 : IE 계열은 외부에서 시작된 드래그이벤트에 대해 커서 effect 지정이 안됨 !! 
+	function containsFiles(event) {
+	    if (event.dataTransfer.types) {
+	        for (var i = 0; i < event.dataTransfer.types.length; i++) {
+//	        	log.debug("types[i]: " + event.dataTransfer.types[i]);
+	            if (event.dataTransfer.types[i] == "Files") {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+	
+	function jsPreventDefault(event) {
+		event = event || window.event;
+		if (event.stopPropagation()) {
+			event.stopPropagation();
+		}
+		if (event.preventDefault) {
+			event.preventDefault();
+		}
+	}
+	
+	function cancelFileDragDrop(event) {
+		try{
+			// 파일객체를 이동하는 경우 판단.
+			if(containsFiles(event)){
+				if (event.dataTransfer) {
+					event.dataTransfer.dropEffect = 'none';
+				}
+				jsPreventDefault(event);
+				return false;
+			}
+		}catch(err){
+			if(log)log.error(err);
+		}
+	}
+	
+	//세션 끊긴 경우에는 xClickLib가 없어 있는 경우에만 이벤트 추가함.
+	try{
+		xClickLib.addEvent(window, "dragover", cancelFileDragDrop);
+		xClickLib.addEvent(window, "drop", cancelFileDragDrop);
+	}catch(e){}
+});
+
+$.fn.serializeObject = function()
+{
+   var o = {};
+   var a = this.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+};
+
+/**
+ * 첨부화일 목록 다운로드 팝업호출
+ * @refId : 관련 PK정보 or 관련refGrpId정보
+ * @refIdType : 위 refId타입정보임
+ */
+var fileDownLoadPop = null;
+viewFileAttach = function(refId, refIdType) {
+	if(isNullStr(refIdType)){
+		refIdType = "REFID";
+	}
+	var f = jQuery("#frmView")[0];
+	var url = "/XClickController?";
+	var params = {
+		nextpage : "/common/pop/fileDownloadPop.jsp",
+		refId	 : refId,
+		downYn	 : "Y",
+		refIdType: refIdType ,
+		msgId	 : "COMMON-000154"
+	};
+	url += jQuery.param(params); // serialize & encode
+	var urlStr = _webapp + url;
+
+	if (fileDownLoadPop != null) {
+		fileDownLoadPop.close();
+	}
+	fileDownLoadPop = openPopupWindowInCenter(urlStr, 'fileDownLoadPop', 700,300, true);
+	fileDownLoadPop.focus();
+};
+
+/**
+ * 가상 콤보박스 초기화
+ */
+jQuery.initComboBox = function(range, ieFix){
+	var $ifrObj;
+	
+	var showHideCombo = function(ev, obj){
+		//var a = obj;
+		var selObjid = jQuery(obj).attr("selObj");
+		var $ul = jQuery("#"+selObjid);
+		
+		if(ieFix){
+			if($ul.css("display") == "none"){
+				activeXhide();
+			}else{
+				activeXshow();
+			}
+		}
+		
+			
+		$ul.css({minWidth:20+jQuery(obj).width()}).toggle();
+		
+		//2017.05.30 즐겨찾기 최신글 글 쓰기 시 콤보박스 height 조정 author joo
+		if($ul.hasClass('bookmark')){
+			var childHeight = jQuery($ul.children().get(0)).outerHeight(true);
+			var childCount = $ul.children().length;
+			var ulHeight = childHeight * childCount;
+			
+			$ul.css({height:20+ulHeight});
+		}
+		
+		
+		
+		// one : 일회용 이벤트.
+		jQuery('body').one("click", function(e){
+			var srcTarget = e.target;
+			if(srcTarget != obj && jQuery(srcTarget).parents("[id="+selObjid+"]").length == 0){
+				activeXshow();
+				$ul.hide();
+			}
+		});
+	};
+	
+	jQuery(".div_sel",range).children(":first").click(function(e){
+		e.stopPropagation();
+		showHideCombo(e, jQuery(this).closest(".div_sel").get(0));
+	});
+
+	jQuery(".div_sel", range).click(function(e){
+		e.stopPropagation();
+		showHideCombo(e, this);
+	});
+	
+	jQuery(".ul_sel",range).each(function(){
+		var $selUl = jQuery(this);
+		var setObjid = jQuery(this).attr("setObj");
+		var lis = jQuery(this).children("li");
+		var selObj = {val:"",txt:""};
+		
+		for(var i = 0; i < lis.length; i++){
+			if(!isNull(lis[i].getAttribute("li_selected")) && !lis[i].disabled){
+				selObj.val = jQuery(lis[i]).attr("listVal");
+				selObj.txt = jQuery(lis[i]).text();
+			}
+			
+			// click 시 event binding
+			jQuery(lis[i]).click(function(){
+				if(!isUndefined(jQuery(this).attr("disabled"))){
+					return;
+				}
+				jQuery(this).siblings("li").removeAttr("li_selected");
+				jQuery(this).attr("li_selected","");
+				
+				jQuery("input#"+setObjid, range).val(jQuery(this).attr("listVal")).trigger("change");
+				jQuery("#div_"+setObjid, range).text(jQuery(this).text());
+				
+				activeXshow();
+				jQuery(this).parent().hide();
+				
+			});
+		}// end for
+		// init
+		if(lis.length > 0){
+			jQuery("input#"+setObjid, range).val(selObj.val);
+			jQuery("#div_"+setObjid, range).text(selObj.txt);
+		}
+	});
+};
+
+//1.range, 2.인풋객체 id, 3. 셋팅할value, 4. 셋팅할 text
+jQuery.setDivisionSelect = function(f, inputId, value, txt){
+	// VER : REG_2015.05, REFID : DEV150511_251, AUTHOR : ikhan
+	// HTML문자를 Text로 변환 처리
+	// DEV150511_34의 common.js 패치 필요
+	//jQuery("#div_"+inputId, f).text(txt);
+	jQuery("#div_"+inputId, f).text(txt.toText().toString());
+	jQuery("input#"+inputId, f).val(value).trigger("change");
+	
+	//VER : REG_2015.03 , REFID : REQ663, AUTHOR : jhhan
+	//xclick.js에 activeXshow() 참조
+	activeXshow(null, null, true);
+	jQuery("#ul_"+inputId, f).hide();
+	
+};
+
+jQuery.setDivisionInit= function(f, inputId, value, txt){
+	jQuery("#div_"+inputId, f).text(txt);
+	jQuery("input#"+inputId, f).val(value);
+	
+	activeXshow();
+	jQuery("#ul_"+inputId, f).hide();
+};
+
+function activeXhide(contentWindow, visibleFrameOnly, skipBlurActiveX){
+	if(!contentWindow)contentWindow = window;
+	if(!visibleFrameOnly)visibleFrameOnly = false;
+	
+	// 이노릭스 첨부파일 리스트에 포커스 가있을 시 BetterTip 실행 시 IE 죽는 문제 처리.
+	// VER : REG_2015.11, REFID : REQ967, AUTHOR : hyungyu, Song 
+	// 2015.11.20 - 메일수신자 작성시 자동완성이 생성될때는 focus 가 빠지면 안되어 조건추가.
+	if(!skipBlurActiveX)skipBlurActiveX = false;
+	if(!skipBlurActiveX){
+		contentWindow.focus();
+	}
+	
+	//cross-domain check
+	try{
+		contentWindow.location.href;
+	}catch(e){return;}
+	
+	jQuery(contentWindow.document).find("iframe[src*='/common/editor/xClickEditor.jsp'],iframe[src*='/thirdparty/editor/activesquare7'],iframe[src*='/innofd/upload.jsp'],iframe[src*='/innofd/upload_ap.jsp'],iframe[src*='/innofd/bpmUpload.jsp'],iframe[src*='/innofd/bpmUpload_ap.jsp'],iframe[src*='/innofd/download.jsp'],iframe[src*='/innofd/download_ap.jsp'],[id=download_wrapper],#hwpCtrlDIV").each(function(i){
+		if(!visibleFrameOnly || ( visibleFrameOnly && jQuery(this).is(":visible") )){
+			jQuery(this).closest("div").css("visibility","hidden");
+			jQuery(this).css("visibility","hidden");
+		}
+	});
+
+	//var frames = contentWindow.frames;
+	var frames = jQuery("iframe", contentWindow.document);
+	for(var i = 0; i < frames.length; i++){
+		//if((frames[i].id).indexOf("_ifrWeather") < 0 && frames[i].name != "irate" && frames[i].src.indexOf(_webapp+"/") > -1 ){
+		var skipframe = false;
+		if(frames[i].className && frames[i].className == "extPortletIframe"){
+			skipframe = true;
+		}
+		if(frames[i].src && frames[i].src.indexOf("http") == 0 && frames[i].src.indexOf(_webapp) < 0){
+			skipframe = true;
+		}
+		if(visibleFrameOnly && frames[i].style.display == "none"){
+			skipframe = true;
+		}
+		if(!skipframe){
+			activeXhide(frames[i].contentWindow, visibleFrameOnly, skipBlurActiveX);
+		}
+	}
+}
+
+// VER : REG_2015.03 , REFID : REQ663, AUTHOR : jhhan
+// checkLayer - 2015.04.17 hyungyu, Song 현재 Window 기준으로 Popup Layer Division 이 활성화 되어 있는지 확인하여 판단
+function activeXshow(contentWindow, visibleFrameOnly, checkLayer){
+	if(!contentWindow)contentWindow = window;
+	if(!visibleFrameOnly)visibleFrameOnly = false;
+	checkLayer = checkLayer || false;
+	
+	//cross-domain check
+	try{
+		contentWindow.location.href;
+	}catch(e){return;}
+	
+	//VER : REG_2015.03 , REFID : REQ663, AUTHOR : jhhan
+	//팝업레이어화면의 활성화 체크 .ribbonPopup과 .division_box는 팝업레이어에서 공통으로 쓰이는 클래스
+	if(checkLayer){
+		var foundPopuppedLayer = false;
+		var type1 = jQuery(".ribbonPopup");
+		var type2 = jQuery(".division_box");
+		for(var i = 0; i < type1.length; i++){
+			if(jQuery(type1[i]).is(":visible")){
+				foundPopuppedLayer = true;
+				break;
+			}
+		}
+		for(var i = 0; i < type2.length; i++){
+			if(jQuery(type2[i]).parent().is(":visible")){
+				foundPopuppedLayer = true;
+				break;
+			}
+		}
+		
+		// VER : REG_2015.11, REFID : REQ967, AUTHOR : hyungyu, Song 
+		// 2015.11.20 - 모달(ex. 파일전송중)이 떠있을때 타임아웃에 의해 자동완성창이 닫힐 경우 active-x 가 노출될 수 있음.
+		if(jQuery(".blockOverlay").is(":visible")){
+			foundPopuppedLayer = true;
+		}
+		if(foundPopuppedLayer){
+			return;
+		}
+		// 만약 레이어를 찾지 못했더라도 하위프레임은 무시하고 진행한다.
+	}
+	
+	jQuery(contentWindow.document).find("iframe[src*='/common/editor/xClickEditor.jsp'],iframe[src*='/thirdparty/editor/activesquare7'],iframe[src*='/innofd/upload.jsp'],iframe[src*='/innofd/upload_ap.jsp'],iframe[src*='/innofd/bpmUpload.jsp'],iframe[src*='/innofd/bpmUpload_ap.jsp'],iframe[src*='/innofd/download.jsp'],iframe[src*='/innofd/download_ap.jsp'],[id=download_wrapper],#hwpCtrlDIV").each(function(){
+		if(!visibleFrameOnly || ( visibleFrameOnly && jQuery(this).is(":visible") )){
+			jQuery(this).closest("div").css("visibility","visible");
+			jQuery(this).css("visibility","visible");
+		}
+	});
+	
+	//var frames = contentWindow.frames;
+	var frames = jQuery("iframe", contentWindow.document);
+	for(var i = 0; i < frames.length; i++){
+		//if((frames[i].id).indexOf("_ifrWeather") < 0 && frames[i].name != "irate" && frames[i].src.indexOf(_webapp+"/") > -1){
+		var skipframe = false;
+		if(frames[i].className && frames[i].className == "extPortletIframe"){
+			skipframe = true;
+		}
+		if(frames[i].src && frames[i].src.indexOf("http") == 0 && frames[i].src.indexOf(_webapp) < 0){
+			skipframe = true;
+		}
+		if(visibleFrameOnly && frames[i].style.display == "none"){
+			skipframe = true;
+		}
+		if(!skipframe){
+			activeXshow(frames[i].contentWindow, visibleFrameOnly);
+		}
+	}	
+}
+
+/**
+ * 멀티 사진 첨부
+ */
+function uploadPhoto(callbackFunctionStr){
+	var urlStr = _webapp + "/XClickController?";
+	var params = {
+		facade 			: "",
+		command 		: "",
+		nextpage 		: "/common/pop/imageMultiUploadPop.jsp",
+		callBackFunction: callbackFunctionStr,
+		msgId 			: "COMMON-000260"
+	};
+	urlStr += $.param(params);
+	var win = openPopupWindowInCenter(urlStr, "multiImageUpload", 700, 350, true);
+}
+function uploadMap(callbackFunctionStr){
+	var urlStr = _webapp + "/XClickController?";
+	var params = {
+		facade 			: "",
+		command 		: "",
+		nextpage 		: "/common/googleMap/gMapPop.jsp",
+		callBackFunction: callbackFunctionStr,
+		msgId 			: "COMMON-000255"
+	};
+	urlStr += $.param(params);
+	var win = openPopupWindowInCenter(urlStr, "gMapUpload", 800, 700, false);
+}
+
+/**
+ * 다음 이벤트 cancel
+ * @param event
+ */
+function disabledEventPropagation(event) {
+   if (event.stopPropagation){
+       event.stopPropagation();
+   }
+   else if(window.event){
+      window.event.cancelBubble=true;
+   }
+}
+
+/**
+ * 이미지 자동 크기 맞춤
+ * @param heView
+ * @param availableWidth
+ * @param availableHeight
+ */
+function adjustImgView (heView, availableWidth, availableHeight) {
+	heView.style.width = "";
+	heView.style.height = "";
+	var widthRate = heView.clientWidth / availableWidth;
+	var heightRate = heView.clientHeight / availableHeight;
+	if (widthRate > 1 || heightRate > 1) {
+		if (widthRate > heightRate) {
+			heView.style.width = availableWidth + "px";
+		} else {
+			heView.style.height = availableHeight + "px";
+		}
+	}
+	if (heView.parentNode.tagName.toLowerCase() == "div" && heView.parentNode.style.overflow == "hidden") {
+		heView.parentNode.style.width = heView.clientWidth + "px";
+		heView.parentNode.style.height = heView.clientHeight + "px";
+	}
+}
+
+/**
+ * 원본 이미지 보기 팝업
+ * @param fileId
+ */
+function openOriginImgViewPop (fileId) {
+	//get 방식변경[IE11 관련] - 2014.02.27 hyungyu, Song
+	//window.open("", "originImgViewPop", "toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes");
+
+	var f = document.getElementById("_popForm");
+	var heInput = document.getElementById("_originImgViewId");
+	if (!f) {
+		f = document.createElement("form");
+		f.id = "_popForm";
+		f.namespaceURI = "_popForm";
+		f.method = "post";
+		heInput = document.createElement("input");
+		heInput.type = "hidden";
+		heInput.id = "_originImgViewId";
+		heInput.name = "_originImgViewId";
+		heInput.value = fileId;
+		f.appendChild(heInput);
+		heInput = document.createElement("input");
+		heInput.type = "hidden";
+		heInput.name = "_xcsparam";
+		f.appendChild(heInput);
+		heInput = document.createElement("input");
+		heInput.type = "hidden";
+		heInput.name = "_isPopMode_";
+		heInput.value = "Y";
+		f.appendChild(heInput);
+		heInput = document.createElement("input");
+		heInput.type = "hidden";
+		heInput.name = "userMode";
+		heInput.value = "USER";
+		f.appendChild(heInput);
+		document.body.appendChild(f);
+	} else if (!heInput || heInput.parentNode != f) {
+		heInput = document.createElement("input");
+		heInput.type = "hidden";
+		heInput.id = "_originImgViewId";
+		heInput.name = "_originImgViewId";
+		heInput.value = fileId;
+		f.appendChild(heInput);
+	} else {
+		heInput.value = fileId;
+	}
+	
+	f.action = _webapp+"/common/pop/originImgViewPop.jsp";
+	//get 방식변경[IE11 관련] - 2014.02.27 hyungyu, Song
+	//f.target = "originImgViewPop";
+	//f.submit();
+	var winName = "originImgViewPop";
+	var features = "toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes";
+	var param = jQuery(f).serialize();
+	//var encTxt = jQuery.encrypt(param);
+	var url = f.action + "?" + param ;
+	log.debug("check popup .. url length : " + url.length);
+	window.open(url, winName, features);	
+}
+
+/**
+ * 세션아웃 후 액션시 미니로그인 팝업
+ */
+function openMiniLoginPop(){
+	if(jQuery("#DIV_login").length > 0){
+		return;
+	}
+	//VER : REG_2015.03 , REFID : REQ438, AUTHOR : SungYongJe
+    //[REQ438] 2015.01.06 [한양정밀] 공통_로그인미니팝업관련오류_사파리
+	//메일등 작성 중 세션이 끊긴후 발송등의 저장액션을 취하면 progress 창을 띄운다음 미니로그인창이 뜨게 되는데
+	//다시 로그인처리 한 뒤 progress가 풀리지 않아 어떤액션을 취할 수 없으므로 미니로그인 창을 띄우기 전 closeProgress 함.
+	jQuery.closeProgress();
+	jQuery.closeModalDIV();
+	var opt = {
+		url : "/gate/div/loginDiv.jsp",
+		width : 450,
+		height : 180,
+		layerId : "DIV_login",
+		overlayCSS : {
+			//backgroundColor: '#f8f8f8',
+			opacity:	  	 0.5,
+			cursor:		  	 'default'			
+		}
+	};
+	if(xClickTop.selfClose){// windowOpenMain.jsp
+		jQuery.openModalDIV(opt);
+	}else{
+		xClickTop.jQuery.openModalDIV(opt);
+	}
+}
+
+function goToLogin(){
+	xClickTop.location.href = _webapp + "/XClickLogoutHandler";
+}
+
+function afterLoginMaintenance(loggedUserId, newtokenid){
+	if(loggedUserId == _userId){
+		// tokenId change
+		setNewTokenId(newtokenid);
+		
+		jQuery.post(
+			_webapp + "/common/sessionInfo.jsp",
+			function(data){
+				// window top 에 new sessionId 를 셋팅한 후 필요한곳에서 가져다 쓴다. 파일업로드 등.
+				xClickTop.xclickNewSessionId = data;
+			}
+		);
+		
+		jQuery.closeModalDIV();
+	}else{
+		// page refresh
+		xClickTop.location.href = _webapp;
+	}
+}
+
+// 현재 관리자 페이지인지 판단.
+function checkAdminPage(){
+	var win = window;
+	var cnt = 0;
+	while(true){
+		if(!win || cnt > 10 || (win && win.closed)){
+			break;
+		}
+		// sysMain.jsp /sysMain_new.jsp 에 선언됨.
+		try{
+			if(win && win.xClickTop.isAdminWindow){
+				return true;
+			}
+			win = win.xClickTop.opener;
+		}catch(e){break;}
+		cnt ++;
+	}
+	return false;
+}
+
+/**
+ * 미니로그인 후 새로운 tokenId 셋팅함.
+ * @param tokenid
+ * @param range
+ */
+function setNewTokenId(tokenid, range){
+	range = range || document;
+	jQuery("[id=_tokenid]", range).val(tokenid);
+	var iframes = jQuery("iframe", range);
+	if(iframes.length > 0){
+		for(var i = 0; i < iframes.length; i++){
+			//if((iframes[i].id).indexOf("_ifrWeather") < 0 && iframes[i].name != "irate" && frames[i].src.indexOf(_webapp+"/") > -1 ){
+			var skipframe = false;
+			if(iframes[i].className && iframes[i].className == "extPortletIframe"){
+				skipframe = true;
+			}
+			if(iframes[i].src && iframes[i].src.indexOf("http") == 0 && iframes[i].src.indexOf(_webapp) < 0){
+				skipframe = true;
+			}
+			if(!skipframe){
+				try{
+					range = iframes[i].contentWindow.document;
+					setNewTokenId(tokenid, range);
+				}catch(e){}
+			}
+		}
+	}
+}
+
+/**
+ * ajax_result_type=JSON 사용하여 직접 ajax 호출시 onerror 시 처리
+ */
+function execErrorHandler(responseText){
+	var errorId = "";
+	var errorMsg = "";
+	if(responseText.indexOf("<SC>") > -1){
+		errorMsg = stringReplace(responseText, "<SC>", "").trim();
+		errorMsg = errorMsg.replace("\\\"", "\\\\\"");
+		eval(errorMsg);
+	}else if(responseText.indexOf("<MS>") > -1){
+		errorMsg = stringReplace(responseText, "<MS>", "");
+		var href = _webapp + "/XClickController?nextpage=/common/pop/errorMessage.jsp&msgid=FORM-000117";
+		href += "&"+jQuery.param({content:errorMsg});
+		openPopupWindowInCenter(href, "errorMessage", "540", "250", true, "");
+	}else if(responseText.indexOf("<FL>") > -1){
+		errorId = stringReplace(responseText, "<FL>", "").trim();
+		errMessagePop(errorId , 'error.jsp' );
+	}else{
+		alert(responseText);
+	}
+}
+
+/*
+ * IE7 Memory leak 발생으로 추가함 - hyungyu, Song
+ */
+if ( window.attachEvent && !window.addEventListener ) {
+	window.attachEvent("onunload", function() {
+		for ( var id in jQuery.cache ) {
+			if ( jQuery.cache[ id ].handle ) {
+				// Try/Catch is to handle iframes being unloaded, see #4280
+				try {
+					jQuery.event.remove( jQuery.cache[ id ].handle.elem );
+				} catch(e) {}
+			}
+		}
+		// The following line added by me to fix leak!
+		window.detachEvent( "onload", jQuery.ready );
+		
+		//jQuery("iframe").purgeFrame();
+		
+		//jQuery("body").purgeElement();
+		//jQuery("iframe").contents().find("body").purgeElement();
+		
+	});
+}
+
+
+(function($) {
+    $.fn.purgeFrame = function() {
+        var deferred;
+
+        if ($.browser.msie && parseFloat($.browser.version, 10) < 9) {
+            deferred = purge(this);
+        } else {
+            this.remove();
+            deferred = $.Deferred();
+            deferred.resolve();
+        }
+
+        return deferred;
+    };
+    $.fn.purgeElement = function() {
+        if ($.browser.msie && parseFloat($.browser.version, 10) < 9) {
+        	for(var i =0; i <this.length;i++){
+        		purgeElement(this[i]);
+        	}
+        }
+
+    };
+    
+    function purge($frame) {
+        var sem = $frame.length
+          , deferred = $.Deferred();
+
+        $frame.load(function() {
+            var frame = this;
+            frame.contentWindow.document.innerHTML = '';
+
+            sem -= 1;
+            if (sem <= 0) {
+                $frame.remove();
+                deferred.resolve();
+            }
+        });
+        $frame.attr('src', 'about:blank');
+
+        if ($frame.length === 0) {
+            deferred.resolve();
+        }
+
+        return deferred.promise();
+    }
+    function purgeElement(d) {
+        var a = d.attributes, i, l, n;
+        if (a) {
+            for (i = a.length - 1; i >= 0; i -= 1) {
+                n = a[i].name;
+                if (typeof d[n] === 'function') {
+                    d[n] = null;
+                }
+            }
+        }
+        a = d.childNodes;
+        if (a) {
+            l = a.length;
+            for (i = 0; i < l; i += 1) {
+            	purgeElement(d.childNodes[i]);
+            }
+        }
+    }
+    
+})(jQuery);
+
+//실수 여부 판단 글로벌 변수 S.H.Byun
+var realPageExistYn = "N";
+//초기 데이터 저장 변수 S.H.Byun
+var editorInitializeContent = "";
+
+//VER : REG_2015.03 , REFID : REQ392, AUTHOR : SungYongJe
+//[REQ392] 2014-12-17 결재 본문 내용 유실 건 
+//에디터가 로딩이 완료되지 않은 경우 alert을 띄워 처리하지 않도록 함.
+//에디터 로딩완료 여부 판단 글로벌 변수 2015.02.16 by SungYongJe
+var isEditorLoadComplete = false;
+
+//에디터 내부에 script와 iframe 태그 제거 펑션
+function htmlCleanContent(content){
+	content = content.replace(/<script.*?>.*?<\/script>/gi, "");
+	content = content.replace(/<iframe.*?>.*?<\/iframe>/gi,"");
+	
+	return content;
+}
+
+/**
+ * VER : REG_2015.03 , REFID : REQ563, AUTHOR : SungYongJe
+ * [REQ563] 2015-03-02 [한양정밀] 브라우저의 페이지 뒤로가기시 읽음 처리 관련 문의 
+ * 2015.03.03 by ty.choi
+ * history.back 시에 읽은 메일, 게시물, 결재문서의 읽은 표시를 위해 Hidden 객체에
+ * 안읽은 Data의 PK ID를 저장한다. 배열을 join을 통해서 저장한다.
+ */
+jQuery.setReadId = function(pkId) {
+    if ( jQuery("#readIdLists",top.document).length > 0) {
+        var readIdListVal = jQuery("#readIdLists",top.document).val();
+        var _autoReadIdListArr = readIdListVal.split("^");
+        //alert("contains : " + _autoReadIdListArr.contains(pkId));
+        //이미 읽거나 읽은표시된 PK ID는 이미 저장되어 있으므로 contains로 걸러낸다. 
+        if ( !_autoReadIdListArr.contains(pkId) ) {
+            _autoReadIdListArr.push(pkId);
+        }
+        //VER : REG_2015.05 , REFID : REQ752, AUTHOR : ty.choi
+        //pageInitYn의 value는 object click할 때마다 변경하도록 한다. cause IE9등에서는 한번 변경한 value가
+        //다른 이벤트가 발생했을때는 default value로 변경됨.
+        jQuery("#_pageInitYn").val("N");
+        jQuery("#readIdLists",top.document).val(_autoReadIdListArr.join("^"));
+    }
+};
+ 
+/**
+ * VER : REG_2015.03 , REFID : REQ563, AUTHOR : SungYongJe
+ * [REQ563] 2015-03-02 [한양정밀] 브라우저의 페이지 뒤로가기시 읽음 처리 관련 문의 
+ * 2015.03.03 by ty.choi
+ * history.back의 document.ready에서 해당 함수를 호출하고 hidden에 저장된 id List로 읽음 표시를
+ * 처리한다.
+ */
+jQuery.loadReadList = function() {
+	if(jQuery("#_pageInitYn").val() == "Y"){
+      //VER : REG_2015.05 , REFID : REQ752, AUTHOR : ty.choi
+      //pageInitYn의 value는 object click할 때마다 변경하도록 한다. cause IE9등에서는 한번 변경한 value가
+      //다른 이벤트가 발생했을때는 default value로 변경됨. 그래서 jQuery.setReadId()로 해당 command를 이동시킨다.
+      //_pageInitYn.val("N");
+  	  jQuery("#readIdLists",top.document).val("");
+    }else{
+		if ( jQuery("#readIdLists",top.document).length > 0) {
+	        var readIdListVal = jQuery("#readIdLists",top.document).val();
+	        var _autoReadIdListArr = readIdListVal.split("^");
+	        for ( var i=0; i<_autoReadIdListArr.length; i++) {
+	            if ( !isNullStr(_autoReadIdListArr[i]) ) {
+//    	                alert(_autoReadIdListArr[i]);
+	                jQuery.activeList(_autoReadIdListArr[i]);
+	            }
+	        }
+	    }
+    }
+};
+
+/**
+ * VER : MBC_4차지원, REFID : 10, AUTHOR : jhhan
+ * articlelist.js에 viewArticle시 id를 저장한다.
+ */
+jQuery.setLastReadId = function(_id){
+	if ($("#lastReadId", top.document).length > 0){
+		$("#lastReadId", top.document).val(_id);
+	}
+}
+
+/**
+ * VER : MBC_4차지원, REFID : 10, AUTHOR : jhhan
+ * articleGenList.jsp... 등등 페이지에서 마지막으로 읽은 게시글 표시
+ */
+jQuery.setLastReadArticle = function(){
+	var lastReadId = $("#lastReadId", top.document).val();
+	if(!isNullStr(lastReadId)){
+		var $chkBoxList = $("input[type=checkbox][name=chkid]");
+		for(var i=0; i<$chkBoxList.length; i++){
+			var $val = $chkBoxList.eq(i).val();
+			if(!isNullStr($val)){
+				var json = $.parseJSON($val);
+				if(json.articleId == lastReadId){
+					$chkBoxList.eq(i).closest("tr").addClass("table_ms");
+				}
+			}
+		}
+	}
+}
+
+/**
+ * AjaxController를 호출하여 JsonData를 리턴받는다.
+ * @param param : {facade :"MAppListFacade",command : "listAppIntroTodo","paging_listcnt":_portalListCnt};
+ * @param callbackFn : 리턴받을 함수(jsonData)가 인자로 넘어감
+ */
+// VER : REG_2016.xx, REFID : MBC_160706, AUTHOR : S.H.Byun
+// 그룹웨어 실시간 알림
+function ajaxJsonData(param,callbackFn,sync){
+	param.ajax_result_type = "JSON";
+	jQuery.ajax({
+		url 		: _webapp+ "/AjaxController",
+		async		: sync ? false : true,
+		data 		: param,
+		dataType 	: 'json',
+		timeout     : 5000, 
+		error 		: function(xhr, status, error){
+//			   alert("code:"+xhr.status+"\n"+"message:"+xhr.statusText +"\n"+"responseText"+xhr.responseText +"\n"+"readyState"+xhr.readyState);
+//			   0: 요청이 준비되기 전 (request not initialized)
+//			   1: 서버 연결이 성립된 시점 (server connection established)
+//			   2: 서버가 요청을 받은 시점 (request received)
+//			   3: 서버의 작업이 수행되는 시점 (processing request)
+//		   	   4: 서버의 작업이 완료되고 response의 준비가 완료된 시점 (request finished and response is ready)
+			if(xhr.readyState != 0){
+				alert("일시적인 네트워크 오류입니다. 다시 시도해주시기 바랍니다."); //20180405 변경 ghlee
+			}
+		},
+		success 	: function (data){
+			callbackFn.call(this,data);
+		}
+	});
+};
+
+/**
+ * 취약점 보안 관련 urlsecure.js에 펑션을 난독화 하여 추가한다.
+ * 2014.04.23 SungYongJe
+ */
+// urlsecure 변경되어서 다시 난독화 by j.h.han 20140901
+eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('5 11="1h";7.1i=9(a,b){H(a.o==0)h(\'\');H(1j(b))b=11;5 v=7.U(7.x.I(a));H(v.o<=1)v[1]=0;5 k=7.U(7.x.I(b).13(0,16));5 n=v.o;5 z=v[n-1],y=v[0],14=1k;5 c,e,q=15.1l(6+1m/n),N=0;q=3;17(q-->0){N+=14;e=N>>>2&3;M(5 p=0;p<n;p++){y=v[(p+1)%n];c=(z^y)+(y^z)^(N^y)+(k[p&3^e]^z);z=v[p]+=c}}5 d=7.19(v);5 f=7.D.I(d);f=1a(f,"=","!");f=1a(f,"\\r\\n","");h f};7.1n=9(d,e){5 f="";$.1o({1p:"1q",1r:1s+"/1t?1u=1v&1w=1x",1y:V,1z:{\'1A\':d,\'1B\':e},1C:{"1D 1E":9(a){h a}},1F:9(a){f=a},1G:9(a,b,c){1H(c)}});h f};7.U=9(s){5 l=1b 1c(15.1I(s.o/4));M(5 i=0;i<l.o;i++){l[i]=s.j(i*4)+(s.j(i*4+1)<<8)+(s.j(i*4+2)<<16)+(s.j(i*4+3)<<1d)}h l};7.19=9(l){5 a=1b 1c(l.o);M(5 i=0;i<l.o;i++){a[i]=A.B(l[i]&O,l[i]>>>8&O,l[i]>>>16&O,l[i]>>>1d&O)}h a.W(\'\')};7.D=9(){};7.D.X="1J+/=";7.D.I=9(a,b){b=(1e b==\'1f\')?V:b;5 d,E,J,u,K,L,F,G,e=[],P=\'\',c,t,m;5 f=7.D.X;t=b?7.x.I(a):a;c=t.o%3;H(c>0){17(c++<3){P+=\'=\';t+=\'\\0\'}}M(c=0;c<t.o;c+=3){d=t.j(c);E=t.j(c+1);J=t.j(c+2);u=d<<16|E<<8|J;K=u>>18&w;L=u>>12&w;F=u>>6&w;G=u&w;e[c/3]=f.C(K)+f.C(L)+f.C(F)+f.C(G)}m=e.W(\'\');m=m.13(0,m.o-P.o)+P;h m};7.D.Q=9(a,b){b=(1e b==\'1f\')?V:b;5 e,E,J,K,L,F,G,u,d=[],t,m;5 f=7.D.X;m=b?7.x.Q(a):a;M(5 c=0;c<m.o;c+=4){K=f.R(m.C(c));L=f.R(m.C(c+1));F=f.R(m.C(c+2));G=f.R(m.C(c+3));u=K<<18|L<<12|F<<6|G;e=u>>>16&Y;E=u>>>8&Y;J=u&Y;d[c/4]=A.B(e,E,J);H(G==1g)d[c/4]=A.B(e,E);H(F==1g)d[c/4]=A.B(e)}t=d.W(\'\');h b?7.x.Q(t):t};7.x=9(){};7.x.I=9(b){5 d=b.S(/[\\T-\\1K]/g,9(c){5 a=c.j(0);h A.B(1L|a>>6,Z|a&w)});d=d.S(/[\\1M-\\1N]/g,9(c){5 a=c.j(0);h A.B(1O|a>>12,Z|a>>6&1P,Z|a&w)});h d};7.x.Q=9(b){5 d=b.S(/[\\1Q-\\1R][\\T-\\10]/g,9(c){5 a=(c.j(0)&1S)<<6|c.j(1)&w;h A.B(a)});d=d.S(/[\\1T-\\1U][\\T-\\10][\\T-\\10]/g,9(c){5 a=((c.j(0)&1V)<<12)|((c.j(1)&w)<<6)|(c.j(2)&w);h A.B(a)});h d};',62,120,'|||||var||jQuery||function||||||||return||charCodeAt|||coded||length|||||plain|bits||0x3f|Utf8|||String|fromCharCode|charAt|Base64|o2|h3|h4|if|encode|o3|h1|h2|for|sum|0xFF|pad|decode|indexOf|replace|u0080|strToLongs|false|join|code|0xff|0x80|u00bf|URL_SECURE_ENCKEY||slice|delta|Math||while||longsToStr|stringReplace|new|Array|24|typeof|undefined|0x40|xclick6|encrypt|isNullStr|123|floor|52|decrypt|ajax|type|POST|url|_webapp|AjaxController|facade|CommonFacade|command|decryptAjax|async|data|ciphertext|encKey|converters|text|json|success|error|alert|ceil|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789|u07ff|0xc0|u0800|uffff|0xe0|0x3F|u00c0|u00df|0x1f|u00e0|u00ef|0x0f'.split('|'),0,{}))
+
+/**
+ * 취약점 보안 관련 String.prototype.hashCode()추가 -> 난독화
+ * app.js에 viewApp()에서 HashCode 생성 -> appProcessFlowChartMain.jsp에서 request와 비교
+ * 2014.04.23 SungYongJe
+ */
+eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('8.9.b=c(){3 a=0;d(2.4==0)6 a;e(3 1=0;1<2.4;1++){7=2.f(1);a=((a<<5)-a)+7;a=a&a}6 a};',16,16,'|i|this|var|length||return|char|String|prototype||hashCode|function|if|for|charCodeAt'.split('|'),0,{}))
+
+/**
+ * MBC - 기본 팝업(openPopupWindowInCenter)이 iframe 구조라 프린트시 크기에 맞게 축소가 되지 않기 때문에, iframe을 이용하지 않고 팝업. 2016.12.20, eykang
+ * @param href
+ * @param winName
+ * @param width
+ * @param height
+ * @param standard
+ * @param tokenId
+ * @param uTop
+ * @param uLeft
+ * @returns
+ */
+function printPopupWindowInCenter(href, winName, width, height, standard, tokenId, uTop, uLeft)
+{
+	var pop = null;
+	var vTop = !isUndefined(uTop)?uTop : Math.max(0, ((screen.height - height) / 2)-100);
+	var vLeft = !isUndefined(uLeft)?uLeft : (screen.width - width) / 2;
+	
+	var sFeatures = "";
+	// 표준 여부에 따라 feature의 속성이 다르다.
+	// 표준인 경우에는 모든 feature가 no
+	// 표준이 아닌 경우에는 scrollbar와 resize가 가능하다.
+	if (standard){
+		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=no';
+	}
+	else{
+		sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes';
+	}
+	//href에 tokenid가 없을경우.. 
+	if (href.indexOf('_tokenid') == -1) {
+		if(isNullStr(tokenId)){
+			tokenId = jQuery("#_tokenid").val();	
+		}
+		if(!isNullStr(tokenId)) href += "&_tokenid=" + tokenId;
+	}
+	// themetype 이 없을경우 관리자 페이지인지 판단하여 append
+	if(href.toLowerCase().indexOf("themetype=") == -1){
+		var isAdminTheme = checkAdminPage();
+		if(isAdminTheme){
+			href += "&themeType=ADMIN";
+		}
+	}
+	
+	pop = window.open(href, winName, sFeatures);
+	pop.focus();
+
+	/*var f = top.document._popForm;
+	/////////////////////////////////////////////////////////////////////
+	// 개발시 화면단독으로 오픈시 SysContents.jsp을 포함안할경우 
+	/////////////////////////////////////////////////////////////////////
+	if (f==null || f == 'undefined') {
+	  	var formHtml = '<form id="_popForm" name="_popForm" method="post">'+
+									 '<input type=hidden name="_xcsparam">'+
+									 '<input type=hidden name="_isPopMode_" value="Y">'+
+									 '</form>';
+		$("body").append(formHtml);
+		f = jQuery('#_popForm')[0];
+	}
+	f.action = href;
+	f.target = winName;
+	jQuery.submitForm(f, "");*/
+	if(top._popupWindowsMap){
+		top._popupWindowsMap.set(winName, pop);
+	}
+	return pop;
+}
+//2017-03-10 접수자 정보 팝업 이주황
+function openRcvInfo(obj){
+	var rcvInfoArray = $(obj).data('rcvInfo');
+	var url = _webapp + "/XClickController?";
+	
+	jQuery.each(rcvInfoArray, function(index, value){
+		url += jQuery.param(value);
+	});
+	
+	console.log(rcvInfoArray);
+	
+	url += "&msgId=APP-000226";
+	url += "&nextpage=/cef/app/pop/appRcvInfoPop.jsp";
+	
+	var width = 450;
+	var height = 300;
+	
+	openPopupWindowInCenter(url, 'rcvInfoPopUp', width, height, false);	
+		
+}

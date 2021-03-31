@@ -1,0 +1,512 @@
+<div style='overflow:auto;height:180;width:535;'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+<!--
+/*
+* Action 변경으로 인한 제목 변경처리!
+*/
+if(jQuery('#CH2486_title').length > 0 && !isNullStr("")){
+	jQuery('#CH2486_title').html("");
+}
+
+
+  
+jQuery('#CH2486_setbtn').hide();  
+  
+//-->
+
+	function CH2486_winOpen(url){
+		var height = '';
+		var width = '';
+		height = (screen.availHeight-133);
+		width = (screen.availWidth-20);
+		
+		if( url.indexOf("http://") < 0 && url.indexOf("https://") < 0 ){
+			url = "http://" + url;
+		}
+		
+		window.open(url, '','scrollbars=yes,toolbar=yes,location=yes,status=yes,menubar=yes,resizable=yes,width='+width+',height='+height+',left=0,top=0');
+	}
+</script>
+<style type="text/css">
+.image_list2 { position: relative;
+		left: 0;
+		top: 0;
+		width: 535px;
+		height: 180px;
+		max-height: 200px;
+		overflow: hidden;
+}
+.image_list2 .images2 {position:absolute; display:none; }
+.ul_label2 { 
+		float: right;
+		position: absolute;
+		right:10px; bottom:10px; z-index:100;
+}
+
+.ul_label2 li.labelOverClass2 {
+  font-weight:bold;
+   background-position: 0 -13px;
+}
+.ul_label2 li{
+  float: left;
+  cursor:pointer;
+  margin:2px;
+  display: block;
+  width: 13px;
+  height: 0px;
+  padding-top: 13px;
+  background-image: url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/pagination.png);
+  text-indent: -1000px;
+}
+
+.ul_label2 li:hover {
+   background-position: 0 -26px
+}
+
+.moveClass_on {
+	cursor:pointer;
+	width: 11px;
+    display: block;
+    height: 14px;
+	background-image: url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/play_stop.png);
+	background-position-y: -19px;
+}
+
+.moveClass_off {
+	cursor:pointer;
+	width: 11px;
+    display: block;
+    height: 14px;
+	background-image: url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/metro_img/play_stop.png);
+	background-position-y: -1px;
+}
+</style>
+<div class="m_banner" style="width: 535px; margin-top:12px; " onmouseover="document.getElementById('banner_move2').style.display = 'block';"
+		onmouseout="document.getElementById('banner_move2').style.display = 'none';"><!-- 마우스 오버시에만 하단 롤링아이콘 표시 ghlee 20180524 -->
+		<div class="image_list2" id="image_list2">
+				
+				<div class="images2" style="display:block;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE65d8af0f5cf3fc87d0642ffc2db7281a" onclick="CH2486_winOpen('http://www.imbc.com/')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE865a3920e41f1351819fda48ed54d06a" onclick="CH2486_winOpen('http://program.imbc.com/ohmyladylord')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE0e51bdc45cf3fc870633c38c43f0ea59" onclick="CH2486_winOpen('http://program.imbc.com/horror')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FEac7e3e9d5cf3fc87f2bae34106c00b08" onclick="CH2486_winOpen('http://program.imbc.com/whistle-stop')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FEac5f0273e41f135131dde5f5102c2197" onclick="CH2486_winOpen('http://program.imbc.com/myworkingvlog')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE59f4ee85e41f13518db80c28bbcafc24" onclick="CH2486_winOpen('http://playvod.imbc.com/Templete/PreView?bid=1005199100000100000')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE81399ca9e41f13514cda77fa7ce1958e" onclick="CH2486_winOpen('http://program.imbc.com/Concept/ChangeMyHome')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FEc9c743d3e41f13519022dd542bc367d4" onclick="CH2486_winOpen('http://program.imbc.com/agoodsupper')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE323c2046e41f1351d4f8ce822f41834a" onclick="CH2486_winOpen('https://www.youtube.com/channel/UC9idb-NIhZrI6wkPesc3MUg')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE323c0e9be41f1351d4f8ce82499916df" onclick="CH2486_winOpen('https://www.youtube.com/channel/UCiwQRG2sCcfjKkgxMEdJGPg/featured')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FEd1356f115cf3fc879a953e79bed33823" onclick="CH2486_winOpen('https://imnews.imbc.com/replay/2020/nwdesk/')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FEc9c75c8fe41f13519022dd54b86c7e4f" onclick="CH2486_winOpen('http://www.imbc.com/broad/tv/culture/pd/')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FEe42f0973e41f1351678cf9e5a1a91983" onclick="CH2486_winOpen('http://www.imbc.com/broad/radio/')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+				<div class="images2" style="display:none;">
+					<img style="cursor:pointer; width:535px; height:180px;" src="/xclick_mbc/DownController?fileId=MBC1FE0e113e79e41f1351d23a7dc08691cd8e" onclick="CH2486_winOpen('https://mportal.mbc.co.kr:443/xclick_mbc/XClickController?nextpage=/cef/cefInterfaceURL.jsp?kind=bbs&amp;bbsId=FC_00000000b&amp;articleId=NEW15840052650610011&amp;catId=AUTH_MBCBBS&amp;copYn=N')" onerror="CH2486_setDefaultImage(this);">
+				</div>
+				
+		</div>
+		<div class="ul_label2" id = "banner_move2" style="display:none;">
+			<div style="z-index: 1; display: block; margin: 0px 0px -15px -14px;" >
+				<span id="moveCnt" class="moveClass_on"></span>
+			</div>
+			<ul  id="label2" style="z-index: 1;">
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+						<li class="fir" overcss="labelOverClass2"></li>
+					
+			</ul>
+		</div>
+</div>
+<form name="CH2486_frm" id="CH2486_frm" method="post" action="/xclick_mbc/workplace/wp/WP70/ch/CH2486/ws/normal/pm/view" style='height:100%'>
+	<input type="hidden" id="facade" name="facade" value="">
+<input type="hidden" id="command" name="command" value="">
+<input type="hidden" id="nextpage" name="nextpage" value="">
+<input type="hidden" id="sort_column" name="sort_column" value="">
+<input type="hidden" id="sort_cond" name="sort_cond" value="">
+<input type="hidden" id="transaction_token_key" name="transaction_token_key" value="MBC1SS84cdea735cf3fc874a8d34fbd78d7491">
+<input type="hidden" id="transaction_yn" name="transaction_yn" value="N">
+<input type="hidden" id="_xcsparam" name="_xcsparam" value="">
+<input type="hidden" id="paging_listcnt" name="paging_listcnt" value="15">
+<input type="hidden" id="formdata_bean" name="formdata_bean" value="">
+<input type="hidden" id="refreshYn" name="refreshYn" value="N">
+<input type="hidden" id="ifrId" name="ifrId" value="">
+<input type="hidden" id="leftPaneMenuId" name="leftPaneMenuId" value="">
+<input type="hidden" id="_tokenid" name="_tokenid" value="bL76kDWVRpbrLajJjNSlE+ev06+cL4ICgFJs5A!!">
+
+	<input type='hidden' name='popYn'>
+	<input type='hidden' name='isPortal' value='true'>
+	<input type='hidden' name='namespace' value='CH2486_'>
+	</form>
+<script>
+function CH2486_RollImage(json){
+	//이미지 롤링 설정값
+	var config = {
+		currentImg: 0,
+		nextImg 	: 1,
+		listArea	: CH2486_e(json.list_area),
+		imageList : CH2486_e(json.list_area).getElementsByTagName("DIV"),
+		imgCnt 		: CH2486_e(json.list_area).getElementsByTagName("DIV").length-1, //0부터 시작
+		rollTime 	: json.roll_time,
+		moveTime 	: json.move_time,
+		coordX1 	: 0,
+		coordX2 	: CH2486_e(json.list_area).offsetWidth,
+		coordY 		: CH2486_e(json.list_area).offsetHeight,
+		moveAt 		: json.moveAt,
+		direction 	: json.direction,
+		label2 		: CH2486_e(json.label2),
+		labelType 	: json.labelType,
+		moveCnt		: CH2486_e(json.moveCnt)
+	};
+	//alert("gmlwh>>>e(json.list_area).offsetWidth:"+e(json.list_area).offsetWidth);
+	
+	CH2486_labelBind(config); //라벨(버튼) 바인드
+	CH2486_setRoll(config); //롤링 시작
+	CH2486_rollPause(config); //마우스 오버시 롤링 멈춤
+	CH2486_moveCntBind(config);
+	
+	//이미지 롤링 기본 세팅하기
+	function CH2486_setRoll(c){
+		c.coordX1 = 0;
+		c.coordX2 = c.listArea.offsetWidth;
+		c.coordY = c.listArea.offsetHeight;
+
+		if(c.direction=="right" || c.direction=="down"){
+			c.coordX2 = c.coordX2 * -1;
+			c.coordY = c.coordY * -1;
+		}
+// 		c.coordX2 = c.coordX2 - 156;//500
+		
+		if(c.imageList[c.nextImg] && c.imageList[c.nextImg]!=null){
+			c.imageList[c.nextImg].style.display = "block";
+		}
+		if(c.imageList[c.nextImg] && c.imageList[c.nextImg]!=null){
+		CH2486_setPosition(c);
+		CH2486_rollOver(c);
+		}
+		//c.imageList[c.nextImg].style.left = c.coordX2+"px";
+		
+		c.rollTimer = setTimeout(function(){CH2486_imgMove(c)},c.rollTime);
+	};
+
+	//이미지를 움직이게 한다.
+	function CH2486_imgMove(c){
+		if(c.imageList[c.currentImg] && c.imageList[c.currentImg]!=null){
+			if(c.direction == "left" || c.direction == "right"){
+				c.imageList[c.currentImg].style.left = c.coordX1 + "px";
+				c.imageList[c.nextImg].style.left = c.coordX2 + "px";
+			}else if(c.direction == "up" || c.direction == "down"){
+				c.imageList[c.currentImg].style.top = c.coordX1 + "px";
+				c.imageList[c.nextImg].style.top = c.coordY + "px";
+			}
+		}
+// 		alert("gmlwh>>>c.nextImg.left:"+c.imageList[c.nextImg].style.left);
+// 		alert("gmlwh>>>c.coordX1:"+c.coordX1+",moveAt:"+moveAt);
+		var moveAt = parseInt(c.moveAt);
+		
+		var nextImgLeftInt = parseInt(c.imageList[c.nextImg].style.left.replace("px", ""));
+		
+		/* alert("gmlwh>>>c.coordX1:"+c.coordX1+",moveAt:"+moveAt+", c.nextImg.left:"+c.nextImg.left+",nextImgLeftInt:"+nextImgLeftInt
+				+"\n1: "+(nextImgLeftInt < 100)
+				+"\n2: "+(moveAt != 0)
+				+"\n3: "+(c.nextImg.left != 'undefined')
+				+"\n4: "+(c.nextImg.left != 0)
+				+"\n5: "+(!isNullStr(c.nextImg.left))
+				); */
+		if( (nextImgLeftInt < 100) && (moveAt != 0) && (nextImgLeftInt != 0) ){
+			moveAt = nextImgLeftInt;
+		}
+		
+		if (c.direction == "left"){
+			c.coordX1 -= moveAt;
+			c.coordX2 -= moveAt;
+		}else if(c.direction == "right"){
+			c.coordX1 += moveAt;
+			c.coordX2 += moveAt;
+		}else if(c.direction=="up"){
+			c.coordX1 -= moveAt;
+			c.coordY -= moveAt;
+		}else if(c.direction=="down"){
+			c.coordX1 += moveAt;
+			c.coordY += moveAt;
+		}
+		
+		//if(c.coordX1 < (-1*c.listArea.offsetWidth) ) {
+		if( CH2486_isNextImgRoll(c) ) {
+			c.currentImg = c.nextImg;
+			c.nextImg += 1;
+			if(c.currentImg == c.imgCnt) c.nextImg = 0;
+			clearTimeout(c.moveTimer);
+			clearTimeout(c.rollTimer);
+			CH2486_setRoll(c);
+			return;
+		}
+		c.moveTimer = setTimeout(function(){CH2486_imgMove(c)},c.moveTime);
+	};
+	
+	//다음 이미지 롤링 해야하는지 확인
+	function CH2486_isNextImgRoll(c){
+		var d = c.direction;
+		if(d=="left" && c.coordX2 < 0 ) return true;
+		else if(d=="right" && c.coordX2 > 0) return true;
+		else if(d=="up" && c.coordY < 0 ) return true;
+		else if(d=="down" && c.coordY > 0) return true;
+
+		return false
+	};
+
+	//롤링 방향에 따른 두번째 이미지 위치 좌표 설정
+	function CH2486_setPosition(c){
+		var d = c.direction;
+		if(d=="left") c.imageList[c.nextImg].style.left = c.listArea.offsetWidth+"px";
+		else if(d=="right") c.imageList[c.nextImg].style.left = (-1 * c.listArea.offsetWidth) + "px";
+		else if(d=="up") c.imageList[c.nextImg].style.top = c.listArea.offsetHeight + "px";
+		else if(d=="down") c.imageList[c.nextImg].style.top = (-1 * c.listArea.offsetHeight) + "px";
+
+		//alert(c.imageList[c.nextImg].style.left);
+	};
+	
+	//onmouseover 시 움직임 멈춤
+	//플레이 버튼 추가로 인해 주석처리
+	function CH2486_rollPause(c){
+	//alert(c.listArea.onmouseover);
+	/*
+		c.listArea.onmouseover = function(){
+			clearTimeout(c.rollTimer);
+		}
+
+		c.listArea.onmouseout = function(){
+			CH2486_setRoll(c);
+		}
+	*/
+	};
+	
+	//플레이버튼 바인드
+	function CH2486_moveCntBind(c){
+		if(c.moveCnt == null) return;
+		
+		$("#moveCnt").click(function(){
+			if($("#moveCnt").attr("class") == "moveClass_on"){
+				clearTimeout(c.rollTimer);
+				$("#moveCnt").attr("class", "moveClass_off");
+			}
+			else{
+				CH2486_setRoll(c);
+				$("#moveCnt").attr("class", "moveClass_on");
+			}
+		});
+	}
+	
+	//라벨과 바인드
+	function CH2486_labelBind(c){
+		if(c.label2 == null) return; //라벨을 사용하지 않으면 아래는 실행되지 않는다.
+		var labels = c.label2.getElementsByTagName(c.labelType);
+
+		c.label2.onmouseover = function(event){ //라벨영역에 마우스가 오면
+			var evt = event || window.event;
+			var t = evt.target || evt.srcElement;
+			for(n in labels){ 
+				if(labels[n] == t){
+					//c.imageList[c.currentImg].style.display = "none";
+					c.currentImg = parseInt(n);
+					c.nextImg = parseInt(n)+1;
+					if(c.currentImg == c.imgCnt) c.nextImg = 0;
+					clearTimeout(c.rollTimer);
+					CH2486_viewImg(c);
+					CH2486_rollOver(c);
+					break;
+				}
+			}
+			//alert(event.srcElement)
+		}
+		
+		c.label2.onmouseout = function(event){
+			var evt = event || window.event;
+			var t = evt.target || evt.srcElement;
+			for(n in labels){
+				if(labels[n]==t){
+					CH2486_setRoll(c);
+					break;
+				}
+			}
+		}
+	};
+
+	//라벨 onmouseover 시 클래스 적용
+	function CH2486_rollOver(c){
+		if(c.label2 == null) return;
+		var els = c.label2.getElementsByTagName(c.labelType);
+		
+		if(c.labelType == "img"){
+			
+			for(n in els){
+				if(typeof els[n] == "object"){
+					if(n == c.currentImg){
+						els[n].src = els[n].getAttribute("oversrc");
+					}else{
+						els[n].src = els[n].getAttribute("outsrc");
+					}
+				}
+			}
+		}else{
+			for(n in els){
+				if(typeof els[n] == "object"){
+					if(n == c.currentImg){
+						var ocss = els[n].className;
+						els[n].className = ocss+" "+els[n].getAttribute("overcss");
+					}else{
+						els[n].className = els[n].getAttribute("outcss");
+					}
+				}
+			}
+		}
+	}
+
+	//라벨에서 선택된 이미지 보이기
+	function CH2486_viewImg(c){
+		//alert(c.currentImg);
+		for(n=0; n<c.imgCnt+1; n++)	{
+			c.imageList[n].style.display = "none";
+		}
+		
+		c.imageList[c.currentImg].style.left = "0px";
+		c.imageList[c.currentImg].style.top = "0px";
+		c.imageList[c.currentImg].style.display = "block";
+	};
+}
+
+function CH2486_debug(t){
+e("dis").innerHTML = t + "<br>";
+}
+
+//id값으로 객체 반환
+function CH2486_e(id){
+	var o = document.getElementById(id);
+	if(typeof o == undefined || o == null) { return null;}
+
+	return o;
+}
+
+//이미지 오류시 대체
+function CH2486_setDefaultImage(imgObj){
+	if(imgObj.src.indexOf("noimage.png") < 0){
+		imgObj.src = _portalDir + "/img/noimage.png";
+	}
+}
+</script>
+<script type="text/javascript">
+
+var j2 = {
+	"list_area":"image_list2",
+	"moveAt":"100",
+	"roll_time":3000,
+	"move_time":"65",
+	"direction":"left",
+	"label2":"label2",
+	labelType : "li",
+	"moveCnt":"moveCnt"
+};
+if(14 > 1){
+	new CH2486_RollImage(j2);
+}
+
+//oj1.setRoll();
+//-->
+</script></div>

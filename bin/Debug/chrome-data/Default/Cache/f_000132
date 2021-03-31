@@ -1,0 +1,1426 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+ 
+
+<html>
+<head>
+<!--	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"> -->
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  	
+	<title>MPORTAL[6]-최푸름님</title>
+	
+
+<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/jquery/css/jquery.datepicker2.css?_xclickstatic" />
+<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/jquery/css/jquery.validationEngine.css?_xclickstatic" media="screen" title="no title" charset="utf-8" />
+<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/common/css/toast.css?1.99_xclickstatic" charset="utf-8" />
+<!-- 신규테마 적용. 2013.10.10 hyungyu, Song -->
+
+<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/content_new/type_metro3/css/style.css?1.99_xclickstatic" charset="utf-8" />
+<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/header_new/type_metro3/css/style.css?1.99_xclickstatic" charset="utf-8" />
+<!-- 2015.05.29 Metro 는 공통용 css 를 따로 사용한다 (위치 : /content_new/  hyungyu  -->
+<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/content_new/type_metro3/css/layout.css?1.99_xclickstatic" charset="utf-8" />
+
+<link type="text/css" rel="stylesheet" href="/xclick_mbc/cef/webFont/css/webFont.css?1.99_xclickstatic" charset="utf-8" />
+
+<script type="text/javascript" src="/xclick_mbc/common/js/jquery-1.6.4.min.js?_xclickstatic"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/xclick.variable.js.jsp?_timestamp=1617178724406"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/datepicker/lang.js?1.99_xclickstatic"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/datepicker/datepicker.js?1.99_xclickstatic"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/jquery.blockUI.js?_xclickstatic"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/json2.js?_xclickstatic"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/common.js?1.99_xclickstatic"></script> 
+<script type="text/javascript" src="/xclick_mbc/common/js/xclick.js?1.99_xclickstatic"></script>
+<script type="text/javascript" src="/xclick_mbc/common/js/jquery.validationEngine.js?1.99_xclickstatic"></script>
+
+
+<script type="text/javascript" src="/xclick_mbc/common/js/xClickLib.js?1.99_xclickstatic"></script>
+	
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/content_new/type_metro3/css/layout_metro.css?1.99_xclickstatic" charset="utf-8" />
+
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/frame_new/type_metro3/css/style.css?1.99_xclickstatic" />
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/top_new/type_metro3/css/style.css?1.99_xclickstatic" />
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/bg_new/type_metro3/css/style.css?1.99_xclickstatic" />
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/unit_new/type_metro3/css/style.css?1.99_xclickstatic" />
+	<link type="text/css" rel="stylesheet" href="/xclick_mbc_resource/themes/ko/tab_new/type_metro3/css/style.css?1.99_xclickstatic" />
+
+	<link href="/xclick_mbc_resource/themes/ko/jquery/css/contextmenu.css" rel="stylesheet" type="text/css" charset="utf-8" />
+	<script type="text/javascript" src="/xclick_mbc/common/js/xClickDragDropHandler.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src="/xclick_mbc/schedule/js/scheduletodo.js?1.99_xclickstatic"></script>
+	<!-- MBC/RQ_BBS_025/게시물 스크랩 기능/2016.07.27/ejdreams -->
+	<script type="text/javascript" src="/xclick_mbc/cef/common/js/cefscrap.js?1.99_xclickstatic"></script>
+	<script type="text/javascript" src='/xclick_mbc/common/js/menu.js?1.99_xclickstatic'></script>
+	<script type="text/javascript" src='/xclick_mbc/common/js/menu_metro.js?1.99_xclickstatic'></script>
+	<script type='text/javascript' src='/xclick_mbc/common/js/jquery.mainTab_metro.js?1.99_xclickstatic1'></script>
+	<script type="text/javascript" src="/xclick_mbc/common/js/xClickLib.js?1.99_xclickstatic"></script>
+
+	<script type='text/javascript'>
+
+	var _popupWindowsMap = new xClickLib.map();
+	
+	var xclickNewSessionId; // 미니로그인으로 새 세션 생성시 이값을 셋팅한다.
+	xClickDragDropHandler.setMain(); // 드래그 드랍 최상위 정의
+	jQuery(document).ready(function() {
+		// Tab Content Division의 Size를 위한 윈도우의 사이즈 추출.
+		var tabOptions = { mode : 'org' };
+		// TabMenu Object 선언 (tabpanel 변수는 jquery.mainTab*.js 파일에 존재함.)
+		tabpanel = new TabPanel(tabOptions);
+		
+		jQuery.initComboBox("*");
+		
+		//페이지 로드시 의무교육팝업창 띄우기
+		if(_companyId == 'XX'){ //본사대상이라SU이나, 20191204에 종료하여 XX로 처리 ghlee
+					
+		}
+	});
+		
+	 function addJob_changeCompany(obj){
+		var companyId;
+		if((typeof obj).toLowerCase() == 'string'){
+			companyId = obj;
+		}else{
+			companyId = obj.value;
+		}
+		if(_companyId == companyId){
+			return;
+		}
+		jQuery.ajax({
+			url : _webapp + "/XClickController"
+			,async : false
+			,data : {
+				facade : "UserFacade"
+				,command : "changeSessionCompany"
+				,companyId : companyId
+			}
+		});
+		xClickTop.location.href = _webapp;
+		
+	}
+	
+	//MBC / 2016.10.24 / 포탈 네이버웍스 url 탭메뉴로 수정 / jcpark
+	function goNaverWorksMenu(naverMenuType, msg) {
+		var menuName = stringReplace(msg,"%20"," ");
+		/*
+		var _menuParam = {
+				menuTreeId: '',
+				defaultMenuId: '',
+				imageFileName: '',
+				menuName: menuName,
+				menuKind: 'USER',
+				menuId : ''
+		};
+		*/
+		var actionVal = _webapp + '/XClickController?nextpage=/cef/naverworks/nwServicePage.jsp?menuType=' + naverMenuType;
+		
+		var activeTab = tabpanel.getActiveTab();
+		var activeTabIsClosable = tabpanel.getClosable(activeTab);
+		if (!_init || (!activeTabIsClosable )) {
+			jQuery.addTab(menuName, actionVal);
+		} else {
+			jQuery.urlTab(menuName, actionVal);
+		}
+		_init = true;
+	}
+	
+	function menuClick2(layer,actionType,actionValue,menuTreeId,defaultMenuId,imageFileName,menuName,menuKind,subMenuId,param,leftWidth) {
+		menuName = stringReplace(menuName,"%20"," ");
+		_menuParam = actionValue.indexOf("?") > 0 ? "&" : "?"
+		_menuParam += "menuTreeId="+menuTreeId+"&defaultMenuId="+defaultMenuId+"&imageFileName="+imageFileName+"&leftWidth="+leftWidth+
+		              "&menuName="+encodeURI(menuName)+"&menuKind="+menuKind+"&subMenuId="+subMenuId+"&param="+param
+		           
+		switch ( actionType ) {
+			case 'NONE' :
+				break;
+			case 'SUB' :
+				submenuFirstClick(layer,true);
+				break;		
+			case 'SCRIPT' :
+				eval(actionValue);
+				break;
+			case 'URL' :
+				// IE계열이 아닐경우  menuName을 인코딩 하지 않는다.
+				if( navigator.appName.indexOf('Microsoft') == -1) {
+					_menuParam = _menuParam.replace(encodeURI(menuName), menuName);
+				}
+				var menuTitle = menuName
+					  , actionVal = _webapp + actionValue + _menuParam
+						, activeTab = tabpanel.getActiveTab()
+						, activeTabIsClosable = parent.xClickTop.tabpanel.getClosable(activeTab);
+
+				if (activeTabIsClosable) {
+					tabpanel.setTabURL(menuTitle, actionVal);
+				} else {
+					jQuery.addTab();
+					tabpanel.setTabURL(menuTitle, actionVal);
+				}
+				break;
+			case 'EXTURL' :
+				xClickTop.mainFrame.location.href = actionValue;
+				break;
+			default :
+				break;	
+		}
+		jQuery("span[id*='Layer']").hide();
+	}
+	
+	// 내가 opener 인 popup 제거
+	if ( jQuery.browser.msie /*window.attachEvent && !window.addEventListener*/ ) {
+		window.attachEvent("onunload", function() {	
+			try{
+				if(xClickTop._popupWindowsMap && xClickTop._popupWindowsMap.length > 0){
+					var len = xClickTop._popupWindowsMap.length;
+					for(var i = len-1; i >= 0; i--){
+						xClickTop._popupWindowsMap.get(xClickTop._popupWindowsMap.arKey[i]).close();
+						xClickTop._popupWindowsMap.remove(xClickTop._popupWindowsMap.arKey[i]);
+					}
+				}
+			}catch(e){
+				//alert("unload error : " + e.description);
+			}
+		});
+	}		
+	/**
+	* EDMS 전용탐색기 java WebStart call
+	*/
+	function openEdmsExplorer(){
+		if(_isMobileFullMode){
+			return;
+		}
+		location = _webapp + '/edms/explorer/EdmsExplorer_JNLP.jsp?';
+	}
+	/**
+	* portal reload.
+	* 회사로고 클릭시 포탈만 reload / focus 로 변경. hyungyu, 2014.8.8 개선사항처리
+	*/
+	function reloadPortal(){
+	 	// VER : REG_2015.11, REFID : DEV1511_239, AUTHOR : ikhan
+	 	// miniLoginDiv 로그인 후 빈화면 보여지는 현상
+		// submit전에 session check
+		var isSession = jQuery.sessionCheckAjax('', '_self');
+		if(!isSession) return false;
+		
+		
+			var idx = 0;
+			jQuery("#_tabIfr"+idx)[0].contentWindow.location.reload();
+			jQuery.focusTab(0);
+		
+	}
+
+	//MBC/RQ_BBS_025/게시물 스크랩 기능/2016.07.27/ejdreams
+	$(document).ready(function(){
+            $("#divScrapContainer").css("display")
+        })
+
+	//2019.02.14/의무교육선택팝업/hds
+	function eduSelectMainPop(){
+				
+	}
+	//2019.08.26/의무교육선택팝업/ghlee
+	function eduPrivacyMainPop(){
+				
+	}
+
+	//2020.07.22/괴롭힘금지교육선택팝업/ghlee
+	function eduWorkHarassmentMainPop(){
+				
+	}
+	
+		
+	</script>
+</head>
+<body style="min-width:1024px;overflow:hidden;">
+<form id="frmMenu" name="frmMenu" method="post" action="/xclick_mbc/XClickController">
+	<input type="hidden" id="facade" name="facade" value="">
+<input type="hidden" id="command" name="command" value="null">
+<input type="hidden" id="nextpage" name="nextpage" value="">
+<input type="hidden" id="sort_column" name="sort_column" value="">
+<input type="hidden" id="sort_cond" name="sort_cond" value="">
+<input type="hidden" id="transaction_token_key" name="transaction_token_key" value="MBC1SS84cdea555cf3fc874a8d34fbf3bc29e8">
+<input type="hidden" id="transaction_yn" name="transaction_yn" value="N">
+<input type="hidden" id="_xcsparam" name="_xcsparam" value="">
+<input type="hidden" id="paging_listcnt" name="paging_listcnt" value="15">
+<input type="hidden" id="formdata_bean" name="formdata_bean" value="">
+<input type="hidden" id="refreshYn" name="refreshYn" value="N">
+<input type="hidden" id="ifrId" name="ifrId" value="">
+<input type="hidden" id="leftPaneMenuId" name="leftPaneMenuId" value="">
+<input type="hidden" id="_tokenid" name="_tokenid" value="bL76kDWVRpbrLajJjNSlE+ev06+cL4ICgFJs5A!!">
+
+	<input type="hidden" id="isRefresh" name="isRefresh" value="true"/>
+</form>
+<div id="wrap">
+	  <div class="m_header">
+	  <div style="border-bottom:1px solid #334555; width: 100%; padding-bottom: 5px;">
+	    <div class="m_unit_area" style="position: relative; top: 5px;">
+	      <div>
+	        <span style="text-align: right;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+	<style type="text/css">
+		select.inputF {height:18px;font-size:11px}
+		select[size].inputF, select[multiple].inputF {height:auto;}
+		.inputF { vertical-align:middle;
+			border:1px #c3c3c3 solid; 
+			font-size:11px; 
+			min-height:14px; 
+			line-height:110%; 
+		}	
+	</style>
+		<!--Extra 메뉴 및 로고 -->
+     <div class="m_unit"  id="unit_menu" style="width: 100%; padding-left: 0px;">
+     	<span style="width: 50%; display : inline-block; text-align: left; position: absolute; left: 15px; top: 2px;">
+			<!-- li 엘리먼트들이 position:absolute 되므로 ul 엘리먼트에는 height 값이 있어야 합니다 --> 
+			<!-- MBC - 한줄공지 추가, 2016.10.28 : 박나래 -->
+			<ul id="scrollNoti" style="height: 15px; color: #353535;">
+				
+				
+					
+				    <li><p class="m_single_notice">
+				    	
+				    	<a style="font-size: 13px; overflow: hidden; white-space:nowrap; text-overflow:ellipsis;" onclick="window.open('https://mportal.mbc.co.kr:443/xclick_mbc/XClickController?nextpage=/cef/cefInterfaceURL.jsp?kind=bbs&amp;bbsId=BBS25&amp;articleId=NEW15833981852720011&amp;catId=AUTH_QNA&amp;copYn=N')">[필독] Chrome/Edge/Whale에서 메일이 안보일 때 해결 방법</a>
+				    	
+				    </p></li>
+				    
+			    
+			</ul>
+     	</span>
+     	<span style="text-align: right; width: 230px; display : inline-block; white-space:nowrap; text-overflow:ellipsis; background-color:white; position: relative;">
+     	<!-- [MBC문화방송] / 2016.06.08 / 부가메뉴영역 조직검색 기능 추가 / hjkim -------- Start -->
+<!--    // MBC - 부가메뉴 사원검색 검색대상, selectBox selected대상 -> 검색대상 전체로 수정, 2016.10.24 : 박나래 -->
+<!--        <span> -->
+
+<!-- 			사원검색 :		 -->
+<!--        </span> -->
+<!--        <span style="position: relative; bottom: 1px;"> -->
+<!-- 	       	<select name="srchTarget" id="srchTarget" class="inputF" style="height:19px; display: none;"> -->
+<!-- 						<!--  <option value="">선택</option>-->
+
+<!-- // 							String searchDbColumnNm = ""; -->
+<!-- // 							String msg = ""; -->
+<!-- // 							//MBC - DEV_ORG_008 / 2016.07.13 / 조직도검색조건추가 / gmlwh Start -->
+<!-- // 							for(int i=0; srchTargetListForOrg != null && i < srchTargetListForOrg.size() ;i++){ -->
+<!-- // 								searchDbColumnNm = srchTargetListForOrg.get(i).getSearchDbColumnNm(); -->
+<!-- // 								msg = srchTargetListForOrg.get(i).getMsg(); -->
+
+
+
+<!--  		      				} -->
+<!-- 		      				//MBC - DEV_ORG_008 ----->
+
+<!-- 			</select> -->
+			<input onkeyup="chgColor(this);" placeholder="직원검색 (성명/부서/전화번호/업무)" type="text" id="srchKeyword" name="srchKeyword" class="inputF" style="width:190px;font-size:12px;height:1.2em; padding-top:2px;line-height:1.2em; min-height:12px; color: #A6A6A6; padding-left:5px;" onkeydown="keyEnter(event, ext_query)" value=""/>
+			<img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/icon_find.png?1.99_xclickstatic" style="cursor:pointer;vertical-align:middle;" onclick="ext_query();"/>
+<!--        </span> -->
+       <!--<span class="unit_bg_bar"></span>-->
+       &nbsp;&nbsp;&nbsp;&nbsp;
+       	<!-- [MBC문화방송] / 2016.06.08 / 부가메뉴영역 조직검색 기능 추가 / hjkim -------- End -->
+       <!--<span style="overflow: hidden; white-space:nowrap; text-overflow:ellipsis;"><strong>최푸름</strong>님-->
+        
+        </span>
+        <span class="m_ext" style="overflow: hidden; white-space:nowrap; text-overflow:ellipsis;">
+	    
+	    
+	    	<a
+	    			onclick="menuClick(this);ga('send','event','상단부가메뉴클릭','개인/부재설정','상단부가메뉴');" id="CONFIG" 
+		    		actiontype="URL" 
+		    		menutype="ExtMenu" 
+		    		title="개인/부재설정"
+	     	>
+	     		개인/부재설정
+	     	</a>
+	    <!--
+	    
+	    -->
+	    	<a
+	    			onclick="menuClick(this);ga('send','event','상단부가메뉴클릭','스크랩게시글','상단부가메뉴');" id="EXT_SCRAP" 
+		    		actiontype="SCRIPT" 
+		    		menutype="ExtMenu" 
+		    		title="스크랩게시글"
+	     	>
+	     		스크랩게시글
+	     	</a>
+	    
+	    
+	    </span>
+		<a href="#" onclick="logout();return false;" class="logout" title="Log-out" style="padding:0; "><img src="/xclick_mbc_resource/themes/ko/unit_new/type_metro3/img/btn_logout.png?1.99_xclickstatic" alt="logout"/></a>		
+	    
+	 	
+	   	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+<script type="text/javascript">
+/**
+* 회사ID 리턴
+*/
+getCompanyId = function (dom) {
+	var oSelect = document.getElementById('companySelect_' + dom);
+	if( oSelect ) {
+		return oSelect.value;
+	}else{
+		return 'IM';
+	}
+};
+/**
+* 회사이름 리턴
+*/
+getCompanyName = function (dom) {
+	var oSelect = document.getElementById('div_companySelect_' + dom);
+	if( oSelect ) {
+		return oSelect.innerHTML;
+	}else{
+		return 'iMBC';
+	}
+};
+</script>
+
+
+	    
+	    </span>
+     </div>
+     
+	<!--//상단 메뉴 및 로고 -->
+	<script type="text/javascript">
+	<!--
+	var _xclick_mbcmportalmbccokr_adminWin;
+	var _logoutMsg = jQuery.getMessage('COMMON-000233');
+	//로그아웃처리
+	function logout() {
+		if(confirm(_logoutMsg) == true){		
+			if( _xclick_mbcmportalmbccokr_adminWin ) {
+				try{
+					_xclick_mbcmportalmbccokr_adminWin.close();
+				}catch(e){}
+			}
+			// VER : REG_2016.xx, REFID : MBC_160706, AUTHOR : S.H.Byun
+			// 그룹웨어 실시간 알림
+			if(typeof delDisconnectUserInfo == 'function'){
+				delDisconnectUserInfo();
+			}
+			xClickTop.location.href = _webapp + "/XClickLogoutHandler";			
+		}
+	}
+	
+	//사원검색 값 입력시 컬러변경 : 박나래
+	function chgColor(obj){
+		if(obj.value!=""){
+			obj.style.color = "#000000";
+		}else{
+			obj.style.color = "#A6A6A6";
+		}
+	}
+	
+/**
+ * TEL popup
+ */
+function openTelPop(){
+	var params = {
+			facade : ""
+			,command : ""
+			,nextpage : "/common/pop/telMain.jsp"
+			,msgId : "COMMON-000284" // TEL
+			,companyId : _companyId
+	};
+	
+	var url = _webapp + "/XClickController?" + jQuery.param(params);
+	var title = "";
+	var width = 920;
+	var height = 680;
+	var standard = false;
+	
+	openPopupWindowInCenter(url, "XClick_tellist", width, height, standard);
+}
+
+/**
+ * session info popup
+ */
+function openSessionInfoPop(){
+	var params = {
+			facade : ""
+			,command : ""
+			,nextpage : "/common/pop/sessionInfoMain.jsp"
+			,msgId : "COMMON-000287" // 사용자현황
+			,companyId : _companyId
+	};
+	
+	var url = _webapp + "/XClickController?" + jQuery.param(params);
+	var title = "";
+	var width = 940;
+	var height = 680;
+	var standard = false;
+	
+	openPopupWindowInCenter(url, "XClick_sessionlist", width, height, standard);
+}
+
+/**
+ * MBC - DEV_ORG_007 / 2016.06.27 / 층별 안내 조회 / gmlwh
+ */
+function openFloorPlansPop(){
+	var params = {
+			facade : "FloorFacade"
+			,command : "listFloor"
+			,nextpage : "/cef/floor/pop/floorPlansMain.jsp"
+			,msgId : "CEF-100302" // 상암사옥 층별 안내
+			,companyId : _companyId
+			,menu : "userExtMenu"
+	};
+	
+	var url = _webapp + "/XClickController?" + jQuery.param(params);
+	var title = "";
+	var width = 1040;
+	var height = 680;
+	var standard = false;
+	
+	openPopupWindowInCenter(url, "XClick_sessionlist", width, height, standard);
+}
+
+function toggleConfigMenu(id){
+	jQuery("#"+id).toggle();
+	jQuery("#BTN_DROPDOWN").toggleClass("unit_option").toggleClass("unit_option_up");
+}
+function toggleCompanyList(){
+	jQuery("#addjobCompnyDiv").toggle();
+}
+
+function openAdminWin() {
+
+//관리자페이지 POPUP 호출
+			if( _xclick_mbcmportalmbccokr_adminWin ) {
+				_xclick_mbcmportalmbccokr_adminWin.close();
+			}
+			var width = Math.min(window.screen.availWidth-100,1200);
+			var height = Math.min(window.screen.availHeight-100,800);
+			var vTop = 0;//(screen.height - height) / 2;
+			var vLeft = 0;//(screen.width - width) / 2;
+			var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes';
+			_xclick_mbcmportalmbccokr_adminWin = window.open(_webapp + '/sys/sysMain.jsp', '_xclick_mbcmportalmbccokr_win', sFeatures);
+			_xclick_mbcmportalmbccokr_adminWin.focus();
+
+}
+	
+/**
+ * query
+ */
+function ext_query() {
+	var userData;
+	// MBC - 부가메뉴 사원검색 검색대상, selectBox selected대상 -> 검색대상 전체로 수정, 2016.10.24 : 박나래
+// 	var srchTarget = document.getElementById("srchTarget");
+	var srchKeyword = document.getElementById("srchKeyword");
+// 	if(isNullStr(srchTarget.value)){
+// 		srchTarget.value = "userName";
+// 	}
+	if(isNullStr(srchKeyword.value)){
+		alert('검색어를 입력하세요');
+		srchKeyword.focus();
+		return;
+	}
+	
+	jQuery.ajax({
+		type : "POST",
+		async : false,
+		url : _webapp + "/AjaxController",
+		data : {
+			ajax_result_type : "JSON",
+			transaction_yn : "N",
+			facade : "UserFacade",
+			command : "checkSearchListAjax",	
+// 			srchTarget : srchTarget.value,	
+			srchKeyword : $.trim(srchKeyword.value)
+		},
+		error : function(xhr, status, error){
+			alert(error);
+		},
+		success : function (data) {
+			userData = data;	
+		}
+	});
+	
+	if(userData.length > 1) { 	// list popup
+		var params = {
+				srchKeyword : $.trim(srchKeyword.value)
+// 				,srchTarget : srchTarget.value
+				,facade : "UserFacade"
+				,command : "listSearchUser"
+				,nextpage : "/acl/pop/userDetailListPop.jsp"
+				,msgId : "ACL-000280" // 사용자 상세리스트
+				,isPopup : 'true'
+			};
+			var urlStr = _webapp + "/XClickController?" + jQuery.param(params);
+			// 2016-11-01 jtlim => width 변경
+			//openPopupWindowInCenter(urlStr, '_extUserSrchList', 720, 670, false);
+			openPopupWindowInCenter(urlStr, '_extUserSrchList', 870, 670, false);
+		
+	} else if(userData.length == 1){   // 사용자 상세정보
+			var params = {
+				userId : userData[0].userid
+				,facade : "UserFacade"
+				,command : "viewSearchUser"
+				,nextpage : "/acl/pop/userDetailPop.jsp"
+				,msgId : "ACL-000401" // 사용자 상세정보
+				,isPopup : 'true'
+			};
+			var urlStr = _webapp + "/XClickController?" + jQuery.param(params);
+			openPopupWindowInCenter(urlStr, '_extUserSrchDetail', 620, 670, false);
+	}else{
+		alert("검색된 사용자가 없습니다.");
+	}
+}
+
+/**
+ * nextProcess
+ */
+function nextProcess () {
+	query();
+}
+
+//MBC - 한줄공지 추가, 2016.10.28 : 박나래
+//한줄공지 스크립트 시작
+function textScroll(scroll_el_id) {
+    this.objElement = document.getElementById(scroll_el_id);
+    this.objElement.style.position = 'relative';
+    this.objElement.style.overflow = 'hidden';
+
+    this.objLi = this.objElement.getElementsByTagName('li');
+    this.height = this.objElement.offsetHeight; // li 엘리먼트가 움직이는 높이(외부에서 변경가능)
+    this.num = this.objLi.length; // li 엘리먼트의 총 갯수
+    this.totalHeight = this.height*this.num; // 총 높이
+    this.scrollspeed = 1; // 스크롤되는 px
+    this.objTop = new Array(); // 각 li의 top 위치를 저장
+    this.timer = null;
+    
+    for(var i=0; this.num>1 && i<this.num; i++){
+        this.objLi[i].style.position = 'absolute';
+        this.objTop[i] = this.height*i;
+        this.objLi[i].style.top = this.objTop[i]+"px";
+    }
+}
+
+textScroll.prototype.move = function(){
+    for(var i=0; i<this.num; i++) {
+        this.objTop[i] = this.objTop[i] - this.scrollspeed;
+        this.objLi[i].style.top = this.objTop[i]+"px";
+    }
+    if(this.objTop[0]%this.height == 0){
+        this.jump();
+    }else{
+        clearTimeout(this.timer);
+        this.timer = setTimeout(this.name+".move()",50);
+    }
+}
+
+textScroll.prototype.jump = function(){
+    for(var i=0; i<this.num; i++){
+        if(this.objTop[i] == this.height*(-1)){
+            this.objTop[i] = this.objTop[i] + this.totalHeight;
+            this.objLi[i].style.top = this.objTop[i]+"px";
+        }
+    }
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.name+".move()",4000);
+}
+
+textScroll.prototype.start = function() {
+    this.timer = setTimeout(this.name+".move()",4000);
+}
+
+var real_search_keyword = new textScroll('scrollNoti'); // 스크롤링 하고자하는 ul 엘리먼트의 id값을 인자로 넣습니다
+real_search_keyword.name = "real_search_keyword"; // 인스턴스 네임을 등록합니다
+real_search_keyword.start(); // 스크롤링 시작
+//한줄공지 스크립트 끝
+//-->
+</script>
+</span>
+	      </div>
+	    </div>
+	  </div>
+        <div class="m_top_area">
+        		
+            <h1 id="logo_area" style="cursor:pointer; bottom: 30px; position: relative;" onclick="reloadPortal();"><img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/Mportal logo_200923.png?1.99_xclickstatic" alt="" style="margin-left: 0px;margin-top: 8px;" /></h1><!-- logo.png -->
+            <h1 id="logo_area" style="bottom: 4px;position: relative;font-size:14px;font-weight:bold;color:#252525;padding-top: 29px;padding-left: 4px;">iMBC</h1>
+            
+            
+						
+ 		 <div class="m_mdi"   id="tabArea" >
+             <span class="m_add"  id="tabPlus">
+             	<a href="#" onClick="jQuery.addTab();return false;" style='cursor:pointer;'>
+             		<img src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/mdi_add_3.png?1.99_xclickstatic" alt="새탭" style="height: 30px;"/>
+             	</a>
+             </span>
+        </div>
+        <p class="naver_unit" id="naver_unit">
+					
+			<!--<a style=" background:url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/mportalqna4.png) 40% 0px no-repeat; width:95px;" onclick="winOpen('https://line.worksmobile.com/kr/download/')"></a>		-->
+			<!--<a style=" background:url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/mportalqna5.png) 40% 0px no-repeat; width:129px;" onclick="winOpen('https://mportal.mbc.co.kr:443/xclick_mbc/XClickController?nextpage=/cef/cefInterfaceURL.jsp?kind=bbs&bbsId=BBS25&articleId=NEW15427050279870011&catId=AUTH_QNA&copYn=N');ga('send','event','상단아이콘클릭','LINE WORKS/모바일 설치가이드','상단아이콘');"></a>-->
+			<!--<a style=" background:url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/mportalqna6.png) 40% 0px no-repeat; width:84px;" onclick="menuActionForBBS('MGRQNA','QNAMENU','QNA','BBS378');ga('send','event','상단아이콘클릭','LINE WORKS 활용팁','상단아이콘');"></a>-->
+			<!--<a style=" background:url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/mportalqna6.png) 40% 0px no-repeat; width:84px;" onclick="winOpen('https://guide.worksmobile.com/ko/');ga('send','event','상단아이콘클릭','LINE WORKS 활용팁','상단아이콘');"></a>-->
+			<!--<a style=" background:url(/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/mportalqna3.png) 40% 0px no-repeat; width:64px;" onclick="winOpen('https://mportal.mbc.co.kr:443/xclick_mbc/XClickController?nextpage=/cef/cefInterfaceURL.jsp?kind=bbs&bbsId=BBS25&articleId=NEW14859234596590011&catId=AUTH_QNA&copYn=N');ga('send','event','상단아이콘클릭','MPortal FAQ','상단아이콘');"></a>-->
+			
+			<a class="wicon01" onclick="goNaverWorksMenu('talk', '메신저');ga('send','event','상단아이콘클릭','메신저','상단아이콘');">메신저</a>
+        	<a class="wicon02" onclick="goNaverWorksMenu('calendar', '일정');ga('send','event','상단아이콘클릭','일정','상단아이콘');">일정</a>
+        	<a class="wicon03" onclick="goNaverWorksMenu('contact', '주소록');ga('send','event','상단아이콘클릭','주소록','상단아이콘');">주소록</a>
+        	<a class="wicon04" onclick="goNaverWorksMenu('drive', '드라이브');ga('send','event','상단아이콘클릭','드라이브','상단아이콘');">드라이브</a>
+        </p>
+
+        </div>
+        <div class="m_gnb">
+            <div>
+              <!-- MBC - 컨트롤누른상태로 메뉴클릭시 신규팝업 호출 후 메뉴 조회, 2016.11.30 : 박나래 -->
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+<!--상단 메뉴 -->
+        	
+<!--- Main Menu -->
+<!-- <ul class="gnb" style="padding-left: 10px;"> -->
+<div>
+	<ul class="gnb">
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="PORTAL" onmouseover="menuEventSet('PORTAL');" onmouseout="menuEventout('PORTAL');">
+		<a href="#" class="menu" id="PORTAL" menuType="mainMenu" actionType="SUB" defaultMenu="PORTAL_WP70" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','초기화면','상단메뉴');">
+			초기화면
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="NMAIL" onmouseover="menuEventSet('NMAIL');" onmouseout="menuEventout('NMAIL');">
+		<a href="#" class="menu" id="NMAIL" menuType="mainMenu" actionType="SUB" defaultMenu="NAVER_MAIL" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','메일','상단메뉴');">
+			메일
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="NOTIFY" onmouseover="menuEventSet('NOTIFY');" onmouseout="menuEventout('NOTIFY');">
+		<a href="#" class="menu" id="NOTIFY" menuType="mainMenu" actionType="SUB" defaultMenu="MBCBBS" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','게시판','상단메뉴');">
+			게시판
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="APPROVAL" onmouseover="menuEventSet('APPROVAL');" onmouseout="menuEventout('APPROVAL');">
+		<a href="#" class="menu" id="APPROVAL" menuType="mainMenu" actionType="SUB" defaultMenu="APP" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','결재','상단메뉴');">
+			결재
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="INFORMATION" onmouseover="menuEventSet('INFORMATION');" onmouseout="menuEventout('INFORMATION');">
+		<a href="#" class="menu" id="INFORMATION" menuType="mainMenu" actionType="SUB" defaultMenu="PDSBBS" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','정보센터','상단메뉴');">
+			정보센터
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="WORK_SUB" onmouseover="menuEventSet('WORK_SUB');" onmouseout="menuEventout('WORK_SUB');">
+		<a href="#" class="menu" id="WORK_SUB" menuType="mainMenu" actionType="SUB" defaultMenu="WORKSUPPORT_SUB" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','업무','상단메뉴');">
+			업무
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="CAFE" onmouseover="menuEventSet('CAFE');" onmouseout="menuEventout('CAFE');">
+		<a href="#" class="menu" id="CAFE" menuType="mainMenu" actionType="SUB" defaultMenu="COP" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','포럼','상단메뉴');">
+			포럼
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="HELP" onmouseover="menuEventSet('HELP');" onmouseout="menuEventout('HELP');">
+		<a href="#" class="menu" id="HELP" menuType="mainMenu" actionType="SUB" defaultMenu="FAQ" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','HELP','상단메뉴');">
+			HELP
+		</a>
+	</li>
+
+	<!-- MBC / 서브메뉴 풀다운 구조변경에 따라 단일 subLayer로 변경 (subLayerId 고정) / 2017. 01. 04. hjkim -->
+	<li name="ORG" onmouseover="menuEventSet('ORG');" onmouseout="menuEventout('ORG');">
+		<a href="#" class="menu" id="ORG" menuType="mainMenu" actionType="URL" defaultMenu="" subLayerId="subLayer_menu" onClick="menuClick(this); ga('send','event','메인메뉴클릭','조직도','상단메뉴');">
+			조직도
+		</a>
+	</li>
+       	
+	</ul>
+</div>
+            
+<!--//상단 메뉴 및 로고 -->
+<script language='javascript'>
+	function dialIpt(calledNumber){
+			jQuery.ajax({
+				url : _webapp+'/AjaxController?facade=CefIPTDialFacade&command=dialIptAjax',
+				data: {"calledNumber":calledNumber, "userId":"MBC1AL855c165be41f1351e3f7108800b4b1cc", "transaction_yn":"Y"},
+				error 	: function(xhr, status, error){
+					alert(error);
+				},
+				success : function (data){
+					//해당 사용자에 대한 전송 결과( 등록된 사용자인가 체크만 해서 넘겨줌)
+					if(data.result == 'Success'){
+						messagePop("CEF-100133", "ALERT", 300, 170); //성공적으로 전화연결되었습니다.
+					}else if(data.result == 'iUC_RC_USER_NOT_FOUND'){
+						messagePop("CEF-100132", "ALERT", 300, 170); //등록된 사용자가 아닙니다.
+					}else if(data.result == 'iUC_RC_CHANNEL_NOT_FOUND'){
+						messagePop("CEF-100134", "ALERT", 300, 170); //없는 번호이거나 등록되지 않는 번호입니다.
+					}else if(data.result == 'iUC_RC_INVALID_EXTENSION'){
+						messagePop("CEF-100135", "ALERT", 300, 170); //CM에 등록되지 않는 전화번호입니다.
+					}else{
+						messagePop("CEF-100136", "ALERT", 300, 170); //전화걸기를 실패하였습니다. 상대방이 통화할 수 없는 상태입니다.
+					}
+				}
+			});
+		
+	}
+<!--
+
+				//MBC - 컨트롤누른상태로 메뉴클릭시 신규팝업 호출 후 메뉴 조회, 2016.11.30 : 박나래
+				init('PORTAL', '', '', '');
+
+
+//-->
+</script>
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ ga('create', 'UA-131195617-3', 'auto');
+ ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+<!-- Sub Menu Layer-->
+<!-- MBC / 2016. 11. 05. / Sub메뉴 리스트 풀다운 적용 (기존 방식 미사용) / hjkim -->
+<div id="subLayer_menu" class="m_gnb_sub" style="position:absolute; z-index: 1;">
+	
+
+
+
+
+
+<script type="text/javascript">var iconMenu = new Array();</script>
+
+<div class="megamenu">
+	<ul>
+		
+		<li name="PORTAL" onmouseover="menuEventSet('PORTAL');" onmouseout="menuEventout('PORTAL');">
+				
+
+		    			<a href="#" class="menu_sub" id="PORTAL_WP70" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','iMBC','상단메뉴');">iMBC</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"PORTAL_WP70", "menuName":"iMBC", "imageFile":"portal_title.png"});</script>
+				
+		</li>
+		
+		<li name="NMAIL" onmouseover="menuEventSet('NMAIL');" onmouseout="menuEventout('NMAIL');">
+				
+
+		    			<a href="#" class="menu_sub" id="NAVER_MAIL" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','받은메일함','상단메뉴');">받은메일함</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"NAVER_MAIL", "menuName":"받은메일함", "imageFile":""});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="MAILWRITE" menuType="mainSubMenu" actionType="SCRIPT" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','메일쓰기','상단메뉴');">메일쓰기</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"MAILWRITE", "menuName":"메일쓰기", "imageFile":""});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="MEMOWRITE" menuType="mainSubMenu" actionType="SCRIPT" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','메모쓰기','상단메뉴');">메모쓰기</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"MEMOWRITE", "menuName":"메모쓰기", "imageFile":""});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="SURVEY" menuType="mainSubMenu" actionType="SCRIPT" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','설문','상단메뉴');">설문</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"SURVEY", "menuName":"설문", "imageFile":""});</script>
+				
+		</li>
+		
+		<li name="NOTIFY" onmouseover="menuEventSet('NOTIFY');" onmouseout="menuEventout('NOTIFY');">
+				
+
+		    			<a href="#" class="menu_sub" id="MBCBBS" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','전사게시판','상단메뉴');">전사게시판</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"MBCBBS", "menuName":"전사게시판", "imageFile":"bbs_title.png"});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="DEPTBBS" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','부서게시판','상단메뉴');">부서게시판</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"DEPTBBS", "menuName":"부서게시판", "imageFile":"bbs_title.png"});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="BOOKMARK" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','구독게시글','상단메뉴');">구독게시글</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"BOOKMARK", "menuName":"구독게시글", "imageFile":"bbs_title.png"});</script>
+				
+		</li>
+		
+		<li name="APPROVAL" onmouseover="menuEventSet('APPROVAL');" onmouseout="menuEventout('APPROVAL');">
+				
+
+		    			<a href="#" class="menu_sub" id="APP" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','전자결재','상단메뉴');">전자결재</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"APP", "menuName":"전자결재", "imageFile":"app_title.png"});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="DOC" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','부서문서함','상단메뉴');">부서문서함</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"DOC", "menuName":"부서문서함", "imageFile":"doc_title.png"});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="GIAN_WRITE" menuType="mainSubMenu" actionType="SCRIPT" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','기안작성','상단메뉴');">기안작성</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"GIAN_WRITE", "menuName":"기안작성", "imageFile":""});</script>
+				
+		</li>
+		
+		<li name="INFORMATION" onmouseover="menuEventSet('INFORMATION');" onmouseout="menuEventout('INFORMATION');">
+				
+
+		    			<a href="#" class="menu_sub" id="WEBRULE_WEB" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','사규집','상단메뉴');">사규집</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"WEBRULE_WEB", "menuName":"사규집", "imageFile":"bbs_title.png"});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="COMDOWN2" menuType="mainSubMenu" actionType="SCRIPT" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','앱 자료실','상단메뉴');">앱 자료실</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"COMDOWN2", "menuName":"앱 자료실", "imageFile":""});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="PDSBBS" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','회사양식함','상단메뉴');">회사양식함</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"PDSBBS", "menuName":"회사양식함", "imageFile":"bbs_title.png"});</script>
+				
+		</li>
+		
+		<li name="WORK_SUB" onmouseover="menuEventSet('WORK_SUB');" onmouseout="menuEventout('WORK_SUB');">
+				
+
+		    			<a href="#" class="menu_sub" id="WORKSUPPORT_SUB" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','업무바로가기','상단메뉴');">업무바로가기</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"WORKSUPPORT_SUB", "menuName":"업무바로가기", "imageFile":"bbs_title.png"});</script>
+				
+
+		    			<a href="#" class="menu_sub" id="RESOURCE_SUB" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','공유자원예약','상단메뉴');">공유자원예약</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"RESOURCE_SUB", "menuName":"공유자원예약", "imageFile":"resource_title.png"});</script>
+				
+		</li>
+		
+		<li name="CAFE" onmouseover="menuEventSet('CAFE');" onmouseout="menuEventout('CAFE');">
+				
+
+		    			<a href="#" class="menu_sub" id="COP" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','포럼','상단메뉴');">포럼</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"COP", "menuName":"포럼", "imageFile":"cop_title.png"});</script>
+				
+		</li>
+		
+		<li name="HELP" onmouseover="menuEventSet('HELP');" onmouseout="menuEventout('HELP');">
+				
+
+		    			<a href="#" class="menu_sub" id="FAQ" menuType="mainSubMenu" actionType="URL" defaultMenu="" onClick="menuClick(this); ga('send','event','서브메뉴클릭','MPortal HELP','상단메뉴');">MPortal HELP</a>
+		    			<script type="text/javascript">iconMenu.push({"menuId":"FAQ", "menuName":"MPortal HELP", "imageFile":"bbs_title.png"});</script>
+				
+		</li>
+		
+		<li name="ORG" onmouseover="menuEventSet('ORG');" onmouseout="menuEventout('ORG');">
+				
+		</li>
+		
+	</ul>
+</div>
+
+</div>
+              	
+				<p class="m_search" style="display: ;">
+					<select id="searchTarget" name="searchTarget" style="display: none;">
+						<option value="ALL">통합검색
+						</option>
+						
+						<option value="SRCH_APP"
+							selCatId="">전자결재</option>
+						
+						<option value="SRCH_TOTAL_BBS"
+							selCatId="">게시판</option>
+						
+						<option value="SRCH_MENU"
+							selCatId="">메뉴</option>
+						
+						<option value="SRCH_WEBRULE"
+							selCatId="">사규</option>
+						
+						<option value="SRCH_USER"
+							selCatId="">조직도</option>
+						
+					</select> <input type="text" name="searchKeyword" id="searchKeyword"
+						onkeydown="keyEnter(event, function(){ goSearchMenu(); }  ); dq_setTextbox(1,event);"
+						onKeypress="javascript:if(event.keyCode==13) {goSearchMenu()}"
+						size=23 maxlength=255 value="" style="padding-left: 13px; padding-right: 25px;color: #A6A6A6;outline-style:none;" placeholder="통합검색 (결재/게시글 등)">
+						<input type="text" name="searchTrash" style="display: none" /> 
+						<a onClick='goSearchMenu();'><img
+						src="/xclick_mbc_resource/themes/ko/content_new/type_metro3/img/btn_search_p.png?1.99_xclickstatic"
+						alt="검색" /></a>
+					<script type="text/javascript" src="/xclick_mbc/thirdparty/search/diquest/js/dqAutoCompleteCommon.js"></script>
+					<script type="text/javascript" src="/xclick_mbc/thirdparty/search/diquest/js/dqAutoComplete.js?1.99_xclickstatic"></script>
+				</p>
+				
+			</div>
+        </div>
+        <div id="dqAuto" style="background-color: white; position:absolute; right:30px; top:116px; width:153px;
+							font-size: 10px;
+							border-bottom: 2px solid #4D7BAE;
+							border-left: 2px solid #4D7BAE;
+								border-right: 2px solid #4D7BAE; z-index: 510; display: none;">
+		</div>
+        <!-- //header--> 
+         
+    </div>
+    <!-- container -->
+  	<div class="m_container">
+  			<div id="tabContent"  ></div>
+  	</div>
+  	<!-- MBC/RQ_BBS_025/게시물 스크랩 기능/2016.07.27/ejdreams -->
+    <div id="divScrapContainer" style="position: fixed;bottom: 21px;right: 21px;display: none;z-index: 10000;overflow: hidden">
+        <iframe id="scrapFrame" style="display: block;height: 312px;border-width: 0;width: 304px;overflow: hidden;" frameborder="0"
+                src="/xclick_mbc/cef/common/cefScrapList.jsp"></iframe>
+    </div>    
+    
+    <div id="divMailContainer" style="position: fixed;bottom: 0px;right: 0px;display: none;z-index: 10001;overflow: hidden"></div>    
+</div>
+<!-- 뒤로가기를 위한 탭이동 History -->	
+<iframe id="ifrTabHistory" name="ifrTabHistory" style="display:none; "></iframe>
+
+<iframe id="ifrNotify" name="ifrNotify" style="display:none; "></iframe>
+<iframe id="ifrOle" name="ifrOle" style="height: 1px;width: 1px;" frameborder='0'></iframe>
+<!-- MBC / 2016.12.02 / 메모,메일쓰기 팝업시 웍스인증창 노출 수정(웍스 인증처리 부분 추가) / jcpark -->
+
+	<iframe id="ifrWmAuth" name="ifrWmAuth" src="https://auth.worksmobile.com/d/login/mbc.co.kr/?accessUrl=https://admin.worksmobile.com/export/blank" style="display:none;"></iframe>	
+
+<!-- -------------- 팝업용 POST호출 FORM --------------  -->
+<form id="_popForm" name="_popForm" method="post" action="#">
+	<input type="hidden" name="_xcsparam"/>
+	<input type="hidden" name="_isPopMode_" value="Y"/>
+	<input type="hidden" name="userMode" value="USER"/>
+</form>
+<!-- -------------- 팝업용 POST호출 FORM 끝.--------------  -->
+
+
+<input type='hidden' name="lastReadId" id="lastReadId"/>
+</body>
+<!-- VER : REG_2016.xx, REFID : MBC_160706, AUTHOR : S.H.Byun -->
+<!-- 그룹웨어 실시간 알림 -->
+
+<script type="text/javascript">
+jQuery(window).load(function(){
+	/*setTimeout(function(){
+		jQuery('#ifrNotify').attr('src',_webapp+'/XClickController?facade=SystemFacade&command=loadNotifyPopup&nextpage=/sys/systemNotify.jsp');
+	},1000);*/
+	//VER : REG_2016.01 , REFID : REQ1062 , AUTHOR : SungYongJe
+	//GSA, Applet 사용 체크는 xclickGSAClientCheck.jsp 내에서 하는 것으로 함.
+	//MBC / 2016. 10. 23. / Applet 미사용 / hjkim
+	/*
+	var appletUrl = _webapp+'/XClickController?nextpage=/gsa/xclickGSAClientCheck.jsp';
+	if(_isMobileFullMode){
+		appletUrl = _webapp+'/XClickController?nextpage=/applet/applet_dummy.jsp';
+	}
+	
+	if(appletUrl != ""){
+		setTimeout(function(){
+			jQuery('#ifrOle').attr('src', appletUrl);
+		}, 1000);
+	}
+	*/
+	
+	/*#######################################################*/
+	// 2016-11-12 jtlim => 정규직인데 이메일이 있는지 여부 체크
+	//emailChk(); //패스워드 변경 후 팝업뜨도록 변경
+	
+	// 2016-12-04 jtlim => LDAP 패스워드 팝업 호출
+	openLdapPasswdChgPop("IM", "IM_220114");
+
+	/*#######################################################*/
+	
+	
+	/****************************************************************
+	* 정보동의여부 체크 (MBC 고객사 개발)
+	****************************************************************/
+	//임직원 정보보호 서약서
+	//1. 서약을 한사람만 보이도록(TBSECUOATH@GRUP_MAINT)
+	//2. 다시열지 않음을 체크한 사람은 안보이도록
+	if("Y" == "Y"){
+			var params = {
+				facade : "SecurityAgreeFacade"
+				,command : "getAgreeuser"
+				,empno : _sabun
+				,makedate : '20151029'
+			};
+			//우리부서테스트
+			//SUDEPT000000331   정보콘텐츠부
+			//SUDEPT000020499  정보보호팀
+			//SUDEPT000000335  경영인프라국 -> 국장님은 겸직이라서 경영인프라국으로 뜸 사번으로 추가
+			if( _sabun == '161889' ){
+			//if( _deptId == 'SUDEPT000000331' ||  _deptId == 'SUDEPT000020499' || _sabun == '920034' ){
+				jQuery.ajax({
+					url: _webapp+"/AjaxController?", 
+					 data : params,
+					 async : true,
+					 success: function(data){ 
+					 	//정보보호서약서에 서약한 직원인 경우
+					 	if( data.SIGNDATE.length > 0 ){
+					 		//'다시보지 않기' 체크 안 한 직원은 팝업
+					 		if( data.CONFIRM_DATE == "" || data.CONFIRM_DATE == null || data.CONFIRM_DATE == "null"){
+					 			var x = screen.width/2 - 800/2;
+			    				var y = screen.height/2 - 1000/2;
+								//확인 밑에 넣기 전	width=700,height=856
+								var openurl = _weburl+'/XClickController?nextpage=/sample/doc_security_agree.jsp?signdate='+data.SIGNDATE;
+								vWin = window.open(openurl,'popup_win_agree','status=no,menubar=no,scrollbars=yes,width=700,height=885,left='+x+',top='+y+',resizable=no');
+					 			vWin.focus();	
+					 		}else{
+					 			//alert("안봄"+data.CONFIRM_DATE+"//");
+					 		}
+					 	}else{
+					 		//alert("서약안함");
+					 	}
+					 },
+			     	error:function(request,status,error){
+			        	//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			      	 }
+				});
+			}
+	} //정보동의여부 체크 if End
+			
+	
+	//2017.12.01 09:00 부터 팝업을 띄어야 하기 때문에 날짜 조건을 추가함 author joo
+	var date = new Date();
+	var year = date.getFullYear();
+	var month = ( date.getMonth() + 1 > 9 ?  date.getMonth() + 1 : "0" + (date.getMonth() + 1) );
+	var day = ( date.getDate() > 9 ?  date.getDate() : "0" + date.getDate() );
+	var hour = ( date.getHours() > 9 ?  date.getHours() : "0" + date.getHours() );
+	var minute = ( date.getMinutes() > 9 ?  date.getMinutes() : "0" + date.getMinutes() );
+	var toDay = year.toString() + month.toString() + day.toString() + hour.toString() + minute.toString();
+		
+	if( toDay >= 201712010800 ){
+		if( "" == "N" && getCookie("notToday") == "N"){
+			//sEduPop();
+		}	
+	}
+	
+	//if(toDay >= 201712180900 ){
+	//if(_sabun = '161889'){// MBC / 김영란법 서약 동의서 팝업 / 2017. 02. 10. hjkim
+		if("Y" == "Y"){ kyrLawAgreePop(); }
+	//}
+	
+
+
+	//청탁금지법 교육 20180109 (본사만) 20181210 미사용 - 아카데미에서 해당 URL 더이상 사용불가
+
+	
+	
+	
+	
+	
+	
+});
+
+
+/*
+2016-11-16 jtlim => 기안작성 팝업 호출
+*/
+function writeAppPop() {
+	
+	var url = "/XClickController?";
+	var params = {
+		facade : "AppFormFacade",
+		command : "listForm",
+		nextpage : "/app/pop/appFormSelectMainPop.jsp",
+		msgId : "APP-000310" // 문서작성
+	};
+	url += jQuery.param(params); // serialize & encode
+
+	var urlStr = _webapp + url;
+	
+	openPopupWindowInCenter(urlStr, 'appFormSelectPopMainPop', 1024, window.screen.availHeight-150, false);
+	
+};
+
+
+/**
+* 2016-10-17 jtlim => ldap 연동 
+* => 비밀번호가 초기 비밀번호인 경우 ldap 비밀번호 변경 페이지 호출
+*/
+function openLdapPasswdChgPop(companyId, loginId) {
+	if (!String.prototype.startsWith) {
+	  String.prototype.startsWith = function(searchString, position) {
+		position = position || 0;
+		return this.indexOf(searchString, position) === position;
+	  };
+	}		
+	if(companyId =="SU" && loginId.startsWith('E'))
+	{
+					
+	}
+
+
+	if("Y" == "Y") {
+		if(!false){
+			emailChk(); //패스워드 변경 후 팝업뜨도록 변경 20180718
+		}
+		return;
+	}
+/*
+	if("SU" != companyId) {
+		loginId = companyId + "_" + loginId;
+	}
+*/
+	var mbcLdapPasswdChgURL = "https://net.mbc.co.kr/net/emp_pop_pw2.jsp" + "?id=" + loginId;
+
+	var width = "400";
+	var height = "460";
+	var vTop = ((screen.height - height) / 2)-100;
+	var vLeft = (screen.width - width) / 2;
+	var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=no';
+	
+	alert("초기 패스워드를 사용중입니다. 변경하신 후, 다시 로그인하시기 바랍니다."); //패스워드 미변경시 강제 로그아웃 20180730부터 적용 예정
+	var win = window.open(mbcLdapPasswdChgURL, "ldapPasswdChgPop", sFeatures);
+	win.focus();
+	xClickTop.location.href = _webapp + "/XClickLogoutHandler";	//패스워드 미변경시 강제 로그아웃 20180730부터 적용 예정
+}
+
+function winOpen(url){
+	var pop = null;
+	var height = 800;//(screen.availHeight-133)
+	var width = 1400;//(screen.availWidth-20)
+	var vTop = Math.max(0, ((screen.height - height) / 2)-100);
+	var vLeft = (screen.width - width) / 2;
+	
+	var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes';
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : Edge 브라우저에서 팝업시 화면높이에 따라 강제로 Maxmize 되는 문제.
+	if(navigator.userAgent.indexOf("Edge") > -1){
+		if(height > screen.availHeight - 100){
+			// Edge .. 지정한 높이가 화면높이보다 크거나 100px 미만으로 차이가 나면 브라우저가 Maxmize 로 창을 띄움... 체크해보고 최대높이는 화면-100 으로 처리함. hyungyu.
+			height = screen.availHeight - 100;
+		}
+		// top, left 는 무시됨.. Bug 인지 컨셉인지 모르겠슴..
+		sFeatures = 'width='+width+',height='+height+',top=0,left=0,location=no,resize=yes,resizable=yes,scrollbars=yes,menubar=yes';
+	}
+	
+	pop = window.open(url, '',sFeatures);
+	
+	if(!pop){
+		pop = setTimeout(function() { window.open(url, '', sFeatures); }, 0);
+	}
+	//VER : EMG_2015.07, REFID : REQ804, AUTHOR : hyungyu, Song
+	//Windows10관련 긴급패치 : blur(), focus() 호출제거. ( Edge 브라우저에서 팝업시 포커스가 되지 않는 문제로 제거함 )
+	if(navigator.userAgent.indexOf("Edge") == -1){
+		pop.focus();
+	}
+	
+	if(xClickTop._popupWindowsMap){
+		xClickTop._popupWindowsMap.set('', pop);
+	}
+	return pop;
+}
+
+/*
+  MBC / 김영란법 서약 동의서 팝업 / 2017. 02. 10. hjkim
+*/
+function kyrLawAgreePop() {
+	var url = _webapp + "/AjaxController?ajax_result_type=JSON";
+	var params = {
+		facade : "CefNotifyFacade",
+		command : "getKYRAgreeUser",
+		empno : _sabun
+	};
+	
+	jQuery.ajax({
+		url : url,
+		async: true,
+		data : params,
+		error : function(xhr, status, error){ alert("[kyrLawAgreePop Call Error] "+ error); },
+		success : function (data){
+			if(data.popupYn == 'Y'){
+				var width = "1024";
+				var height = "768";
+				var vTop = ((screen.height - height) / 2)-100;
+				var vLeft = (screen.width - width) / 2;
+				var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=yes,scrollbars=yes,resizable=no';
+				var win = window.open(_webapp+"/cef/notify/cefKYRAgreePop.jsp?empno="+_sabun, "kyr_agree_pop", sFeatures);
+				win.focus();
+			}else{}
+		}
+	});	
+};
+
+
+//2017.07.12 본사 정직원 성희롱 교육  팝업 author joo
+var sEduWin;
+function closePopupNotToday(){	             
+	setCookie('notToday','Y', 1);
+	sEduWin.close();
+}
+function setCookie(name, value, expiredays) {
+	var today = new Date();
+	today.setDate(today.getDate() + expiredays);
+	
+	document.cookie = name + '=' + escape(value) + '; path=/; expires=' + today.toGMTString() + ';'
+}
+
+function getCookie(name) { 
+	var cName = name + "="; 
+	var x = 0; 
+	while ( x <= document.cookie.length ){ 
+	    var y = (x+cName.length); 
+	    if ( document.cookie.substring( x, y ) == cName ) 
+	    { 
+	        if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 ) 
+	            endOfCookie = document.cookie.length;
+	        return unescape( document.cookie.substring( y, endOfCookie ) ); 
+	    } 
+	    x = document.cookie.indexOf( " ", x ) + 1; 
+	    if ( x == 0 ) 
+	        break; 
+	} 
+	return "N"; 
+}
+
+//2017.07.12 본사 정직원 성희롱 교육 이수 확인 author joo
+function sEduPop(){
+	var width = "388";
+	var height = "320";
+	var vTop = 100;
+	var vLeft = 150;
+	var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=yes,scrollbars=yes,resizable=no,menubar=no';
+	sEduWin = window.open(_webapp+"/cef/notify/cefSexEducationPop.jsp?&empno="+_sabun, "sex_edu_pop", sFeatures);
+	sEduWin.focus();
+}
+
+//2018.1.9 본사 정직원 김영란법 교육 팝업
+function sEduPop2(){
+	var width = "388";
+	var height = "320";
+	var vTop = 100;
+	var vLeft = 150;
+	var sFeatures = 'width='+width+',height='+height+',top='+vTop+',left='+vLeft+',toolbar=no,location=no,directories=no,status=yes,menubar=yes,scrollbars=yes,resizable=no,menubar=no';
+	sEduWin = window.open(_webapp+"/cef/notify/cefKYREducationPop.jsp?&empno="+_sabun, "kyr_edu_pop", sFeatures);
+	sEduWin.focus();
+}
+
+
+
+</script>
+</html>
