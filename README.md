@@ -55,5 +55,5 @@ using OpenQA.Selenium.Interactions;
 ### GUI v2.0.0
 ![image](https://user-images.githubusercontent.com/55127127/113116372-57024800-9248-11eb-9484-d9dba8b7ea1c.png)
 
-### GUI v1.0.0()
+### GUI v1.0.0
 ![image](https://user-images.githubusercontent.com/55127127/112961948-d2002b80-9180-11eb-8384-ab157446e541.png)
