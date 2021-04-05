@@ -53,7 +53,7 @@ using OpenQA.Selenium.Interactions;
 ### 자동 로그인
 ![image](https://user-images.githubusercontent.com/55127127/112962103-fb20bc00-9180-11eb-847b-4138b4b759fb.png)
 ### GUI v2.0.0
-![image](https://user-images.githubusercontent.com/55127127/113116372-57024800-9248-11eb-9484-d9dba8b7ea1c.png)
+![image](https://user-images.githubusercontent.com/55127127/113537417-a7e0ba80-9613-11eb-8924-eb3ffb9b8efd.png)
 
 ### GUI v1.0.0
 ![image](https://user-images.githubusercontent.com/55127127/112961948-d2002b80-9180-11eb-8384-ab157446e541.png)
