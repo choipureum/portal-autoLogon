@@ -38,7 +38,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
 ```
-## issues
+## Issues
 - 자동 로그인의 경우 Mportal만 지원합니다.(selector)
 - 향후 추가예정
 
