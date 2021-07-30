@@ -12,7 +12,7 @@
 
 ## 핵심 기능  Key Feature
 - url, id, pw를 저장해 하나의 chrome창에 여러개의 탭을 생성해 저장해둔 여러 url 로그인 또는 url process를 생성합니다. 
-- 자주 사용하는 url을 마구마구 등록한 뒤 사용하세요.
+- 자주 사용하는 url을 등록한 뒤 사용하세요.
 
 - 모든 기록은 "C:/Users/autoLogin/key.txt"에 저장됩니다. 자동 디렉토리 
 ## 사용 How To Use
@@ -31,7 +31,7 @@
 ## Contributing
 - [@choipureum](https://github.com/choipureum)
 
-## Reference
+## Library
 ```
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
